@@ -19,6 +19,7 @@
 		D7ABEFE1283FF57300F7E44C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D7ABEFE3283FF57800F7E44C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7ABEFE6283FF57800F7E44C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D7ABEFED283FF60300F7E44C /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +56,7 @@
 				D7ABEFE1283FF57300F7E44C /* ContentView.swift */,
 				D7ABEFE3283FF57800F7E44C /* Assets.xcassets */,
 				D7ABEFE5283FF57800F7E44C /* Preview Content */,
+				D7ABEFED283FF60300F7E44C /* .gitignore.md */,
 			);
 			path = WeatherAround;
 			sourceTree = "<group>";
