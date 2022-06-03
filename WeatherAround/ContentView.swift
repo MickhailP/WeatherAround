@@ -8,9 +8,48 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @StateObject var viewModel = ViewModel(weatherAPI: WeatherService())
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        ScrollView{
+
+            Text(viewModel.forecast?.timezone ?? "fuck")
+//            Text("\(viewModel.forecast?.current.clouds)")
+        }
+        .onAppear{
+            viewModel.refresh()
+            
+        }
+//        .onAppear {
+//            Task{
+//                locationManager.getLocation()
+//            }
+//            Task{
+//                if let location = locationManager.location {
+//                    do {
+//                     try await viewModel.forecast =  weatherManager.getWeatherData(latitude: location.latitude, longitude: location.longitude)
+//                        print("Weather forecast has successfully gotten")
+//                    } catch{
+//                      print("Fetching failed")
+//                    }
+//                }
+//                print("Failed")
+//            }
+//        }
+//        .task {
+////            locationManager.getLocation()
+//            print(locationManager.location)
+//            if let location = locationManager.location {
+//                do {
+//                 try await viewModel.forecast =  weatherManager.getWeatherData(latitude: location.latitude, longitude: location.longitude)
+//                    print("Weather forecast has successfully gotten")
+//                } catch{
+//                  print("Fetching failed")
+//                }
+//            }
+//            print("Failed")
+//        }
     }
 }
 
