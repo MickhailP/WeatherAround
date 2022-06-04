@@ -13,7 +13,7 @@ import CoreLocation
     let weatherAPI: WeatherService
 //    @Published var oneCallWeather: OneCallWeatherResponse?
     
-    @Published var currentWeather: CurrentWeatherResponse?
+    @Published var weather: Weather?
     
     @Published var temperature = "--º"
     @Published var maxTemp = ""
@@ -22,18 +22,16 @@ import CoreLocation
 
     init(weatherAPI: WeatherService) {
         self.weatherAPI = weatherAPI
+        
     }
     
     func refresh() {
         weatherAPI.getLocation { weatherResponse in
             DispatchQueue.main.async {
 //                self.oneCallWeather = weather
-                self.currentWeather = weatherResponse
-
-                
-                print(self.currentWeather)
+                self.weather = Weather(apiResponse: weatherResponse)
+                print(self.weather)
             }
-         
         }
     }
     
