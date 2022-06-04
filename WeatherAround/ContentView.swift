@@ -14,42 +14,13 @@ struct ContentView: View {
     var body: some View {
         ScrollView{
 
-            Text(viewModel.forecast?.timezone ?? "fuck")
-//            Text("\(viewModel.forecast?.current.clouds)")
+//            Text(viewModel.forecast?.timezone ?? "fuck")
+
         }
         .onAppear{
             viewModel.refresh()
             
         }
-//        .onAppear {
-//            Task{
-//                locationManager.getLocation()
-//            }
-//            Task{
-//                if let location = locationManager.location {
-//                    do {
-//                     try await viewModel.forecast =  weatherManager.getWeatherData(latitude: location.latitude, longitude: location.longitude)
-//                        print("Weather forecast has successfully gotten")
-//                    } catch{
-//                      print("Fetching failed")
-//                    }
-//                }
-//                print("Failed")
-//            }
-//        }
-//        .task {
-////            locationManager.getLocation()
-//            print(locationManager.location)
-//            if let location = locationManager.location {
-//                do {
-//                 try await viewModel.forecast =  weatherManager.getWeatherData(latitude: location.latitude, longitude: location.longitude)
-//                    print("Weather forecast has successfully gotten")
-//                } catch{
-//                  print("Fetching failed")
-//                }
-//            }
-//            print("Failed")
-//        }
     }
 }
 
