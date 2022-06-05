@@ -11,13 +11,10 @@ import CoreLocation
 @MainActor class ViewModel: ObservableObject {
     
     let weatherAPI: WeatherService
-//    @Published var oneCallWeather: OneCallWeatherResponse?
+
     
     @Published var weather: Weather?
-    
-    @Published var temperature = "--º"
-    @Published var maxTemp = ""
-    @Published var lowTemp = ""
+    @Published var weatherHourly: WeatherHourly?
     
 
     init(weatherAPI: WeatherService) {
@@ -26,11 +23,14 @@ import CoreLocation
     }
     
     func refresh() {
-        weatherAPI.getLocation { weatherResponse in
+        weatherAPI.getLocation { [weak self] weatherResponse in
             DispatchQueue.main.async {
 //                self.oneCallWeather = weather
-                self.weather = Weather(apiResponse: weatherResponse)
-                print(self.weather)
+                self?.weather = Weather(apiResponse: weatherResponse)
+                self?.weatherHourly = WeatherHourly(apiResponse: weatherResponse)
+                print(self?.weather)
+                print(self?.weatherHourly?.weatherHourly)
+                print(self?.weatherHourly?.weatherHourly.count)
             }
         }
     }
