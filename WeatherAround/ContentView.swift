@@ -9,17 +9,33 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var viewModel = ViewModel(weatherAPI: WeatherService())
+    @StateObject var viewModel = ViewModel()
     
     var body: some View {
-        ScrollView{
-
-//            Text(viewModel.forecast?.timezone ?? "fuck")
-
+        ZStack{
+            LinearGradient(gradient: Gradient(colors: [.blue.opacity(0.7), .white]), startPoint: .topLeading, endPoint: .bottom)
+                .ignoresSafeArea()
+            
+            ScrollView(showsIndicators: false) {
+                if let weather = viewModel.weather {
+                    VStack {
+                        HeaderView(weather: weather)
+                        .padding(.vertical, 40)
+                        .padding(.horizontal, 40)
+                        
+                        if let weatherHourly = viewModel.weatherHourly {
+                            HourlyWeatherView(weather: weatherHourly)
+                                .padding()
+                        }
+                       
+                    }
+                    ProgressView()
+                }
+            }
+            
         }
         .onAppear{
             viewModel.refresh()
-            
         }
     }
 }

@@ -27,7 +27,7 @@ struct WeatherHourly {
 }
 
 
-struct Weather {
+struct Weather: Identifiable {
     let id = UUID()
     
     let startTime: String?
@@ -101,6 +101,59 @@ struct Weather {
                 return Image(systemName: "questionmark")
         }
     }
+    
+    var description: String {
+        switch weatherCode {
+            case .unknown:
+                return "Unknown"
+            case .clear:
+                return "Clear"
+            case .mostlyClear:
+                return "Mostly clear"
+            case .partlyCloudy:
+                return "Partly cloudy"
+            case .mostlyCloudy:
+                return "Mostly cloudy"
+            case .cloudy:
+                return "Cloudy"
+            case .fog:
+                return "Fog"
+            case .lightFog:
+                return "Light fog"
+            case .drizzle:
+                return "Drizzle"
+            case .rain:
+                return "Rain"
+            case .lightRain:
+                return "Light rain"
+            case .heavyRain:
+                return "Heavy rain"
+            case .snow:
+                return "Snow"
+            case .flurries:
+                return "Flurries"
+            case .lightSnow:
+                return "Light snow"
+            case .heavySnow:
+                return "Heavy snow"
+            case .freezingDrizzle:
+                return "Freezing drizzle"
+            case .freezingRain:
+                return "Freezing rain"
+            case .lightFreezingRain:
+                return "Light freezing rain"
+            case .heavyFreezingRain:
+                return "Heavy freezing rain"
+            case .icePellets:
+                return "Ice pellets"
+            case .heavyIcePellets:
+                return "Heavy ice pellets"
+            case .lightIcePellets:
+                return "Light ice pellets"
+            case .thunderStorm:
+                return "Thunder strom"
+        }
+    }
 }
 enum WeatherCode: String {
     case unknown = "0"
@@ -146,5 +199,7 @@ extension Weather {
         self.visibility = visibility
         self.windSpeed = windSpeed
     }
+    
+    static let example = Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
     
 }

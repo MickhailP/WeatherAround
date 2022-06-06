@@ -10,17 +10,12 @@ import CoreLocation
 
 @MainActor class ViewModel: ObservableObject {
     
-    let weatherAPI: WeatherService
+    let weatherAPI = WeatherService()
 
     
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
     
-
-    init(weatherAPI: WeatherService) {
-        self.weatherAPI = weatherAPI
-        
-    }
     
     func refresh() {
         weatherAPI.getLocation { [weak self] weatherResponse in
