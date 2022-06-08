@@ -11,7 +11,11 @@ import SwiftUI
 struct WeatherAroundApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            GeometryReader { proxy in
+                let topEdge = proxy.safeAreaInsets.top
+                ContentView(topEdge: topEdge)
+                    .ignoresSafeArea(.all, edges: .top)
+            }
         }
     }
 }

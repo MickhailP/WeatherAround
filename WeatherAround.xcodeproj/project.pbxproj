@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D7925D04284BA62900FA1F28 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7925D03284BA62900FA1F28 /* Weather.swift */; };
+		D798D9E3284FCC2700097978 /* CustomStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D798D9E2284FCC2700097978 /* CustomStackView.swift */; };
 		D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */; };
 		D799C0DA284E5CF90084C541 /* HourColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D9284E5CF90084C541 /* HourColumn.swift */; };
 		D7ABEFE0283FF57300F7E44C /* WeatherAroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7ABEFDF283FF57300F7E44C /* WeatherAroundApp.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		D7925D03284BA62900FA1F28 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		D798D9E2284FCC2700097978 /* CustomStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStackView.swift; sourceTree = "<group>"; };
 		D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
 		D799C0D9284E5CF90084C541 /* HourColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourColumn.swift; sourceTree = "<group>"; };
 		D7ABEFDC283FF57300F7E44C /* WeatherAround.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherAround.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				D7BE6A01284CC9510040AAC2 /* HeaderView.swift */,
+				D798D9E2284FCC2700097978 /* CustomStackView.swift */,
 				D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */,
 				D799C0D9284E5CF90084C541 /* HourColumn.swift */,
 			);
@@ -193,6 +196,7 @@
 				D7B024C0284916BF004549B5 /* WeatherService.swift in Sources */,
 				D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */,
 				D7BE6A04284CD1960040AAC2 /* IconColor.swift in Sources */,
+				D798D9E3284FCC2700097978 /* CustomStackView.swift in Sources */,
 				D7B024DC284A60FF004549B5 /* CurrentWeatherResponse.swift in Sources */,
 				D7ABEFF1283FF87B00F7E44C /* ViewModel.swift in Sources */,
 				D7925D04284BA62900FA1F28 /* Weather.swift in Sources */,

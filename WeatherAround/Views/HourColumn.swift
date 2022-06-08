@@ -23,6 +23,8 @@ struct HourColumn: Identifiable {
     
     init(columnType: ColumnType, weather: Weather) {
         
+        
+        
         let dateFormatter = DateFormatter()
         let ISODateFormatter = ISO8601DateFormatter()
         
@@ -32,6 +34,7 @@ struct HourColumn: Identifiable {
         
         self.date = convertedDate
         self.weatherCode = weather.weatherCode
+        
         switch columnType {
             case .sunrise:
                 dateFormatter.dateFormat = "h:mma"
