@@ -21,9 +21,26 @@ struct ContentView: View {
                 .ignoresSafeArea()
             
             ScrollView(showsIndicators: false) {
-                if let weather = viewModel.weather {
+                if let weather = viewModel.weather ?? Weather.example {
                     VStack {
-                        HeaderView(weather: weather)
+                        ZStack {
+                            HStack(alignment: .top){
+                                Text("My Location")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding(.top, 20)
+                            
+                            }
+                            .frame(maxHeight: .infinity, alignment: .top)
+                            .opacity( 1 - getTitleOpacity())
+                            
+                            
+                                HeaderView(weather: weather)
+                                    .opacity(getTitleOpacity())
+                            
+                            
+                        }
+                       
                         //for dragging from bottom
                         .offset(y: -offset)
                         
@@ -32,13 +49,18 @@ struct ContentView: View {
                         
                         .offset(y: getTitleOffset())
                         
-                        .opacity(getTitleOpacity())
-                        
                         if let weatherHourly = viewModel.weatherHourly {
-                            HourlyWeatherView(weather: weatherHourly)
-//                                .padding()
+                            ForEach(0..<5, id:\.self) { _ in
+                                HourlyWeatherView(weather: weatherHourly)
+                                
+                            }
                         }
-                       
+                        //FOR TESTING
+                        ForEach(0..<5, id:\.self) { _ in
+                            HourlyWeatherView(weather: WeatherHourly.example)
+                            
+                        }
+                        
                     }
                     .padding(.top, 25)
                     .padding(.top, topEdge)
@@ -73,7 +95,7 @@ struct ContentView: View {
         if offset < 0 {
             let progress = -offset / 120
             
-            let newOffset = (progress <= 1.0 ? progress : 1) * 20
+            let newOffset = (progress <= 1.0 ? progress : 1) * 30
             return -newOffset
         }
         return 0

@@ -21,10 +21,10 @@ struct HeaderView: View {
                         .iconColor(weatherCode: weather.weatherCode)
                     
                     Text(weather.description)
-                        .font(.headline)
+                        .font(.title3)
                     
                     Label {
-                        Text("\(String(format:"%.2f", weather.windSpeed ?? 0))mph")
+                        Text("\(String(format:"%.2f", weather.windSpeed ?? 0)) mph")
                     } icon: {
                         Image(systemName: "wind")
                     }
@@ -33,19 +33,18 @@ struct HeaderView: View {
                 Spacer()
                 
                 VStack {
-                    Text("My location")
-                        .font(.title2)
+                  
                     Text("\(Int(weather.temperature))º")
                         .font(.system(size: 50))
+                    Text("My location")
+                        .font(.title2)
                 }
             }
             .foregroundColor(.white)
             .shadow(color: .black.opacity(0.2), radius: 3)
             .padding(15)
         }
-//        .frame(maxWidth: .infinity)
-//        .background(RoundedRectangle(cornerRadius: 12, style: .continuous)
-//            .foregroundStyle(.ultraThinMaterial))
+        .frame(maxWidth: .infinity)
     }
     
 }
@@ -53,6 +52,7 @@ struct HeaderView: View {
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         HeaderView(weather: Weather.example)
+            .background(.blue)
    
     }
 }

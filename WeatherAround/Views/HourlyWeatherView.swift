@@ -7,26 +7,17 @@
 
 import SwiftUI
 
+
+
 struct HourlyWeatherView: View {
     let weather: WeatherHourly
     
     var body: some View {
-        VStack(alignment: .leading) {
-            
+        CustomStackView(titleView: {
             sectionLabel
-            
-            Divider()
-                .background(.primary)
-            
+        }, contentView: {
             scrollHourlySection
-            
-        }
-        .padding(.horizontal,5)
-        .padding(.bottom, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 15, style: .continuous)
-                .foregroundColor(.white.opacity(0.1))
-        )
+        })
     }
 }
 
