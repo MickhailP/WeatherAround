@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D78EFF662851AF6A0075E6A1 /* CustomCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */; };
 		D7925D04284BA62900FA1F28 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7925D03284BA62900FA1F28 /* Weather.swift */; };
 		D798D9E3284FCC2700097978 /* CustomStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D798D9E2284FCC2700097978 /* CustomStackView.swift */; };
 		D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCorners.swift; sourceTree = "<group>"; };
 		D7925D03284BA62900FA1F28 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		D798D9E2284FCC2700097978 /* CustomStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStackView.swift; sourceTree = "<group>"; };
 		D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			children = (
 				D7BE6A01284CC9510040AAC2 /* HeaderView.swift */,
 				D798D9E2284FCC2700097978 /* CustomStackView.swift */,
+				D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */,
 				D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */,
 				D799C0D9284E5CF90084C541 /* HourColumn.swift */,
 			);
@@ -193,6 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7ABEFE2283FF57300F7E44C /* ContentView.swift in Sources */,
+				D78EFF662851AF6A0075E6A1 /* CustomCorners.swift in Sources */,
 				D7B024C0284916BF004549B5 /* WeatherService.swift in Sources */,
 				D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */,
 				D7BE6A04284CD1960040AAC2 /* IconColor.swift in Sources */,

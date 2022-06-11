@@ -56,9 +56,9 @@ struct ContentView: View {
                             }
                         }
                         //FOR TESTING
-                        ForEach(0..<5, id:\.self) { _ in
+                        ForEach(0..<10, id:\.self) { _ in
                             HourlyWeatherView(weather: WeatherHourly.example)
-                            
+                                
                         }
                         
                     }
