@@ -17,14 +17,21 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            LinearGradient(gradient: Gradient(colors: [.blue.opacity(0.7), .white]), startPoint: .topLeading, endPoint: .bottom)
+            Image("appBackground")
+                .resizable()
+                .scaledToFill()
                 .ignoresSafeArea()
+                
+            
+            LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
+                .ignoresSafeArea()
+                .opacity(0.4)
+                .blur(radius: 100)
             
             if viewModel.loadingState == .loaded {
                 
                 if let weather = viewModel.weather  {
                     ScrollView(showsIndicators: false) {
-                        
                         VStack(spacing: 15) {
                             ZStack {
                                 HStack(alignment: .top) {
@@ -32,7 +39,6 @@ struct ContentView: View {
                                         .font(.title)
                                         .foregroundColor(.white)
                                         .padding(.top, 20)
-                                    
                                 }
                                 .frame(maxHeight: .infinity, alignment: .top)
                                 .opacity( 1 - getTitleOpacity())
@@ -41,10 +47,7 @@ struct ContentView: View {
                                 HeaderView(weather: weather, locationName: viewModel.locationName)
                                     .opacity(getTitleOpacity())
                                     .padding(.vertical, 30)
-                                
-                                
                             }
-                            //                        .background(.red)
                             
                             //for dragging from bottom
                             .offset(y: -offset)
@@ -54,13 +57,13 @@ struct ContentView: View {
                             
                             .offset(y: getTitleOffset())
                             
+                            
                             if let weatherHourly = viewModel.weatherHourly {
-                                ForEach(0..<7, id:\.self) { _ in
-                                    HourlyWeatherView(weather: weatherHourly)
-                                    
-                                }
+                                HourlyWeatherView(weather: weatherHourly)
+                                
                             }
                             
+                            WeatherDetailView(weather: weather)
                         }
                         .padding(.top, 25)
                         .padding(.top, topEdge)

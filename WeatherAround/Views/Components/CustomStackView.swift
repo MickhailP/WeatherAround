@@ -21,19 +21,17 @@ struct CustomStackView <Title: View, Content: View> : View {
     }
     
     var body: some View {
-//        ZStack {
-//            RoundedRectangle(cornerRadius: 15, style: .continuous)
-//                .fill(.white.opacity(0.1))
         VStack(spacing: 0){
                 titleView
                     .lineLimit(1)
-                    
                     .frame(height: 30)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 5)
+                    .padding(.leading, 10)
                     .foregroundColor(.secondary)
-                    .font(.subheadline)
-                    .background(.white.opacity(0.1), in: CustomCorners(corners: bottomOffset < 35 ? .allCorners : [.topLeft, .topRight], radius: 15))
+                    .font(.caption)
+                    .textCase(.uppercase)
+                    .background(.white.opacity(0.2), in: CustomCorners(corners: bottomOffset < 35 ? .allCorners : [.topLeft, .topRight], radius: 15))
                     .zIndex(1)
                 
                 VStack {
@@ -46,7 +44,7 @@ struct CustomStackView <Title: View, Content: View> : View {
                         .padding(.bottom, 10)
                         
                 }
-                .background(.white.opacity(0.1), in: CustomCorners(corners: [.bottomLeft, .bottomRight], radius: 15))
+                .background(.white.opacity(0.2), in: CustomCorners(corners: [.bottomLeft, .bottomRight], radius: 15))
                 .offset(y: topOffset >= 120 ? 0 : -(-topOffset + 120))
                 .zIndex(0)
                 .clipped()

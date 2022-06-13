@@ -66,8 +66,10 @@ struct Weather: Identifiable {
         
         self.temperature = currentWeather.temperature
         self.temperatureApparent = currentWeather.temperatureApparent
-        let weatherCode = WeatherCode(rawValue: "\(currentWeather.weatherCode)")
-        self.weatherCode = weatherCode ?? WeatherCode.unknown
+        
+        self.weatherCode = WeatherCode(rawValue: "\(currentWeather.weatherCode)") ?? WeatherCode.unknown
+
+        
         self.humidity = currentWeather.humidity
         self.precipitationType = currentWeather.precipitationType
         self.precipitationProbability = currentWeather.precipitationProbability
@@ -165,7 +167,65 @@ struct Weather: Identifiable {
                 return "Thunder strom"
         }
     }
+    
+    var precipitationDescription: String {
+        switch precipitationType {
+            case 1:
+                return "Rain"
+            case 2:
+                return "Snow"
+            case 3:
+                return "Freezing Rain"
+            case 4:
+                return "Ice Pellets"
+            default:
+                return "Clear"
+        }
+    }
+    
+    var uvIndexDescription: String {
+        if let uvIndex = uvIndex {
+            switch uvIndex {
+                case 0...2:
+                    return "Low"
+                case 3...5:
+                    return "Moderate"
+                case 6...7:
+                    return "High"
+                case 8...10:
+                    return "Very high"
+                case 11...:
+                    return "Extreme"
+                default:
+                    return "Unknown"
+            }
+        }
+        return "Unknown"
+    }
+    
+    var feelsLikeDescription: String {
+        if let temperatureApparent = temperatureApparent {
+            if temperatureApparent < temperatureApparent - 3.0 {
+                return "Colder that actual temperature"
+            } else if temperatureApparent > temperatureApparent + 3.0 {
+                return "Warmer then actual temperature"
+            } else {
+                return "Similar to the actual temperature"
+            }
+        }
+        return "Temperature isn't available"
+    }
+    
 }
+
+enum PrecipitationCode: Int {
+    case unknown = 0
+    case rain = 1
+    case snow = 2
+    case freezingRain = 3
+    case icePellets = 4
+}
+
 enum WeatherCode: String {
     case unknown = "0"
     case clear = "1000"

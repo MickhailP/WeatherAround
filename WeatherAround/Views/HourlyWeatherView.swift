@@ -17,6 +17,7 @@ struct HourlyWeatherView: View {
             sectionLabel
         }, contentView: {
             scrollHourlySection
+                .padding(.vertical)
         })
     }
 }
@@ -38,7 +39,7 @@ extension HourlyWeatherView {
     private var sectionLabel: some View {
         Label("24 Hours forecast", systemImage: "clock")
             .foregroundColor(.secondary)
-            .font(.subheadline)
+            .font(.caption)
             .padding([.top, .leading], 10)
     }
 }
@@ -46,7 +47,6 @@ extension HourlyWeatherView {
 
 fileprivate struct HourStack: View {
     let column: HourColumn
-    
     
     var body: some View {
         VStack(alignment: .center){

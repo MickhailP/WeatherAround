@@ -11,13 +11,12 @@ import CoreLocation
 class WeatherService: NSObject, CLLocationManagerDelegate {
     
     private let manager = CLLocationManager()
-    
-//    @Published var location: CLLocationCoordinate2D?
     @Published var location: CLLocation?
     
     
     var completionHandler: ((CurrentWeatherResponse) -> Void)?
     
+    //Properties configures URL's parameters
     private let apiKey = "lT5ix1gfznPpiE860KoSKsRkP1FYuX2Y"
     private let units = "metric"
     private let dateFormatter = ISO8601DateFormatter()
