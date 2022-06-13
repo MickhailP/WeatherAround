@@ -67,8 +67,6 @@ struct CustomStackView <Title: View, Content: View> : View {
                 DispatchQueue.main.async {
                     self.topOffset = minY
                     self.bottomOffset = maxY - 120
-                    print(self.bottomOffset)
-                    
                 }
                 return .clear
                 

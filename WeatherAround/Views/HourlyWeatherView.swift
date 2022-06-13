@@ -36,7 +36,7 @@ extension HourlyWeatherView {
     }
     
     private var sectionLabel: some View {
-        Label("24 Hours forecast", systemImage: "calendar")
+        Label("24 Hours forecast", systemImage: "clock")
             .foregroundColor(.secondary)
             .font(.subheadline)
             .padding([.top, .leading], 10)
