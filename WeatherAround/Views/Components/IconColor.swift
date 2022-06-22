@@ -13,13 +13,12 @@ extension View {
         modifier(IconColor(weatherCode: weatherCode))
             .symbolVariant(.fill)
             .symbolRenderingMode(.palette)
-            
     }
 }
 
 struct IconColor: ViewModifier {
-    let weatherCode: WeatherCode
     
+    let weatherCode: WeatherCode
     
     func body(content: Content) -> some View {
         
@@ -50,7 +49,7 @@ struct IconColor: ViewModifier {
                 content.foregroundStyle(.gray, .yellow)
             case .unknown:
                 content.foregroundStyle(.white)
-          
+                
         }
     }
 }

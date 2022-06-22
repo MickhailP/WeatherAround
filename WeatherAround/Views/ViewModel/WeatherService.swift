@@ -31,7 +31,7 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
     }
   
     
-    func getLocation(_ completionHandler: @escaping ((_ weather: CurrentWeatherResponse) -> Void)) {
+    func getLocation(_ completionHandler: @escaping (_ weather: CurrentWeatherResponse) -> Void) {
         manager.requestWhenInUseAuthorization()
         manager.requestLocation()
         self.completionHandler = completionHandler
@@ -72,6 +72,7 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
     // Fetch the user's locations and request Weather from server for the first one.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.first
+        
         if let location = location {
             //Pass location in to async weather request.
             Task { await fetchWeather(for: location) }
@@ -82,6 +83,10 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
         print("Unable to get user's location.", error)
     }
 }
+
+
+//Typealias for download completion handler
+//typealias Downloade = <#type expression#>
 
 //The functionality to update user's location name
 extension WeatherService {

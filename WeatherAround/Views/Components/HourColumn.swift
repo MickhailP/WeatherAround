@@ -23,8 +23,6 @@ struct HourColumn: Identifiable {
     
     init(columnType: ColumnType, weather: Weather) {
         
-        
-        
         let dateFormatter = DateFormatter()
         let ISODateFormatter = ISO8601DateFormatter()
         

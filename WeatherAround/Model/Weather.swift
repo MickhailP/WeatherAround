@@ -11,19 +11,29 @@ import SwiftUI
 struct WeatherHourly {
     let weatherHourly: [Weather]
     
-    init(apiResponse: CurrentWeatherResponse){
+    init(apiResponse: CurrentWeatherResponse) {
         let hourIntervals = apiResponse.data.timelines[0].intervals
         
-        var tempHourlyWeather = [Weather]()
-        
-        for hour in hourIntervals {
+        self.weatherHourly = hourIntervals.compactMap { hour -> Weather in
             let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
-            let weather = Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
-            tempHourlyWeather.append(weather)
+            return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
         }
         
-        self.weatherHourly = tempHourlyWeather
+        //Old version of creating a hourly forecast using for loop.
+        /*
+//        var tempHourlyWeather = [Weather]()
+//        for hour in hourIntervals {
+//            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
+//            let weather = Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
+//            tempHourlyWeather.append(weather)
+//        }
+        
+//        self.weatherHourly = tempHourlyWeather
+         */
     }
+    
+    
+    //For testing purposes
     init(array: [Weather]) {
         self.weatherHourly = array
     }
@@ -68,7 +78,7 @@ struct Weather: Identifiable {
         self.temperatureApparent = currentWeather.temperatureApparent
         
         self.weatherCode = WeatherCode(rawValue: "\(currentWeather.weatherCode)") ?? WeatherCode.unknown
-
+        
         
         self.humidity = currentWeather.humidity
         self.precipitationType = currentWeather.precipitationType

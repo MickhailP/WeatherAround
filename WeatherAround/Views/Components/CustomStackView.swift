@@ -21,7 +21,7 @@ struct CustomStackView <Title: View, Content: View> : View {
     }
     
     var body: some View {
-        VStack(spacing: 0){
+        VStack(spacing: 0) {
                 titleView
                     .lineLimit(1)
                     .frame(height: 30)
@@ -51,6 +51,7 @@ struct CustomStackView <Title: View, Content: View> : View {
                 .opacity(changeOpacity())
                 
             }
+        
         .frame(maxWidth: .infinity)
         .cornerRadius(15)
         .opacity(changeOpacity())

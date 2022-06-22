@@ -26,9 +26,10 @@ import SwiftUI
     @Published var loadingState: LoadingState = .loading
     
     func refresh() {
+//        weatherService.getLocation(<#T##completionHandler: ((CurrentWeatherResponse) -> Void)##((CurrentWeatherResponse) -> Void)##(_ weather: CurrentWeatherResponse) -> Void#>)
         weatherService.getLocation { [weak self] weatherResponse in
             DispatchQueue.main.async {
-                //                self.oneCallWeather = weather
+                
                 self?.weather = Weather(apiResponse: weatherResponse)
                 self?.weatherHourly = WeatherHourly(apiResponse: weatherResponse)
                 
