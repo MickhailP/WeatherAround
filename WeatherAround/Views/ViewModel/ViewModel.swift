@@ -11,10 +11,13 @@ import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
     
-    let weatherService = WeatherService()
+    let weatherService = WeatherService.shared
+//    let locationManager = LocationManager()
     
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
+    
+    
     
     @Published var locationName = ""
     
@@ -25,8 +28,15 @@ import SwiftUI
     
     @Published var loadingState: LoadingState = .loading
     
+    
+    init() {
+        
+        refresh()
+      
+//        getWeather()
+    }
+    
     func refresh() {
-//        weatherService.getLocation(<#T##completionHandler: ((CurrentWeatherResponse) -> Void)##((CurrentWeatherResponse) -> Void)##(_ weather: CurrentWeatherResponse) -> Void#>)
         weatherService.getLocation { [weak self] weatherResponse in
             DispatchQueue.main.async {
                 
@@ -45,6 +55,37 @@ import SwiftUI
             }
         }
     }
+    
+    
+//    func getWeather() {
+//
+//        guard let location = locationManager.location  else {
+//            print("There is no location")
+//            return
+//        }
+//        Task {
+//            await weatherService.downloadWeather(for: location) { [weak self] weatherResponse in
+//                DispatchQueue.main.async {
+//
+//                    self?.weather = Weather(apiResponse: weatherResponse)
+//                    self?.weatherHourly = WeatherHourly(apiResponse: weatherResponse)
+//
+//
+//                    if let location = self?.weatherService.location {
+//                        self?.weatherService.getLocationName(for: location) { name in
+//                            self?.locationName = name ?? "My location"
+//                        }
+//                    }
+//                    withAnimation(.easeInOut) {
+//                        self?.loadingState = .loaded
+//                    }
+//                }
+//
+//            }
+//        }
+//    }
+    
+    
 }
 
 

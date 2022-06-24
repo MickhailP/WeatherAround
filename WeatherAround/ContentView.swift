@@ -87,7 +87,7 @@ struct ContentView: View {
         }
         .onAppear{
             withAnimation {
-                viewModel.refresh()
+//                viewModel.refresh()
             }
         }
     }
