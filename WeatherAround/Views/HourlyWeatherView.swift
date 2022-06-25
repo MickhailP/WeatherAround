@@ -32,7 +32,7 @@ extension HourlyWeatherView {
                     HourStack(column: HourColumn(columnType: .regular, weather: weather))
                 }
             }
-            .padding(.trailing)
+            .padding(.horizontal, 10)
         }
     }
     
@@ -58,6 +58,7 @@ fileprivate struct HourStack: View {
                 .iconColor(weatherCode: column.weatherCode)
             Spacer()
             Text("\(column.detail)º")
+                
         }
         .foregroundColor(.white)
     }

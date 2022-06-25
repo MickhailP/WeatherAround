@@ -27,7 +27,7 @@ struct HourColumn: Identifiable {
         let ISODateFormatter = ISO8601DateFormatter()
         
         
-        let startTime = weather.startTime ?? ISODateFormatter.string(from: Date())
+let startTime = weather.startTime 
         let convertedDate = ISODateFormatter.date(from: startTime) ?? Date()
         
         self.date = convertedDate

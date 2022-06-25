@@ -8,6 +8,21 @@
 import Foundation
 import SwiftUI
 
+
+struct WeatherDaily {
+    let weatherDaily: [Weather]
+    
+    init(apiResponse: CurrentWeatherResponse) {
+        let dailyIntervals = apiResponse.data.timelines[0].intervals
+        self.weatherDaily = dailyIntervals.compactMap { day -> Weather in
+            let weatherCode = WeatherCode(rawValue: "\(day.values.weatherCode)") ?? WeatherCode.unknown
+            return Weather(temperature: day.values.temperature, weatherCode: weatherCode, startTime: day.startTime)
+        }
+    }
+    
+    
+}
+
 struct WeatherHourly {
     let weatherHourly: [Weather]
     
@@ -51,7 +66,7 @@ struct WeatherHourly {
 struct Weather: Identifiable {
     let id = UUID()
     
-    let startTime: String?
+    let startTime: String
     let temperature: Double
     let temperatureApparent: Double?
     
@@ -92,7 +107,18 @@ struct Weather: Identifiable {
         
     }
     
-    
+    var displayedDay: String {
+       
+        let dateFormatter = DateFormatter()
+        let ISODateFormatter = ISO8601DateFormatter()
+        
+        let date = ISODateFormatter.date(from: startTime)
+        dateFormatter.dateFormat = "EE"
+        
+        let day = dateFormatter.string(from: date ?? Date.now)
+        
+        return day
+    }
     
     var image: Image {
         switch weatherCode {
@@ -283,4 +309,15 @@ extension Weather {
     
     static let example = Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
     
+}
+
+extension WeatherDaily {
+    
+    
+    static let exampleArray = [
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 22, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 31, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 12, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
+    ]
 }

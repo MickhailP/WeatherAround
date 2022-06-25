@@ -40,7 +40,7 @@ struct CustomStackView <Title: View, Content: View> : View {
                         
                     
                     contentView
-                        .padding(.leading)
+                        .padding(.horizontal, 15)
                         .padding(.bottom, 10)
                         
                 }

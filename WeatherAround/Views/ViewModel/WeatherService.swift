@@ -46,7 +46,7 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
     
     enum APIService {
         case currentForecast(location: CLLocation)
-        case dailyForecast(lat: Double, long: Double)
+        case dailyForecast(location: CLLocation)
     }
     
     
@@ -94,18 +94,29 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
         print("Start fetch Weather")
         
         //Set URL FOR request
-        let urlTest = APIService.currentForecast(location: location).url
+        let urlCurrent = APIService.currentForecast(location: location).url
+        let urlDaily = APIService.dailyForecast(location: location).url
+        
+        print(urlDaily)
         
         do {
-            let (data, response) = try await URLSession.shared.data(from: urlTest)
+            let (dataCurrent, responseCurrent) = try await URLSession.shared.data(from: urlCurrent)
+            let (dataDaily, responseDaily) = try await URLSession.shared.data(from: urlDaily)
             
-            guard ( response as? HTTPURLResponse)?.statusCode == 200 else { return }
+            
+            guard (responseCurrent as? HTTPURLResponse)?.statusCode == 200 else { return }
+            guard (responseDaily as? HTTPURLResponse)?.statusCode == 200 else { return }
             
             let decoder = JSONDecoder()
-            let decodedData = try decoder.decode(CurrentWeatherResponse.self, from: data)
-            self.completionHandler?(decodedData)
+            
+            let decodedDataCurrent = try decoder.decode(CurrentWeatherResponse.self, from: dataCurrent)
+            let decodedDataDaily = try decoder.decode(CurrentWeatherResponse.self, from: dataDaily)
+            
+            self.completionHandler?(decodedDataCurrent)
+            self.completionHandler?(decodedDataDaily)
             
             print("Weather forecast received successfully")
+            print(decodedDataDaily)
         } catch {
             print(error, error.localizedDescription)
         }
@@ -118,7 +129,6 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
         location = locations.first
         manager.stopUpdatingLocation()
         print("Location received")
-        print(location)
         
         guard let location = location else {
             print("There is no location")

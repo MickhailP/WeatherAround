@@ -16,6 +16,7 @@ import SwiftUI
     
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
+    @Published var weatherDaily: WeatherDaily?
     
     
     
@@ -30,7 +31,10 @@ import SwiftUI
     
     
     init() {
-        
+        //
+        //    ADD ALERTS TO ERRORS!
+        //
+        //
         refresh()
       
 //        getWeather()
@@ -42,6 +46,7 @@ import SwiftUI
                 
                 self?.weather = Weather(apiResponse: weatherResponse)
                 self?.weatherHourly = WeatherHourly(apiResponse: weatherResponse)
+                self?.weatherDaily = WeatherDaily(apiResponse: weatherResponse)
                 
                 
                 if let location = self?.weatherService.location {

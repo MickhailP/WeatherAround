@@ -28,6 +28,9 @@ struct ContentView: View {
                 .opacity(0.4)
                 .blur(radius: 100)
             
+            Color.gray.opacity(0.3)
+                .ignoresSafeArea()
+            
             if viewModel.loadingState == .loaded {
                 
                 if let weather = viewModel.weather  {
@@ -61,6 +64,10 @@ struct ContentView: View {
                             if let weatherHourly = viewModel.weatherHourly {
                                 HourlyWeatherView(weather: weatherHourly)
                                 
+                            }
+                            
+                            if let weatherDaily = viewModel.weatherDaily {
+                                DailyForecastView(weatherDaily: weatherDaily)
                             }
                             
                             WeatherDetailView(weather: weather)

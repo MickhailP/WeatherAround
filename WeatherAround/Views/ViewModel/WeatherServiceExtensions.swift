@@ -15,9 +15,12 @@ extension WeatherService.APIService {
     //Date parameters
     private static let dateFormatter = ISO8601DateFormatter()
     private static let startTimeFormatted = dateFormatter.string(from: Date.now)
-    private static let endTime = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date())
+//    private static let endTimeForCurrent = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date())
+//    private static let endTimeForDaily = Calendar.current.date(byAdding: DateComponents(day: 10), to: Date())
+    
     //ATTENTION!! FORCE UNWRAPPED OPTIONAL
     private static let endTimeFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 1), to: Date.now)!)
+    private static let endTimeForDailyFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 10), to: Date.now)!)
     
     var url: URL {
         var urlComponents = URLComponents(string: baseURL)
@@ -35,7 +38,7 @@ extension WeatherService.APIService {
             case .currentForecast:
                 return "https://api.tomorrow.io"
             case .dailyForecast:
-                return "EMPTY SITE ADDRESS"
+                return "https://api.tomorrow.io"
         }
     }
     
@@ -44,7 +47,7 @@ extension WeatherService.APIService {
             case .currentForecast:
                 return "/v4/timelines"
             case .dailyForecast:
-                return "EMPTY PATH"
+                return "/v4/timelines"
         }
     }
     
@@ -69,8 +72,16 @@ extension WeatherService.APIService {
                     URLQueryItem(name: "endTime", value: "\(Self.endTimeFormatted)"),
                     URLQueryItem(name: "apikey", value: "\(Self.currentWeatherAPIKey)")
                 ]
-            case .dailyForecast:
-                return [ URLQueryItem(name: "EMPTY_FIELD", value: "EMPTY_QUERY_ITEM") ]
+            case .dailyForecast(let location):
+                return [
+                    URLQueryItem(name: "location", value: "\(location.coordinate.latitude),\(location.coordinate.longitude)"),
+                    URLQueryItem(name: "fields", value: "temperature"),
+                    URLQueryItem(name: "fields", value: "weatherCode"),
+                    URLQueryItem(name: "timesteps", value: "1d"),
+                    URLQueryItem(name: "startTime", value: "\(Self.startTimeFormatted)"),
+                    URLQueryItem(name: "endTime", value: "\(Self.endTimeForDailyFormatted)"),
+                    URLQueryItem(name: "apikey", value: "\(Self.currentWeatherAPIKey)")
+                ]
         }
     }
 }
