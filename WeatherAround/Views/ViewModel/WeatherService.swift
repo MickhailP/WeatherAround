@@ -109,9 +109,7 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
                 return
             }
             
-//            guard (responseCurrent as? HTTPURLResponse)?.statusCode == 200 else { return }
-//            guard (responseDaily as? HTTPURLResponse)?.statusCode == 200 else { return }
-//
+
             
             
             let decoder = JSONDecoder()
