@@ -17,7 +17,7 @@ struct HourlyWeatherView: View {
             sectionLabel
         }, contentView: {
             scrollHourlySection
-                .padding(.vertical)
+                .padding(.vertical, 5)
         })
     }
 }
@@ -49,7 +49,7 @@ fileprivate struct HourStack: View {
     let column: HourColumn
     
     var body: some View {
-        VStack(alignment: .center){
+        VStack(alignment: .center, spacing: 2.5){
             Text(column.time)
                 .font(.body)
             Spacer()
@@ -58,7 +58,6 @@ fileprivate struct HourStack: View {
                 .iconColor(weatherCode: column.weatherCode)
             Spacer()
             Text("\(column.detail)º")
-                
         }
         .foregroundColor(.white)
     }

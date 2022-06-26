@@ -44,6 +44,7 @@ struct WeatherDetailView: View {
                 }
             }
             .frame(maxHeight: .infinity)
+            
             HStack {
                 CustomStackView {
                     Label("Feels like", systemImage: "thermometer")
@@ -57,7 +58,6 @@ struct WeatherDetailView: View {
                         Text(weather.feelsLikeDescription)
                             .font(.subheadline)
                     }
-                   
                     
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .font(.title3)
@@ -71,76 +71,12 @@ struct WeatherDetailView: View {
                         Text("\(Int(weather.humidity ?? 0))%")
                             .font(.title)
                         Spacer()
-                        
-                    }
-                    
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                }
-            }
-            .frame(maxHeight: .infinity)
-            
-            
-            HStack {
-                CustomStackView {
-                    Label("Wind speed", systemImage: "wind")
-                } contentView: {
-                    VStack(alignment: .leading, spacing: customStackContentViewSpacing) {
-                        
-                        Text("\(Int(weather.windSpeed ?? 0)) mps")
-                            .font(.title)
-                        Spacer()
-                    }
-                    
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                    .font(.title3)
-                }
-                
-                
-                CustomStackView {
-                    Label("Visibility", systemImage: "eye")
-                } contentView: {
-                    VStack(alignment: .leading, spacing: customStackContentViewSpacing) {
-                        Text("\(Int(weather.visibility ?? 0)) km")
-                            .font(.title)
-                        Spacer()
-                        
-                        Text("Light haze is affecting visibility")
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 }
             }
             .frame(maxHeight: .infinity)
             
-            HStack {
-                CustomStackView {
-                    Label("Wind speed", systemImage: "wind")
-                } contentView: {
-                    VStack(alignment: .leading, spacing: customStackContentViewSpacing) {
-                        
-                        Text("\(Int(weather.windSpeed ?? 0)) mps")
-                            .font(.title)
-                        Spacer()
-                    }
-                    
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                    .font(.title3)
-                }
-                
-                
-                CustomStackView {
-                    Label("Visibility", systemImage: "eye")
-                } contentView: {
-                    VStack(alignment: .leading, spacing: customStackContentViewSpacing) {
-                        Text("\(Int(weather.visibility ?? 0)) km")
-                            .font(.title)
-                        Spacer()
-                        
-                        Text("Light haze is affecting visibility")
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                }
-            }
-            .frame(maxHeight: .infinity)
             
             HStack {
                 CustomStackView {

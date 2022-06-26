@@ -36,19 +36,17 @@ import SwiftUI
         //
         //
         refresh()
-      
-//        getWeather()
     }
     
     func refresh() {
-        weatherService.getLocation { [weak self] weatherResponse in
+        weatherService.getLocation { [weak self] current, daily  in
             DispatchQueue.main.async {
                 
-                self?.weather = Weather(apiResponse: weatherResponse)
-                self?.weatherHourly = WeatherHourly(apiResponse: weatherResponse)
-                self?.weatherDaily = WeatherDaily(apiResponse: weatherResponse)
+                self?.weather = Weather(apiResponse: current)
+                self?.weatherHourly = WeatherHourly(apiResponse: current)
+                self?.weatherDaily = WeatherDaily(apiResponse: daily)
                 
-                
+            
                 if let location = self?.weatherService.location {
                     self?.weatherService.getLocationName(for: location) { name in
                         self?.locationName = name ?? "My location"

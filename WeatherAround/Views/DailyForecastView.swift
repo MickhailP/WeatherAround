@@ -18,24 +18,28 @@ struct DailyForecastView: View {
 
         } contentView: {
             ForEach(weatherDaily.weatherDaily) { day in
-                VStack(spacing: 5) {
+                VStack {
                     HStack {
                         Text("\(day.displayedDay)")
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Spacer()
                         
                         day.image
                             .iconColor(weatherCode: day.weatherCode)
-                            .font(.title3)
+                            .frame(maxWidth: .infinity, alignment: .center)
                         
                         Spacer()
-                        
-                        Image(systemName: "thermometer")
-                        Text("\(Int(day.temperature))º")
+                        HStack {
+                            Image(systemName: "thermometer")
+                            Text("\(Int(day.temperature))º")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                         
                     }
                     .padding(.horizontal, 10)
-                    .font(.title2 .weight(.semibold))
+//                    .padding(.vertical, 5)
+                    .font(.title3 .weight(.regular))
                     .foregroundColor(.white)
                     
                     Divider()

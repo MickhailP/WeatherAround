@@ -52,6 +52,7 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
     
     @Published var location: CLLocation?
     
+    /*
 //    {
 //        didSet {
 //            guard let location = location else {
@@ -63,11 +64,11 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
 //            }
 //        }
 //    }
-    
+    */
     
     private let manager = CLLocationManager()
     
-    var completionHandler: ((CurrentWeatherResponse) -> Void)?
+    var completionHandler: ((_ current: CurrentWeatherResponse,_ daily: CurrentWeatherResponse) -> Void)?
     
     
  
@@ -76,16 +77,13 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
         manager.delegate = self
         manager.requestWhenInUseAuthorization()
         manager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-        manager.startUpdatingLocation()
+        manager.requestLocation()
         print("Location requested")
     }
   
     
     
-    func getLocation(_ completionHandler: @escaping (_ weather: CurrentWeatherResponse) -> Void) {
-        
-    
-      
+    func getLocation(_ completionHandler: @escaping (_ current: CurrentWeatherResponse, _ daily: CurrentWeatherResponse) -> Void) {
         self.completionHandler = completionHandler
     }
     
@@ -104,16 +102,25 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
             let (dataDaily, responseDaily) = try await URLSession.shared.data(from: urlDaily)
             
             
-            guard (responseCurrent as? HTTPURLResponse)?.statusCode == 200 else { return }
-            guard (responseDaily as? HTTPURLResponse)?.statusCode == 200 else { return }
+            guard (responseCurrent as? HTTPURLResponse)?.statusCode == 200 &&
+                    (responseDaily as? HTTPURLResponse)?.statusCode == 200 else {
+                print("There should be a code 2xx, but it is \(responseCurrent) or  \(responseDaily)")
+                self.completionHandler = nil
+                return
+            }
+            
+//            guard (responseCurrent as? HTTPURLResponse)?.statusCode == 200 else { return }
+//            guard (responseDaily as? HTTPURLResponse)?.statusCode == 200 else { return }
+//
+            
             
             let decoder = JSONDecoder()
             
             let decodedDataCurrent = try decoder.decode(CurrentWeatherResponse.self, from: dataCurrent)
             let decodedDataDaily = try decoder.decode(CurrentWeatherResponse.self, from: dataDaily)
             
-            self.completionHandler?(decodedDataCurrent)
-            self.completionHandler?(decodedDataDaily)
+            self.completionHandler?(decodedDataCurrent, decodedDataDaily)
+            
             
             print("Weather forecast received successfully")
             print(decodedDataDaily)
@@ -127,7 +134,6 @@ class WeatherService: NSObject, CLLocationManagerDelegate {
     // Fetch the user's locations and request Weather from server for the last one.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.first
-        manager.stopUpdatingLocation()
         print("Location received")
         
         guard let location = location else {
