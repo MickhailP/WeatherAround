@@ -112,6 +112,7 @@
 				D7ABEFF32842439700F7E44C /* Model */,
 				D7ABEFE3283FF57800F7E44C /* Assets.xcassets */,
 				D7ABEFE5283FF57800F7E44C /* Preview Content */,
+				D7ABEFED283FF60300F7E44C /* .gitignore.md */,
 			);
 			path = WeatherAround;
 			sourceTree = "<group>";
@@ -119,7 +120,6 @@
 		D7ABEFE5283FF57800F7E44C /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				D7ABEFED283FF60300F7E44C /* .gitignore.md */,
 				D7ABEFE6283FF57800F7E44C /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
