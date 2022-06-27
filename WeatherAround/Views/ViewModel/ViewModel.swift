@@ -6,19 +6,17 @@
 //
 
 import Foundation
-import CoreLocation
 import SwiftUI
+import Combine
 
 @MainActor class ViewModel: ObservableObject {
     
-    let weatherService = WeatherService.shared
-//    let locationManager = LocationManager()
+    @ObservedObject var locationManager = LocationManager.shared
+    let weatherManager = WeatherManager.shared
     
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
     @Published var weatherDaily: WeatherDaily?
-    
-    
     
     @Published var locationName = ""
     
@@ -29,29 +27,28 @@ import SwiftUI
     
     @Published var loadingState: LoadingState = .loading
     
+    private (set) var cancellables = Set<AnyCancellable>()
+    
     
     init() {
-        //
-        //    ADD ALERTS TO ERRORS!
-        //
-        //
-        refresh()
-    }
-    
-    func refresh() {
-        weatherService.getLocation { [weak self] current, daily  in
+        fetchWeather()
+        weatherManager.setWeatherToModel { [weak self] current, daily in
             DispatchQueue.main.async {
+                
+                if let location = self?.locationManager.location {
+                    self?.weatherManager.getLocationName(for: location) { name in
+                        self?.locationName = name ?? "My location"
+                    }
+                } else {
+                    self?.loadingState = .failed
+                    print("Location not found")
+                }
                 
                 self?.weather = Weather(apiResponse: current)
                 self?.weatherHourly = WeatherHourly(apiResponse: current)
                 self?.weatherDaily = WeatherDaily(apiResponse: daily)
                 
-            
-                if let location = self?.weatherService.location {
-                    self?.weatherService.getLocationName(for: location) { name in
-                        self?.locationName = name ?? "My location"
-                    }
-                }
+                
                 withAnimation(.easeInOut) {
                     self?.loadingState = .loaded
                 }
@@ -59,36 +56,21 @@ import SwiftUI
         }
     }
     
-    
-//    func getWeather() {
-//
-//        guard let location = locationManager.location  else {
-//            print("There is no location")
-//            return
-//        }
-//        Task {
-//            await weatherService.downloadWeather(for: location) { [weak self] weatherResponse in
-//                DispatchQueue.main.async {
-//
-//                    self?.weather = Weather(apiResponse: weatherResponse)
-//                    self?.weatherHourly = WeatherHourly(apiResponse: weatherResponse)
-//
-//
-//                    if let location = self?.weatherService.location {
-//                        self?.weatherService.getLocationName(for: location) { name in
-//                            self?.locationName = name ?? "My location"
-//                        }
-//                    }
-//                    withAnimation(.easeInOut) {
-//                        self?.loadingState = .loaded
-//                    }
-//                }
-//
-//            }
-//        }
-//    }
-    
-    
+    func fetchWeather() {
+        locationManager.$location
+            .sink { [weak self] location in
+                guard let location = location else {
+                    self?.loadingState = .failed
+                    print("Location not found")
+                    return
+                }
+                
+                Task  {
+                    await self?.weatherManager.downloadWeather(for: location)
+                }
+            }
+            .store(in: &cancellables)
+    }
 }
 
 
