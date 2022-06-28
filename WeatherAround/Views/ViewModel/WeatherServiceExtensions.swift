@@ -8,15 +8,15 @@
 import CoreLocation
 import Foundation
 
-extension WeatherManager.APIEndPoint {
+extension WeatherService.APIService {
     
     //This properties configure URL parameters
     private static let currentWeatherAPIKey = APIKeys.currentWeatherAPIKey
-    
     //Date parameters
     private static let dateFormatter = ISO8601DateFormatter()
     private static let startTimeFormatted = dateFormatter.string(from: Date.now)
-
+//    private static let endTimeForCurrent = Calendar.current.date(byAdding: DateComponents(day: 1), to: Date())
+//    private static let endTimeForDaily = Calendar.current.date(byAdding: DateComponents(day: 10), to: Date())
     
     //ATTENTION!! FORCE UNWRAPPED OPTIONAL
     private static let endTimeFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 1), to: Date.now)!)
@@ -89,7 +89,7 @@ extension WeatherManager.APIEndPoint {
 
 
 //The functionality to update user's location name
-extension WeatherManager {
+extension WeatherService {
     
     //Use this function to decode current location to locality name
     func getLocationName(for location: CLLocation, completionHandler: @escaping (String?) -> Void ) {
