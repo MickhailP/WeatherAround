@@ -92,11 +92,8 @@ struct ContentView: View {
                     .scaleEffect(2)
             }
         }
-        .onAppear{
-            withAnimation {
-//                viewModel.refresh()
-            }
-        }
+        
+    
     }
     
     func getTitleOpacity() -> CGFloat {

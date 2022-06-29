@@ -29,7 +29,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
 
     // Fetch the user's locations and request Weather from server for the last one.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
+        guard let location = locations.first else { return }
         self.location = location
         print("Location received FROM MANAGER")
         print(location)

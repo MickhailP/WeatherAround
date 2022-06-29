@@ -28,7 +28,7 @@ final class WeatherManager {
     
     //Use this function to fetch weather data from server. Call the WeatherService completion handler with Weather data.
     func downloadWeather(for location: CLLocation) async {
-        print("Start fetch Weather")
+        print("Start fetching Weather")
         
         //Set URL FOR request
         let urlCurrent = APIEndPoint.currentForecast(location: location).url

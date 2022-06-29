@@ -11,8 +11,8 @@ import Combine
 
 @MainActor class ViewModel: ObservableObject {
     
-    @ObservedObject var locationManager = LocationManager.shared
-    let weatherManager = WeatherManager.shared
+    @ObservedObject private var locationManager = LocationManager.shared
+    private let weatherManager = WeatherManager.shared
     
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
@@ -32,6 +32,7 @@ import Combine
     
     init() {
         fetchWeather()
+        
         weatherManager.setWeatherToModel { [weak self] current, daily in
             DispatchQueue.main.async {
                 
@@ -41,7 +42,7 @@ import Combine
                     }
                 } else {
                     self?.loadingState = .failed
-                    print("Location not found")
+                    print("Location is not available ")
                 }
                 
                 self?.weather = Weather(apiResponse: current)
@@ -58,13 +59,13 @@ import Combine
     
     func fetchWeather() {
         locationManager.$location
+            .compactMap { $0 }
             .sink { [weak self] location in
-                guard let location = location else {
-                    self?.loadingState = .failed
-                    print("Location not found")
-                    return
-                }
-                
+//                guard let location = location else {
+//                    self?.loadingState = .failed
+//                    print("Location not found")
+//                    return
+//                }
                 Task  {
                     await self?.weatherManager.downloadWeather(for: location)
                 }
