@@ -26,6 +26,7 @@
 		D7D098BD2865A16100138FBC /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D098BC2865A16100138FBC /* APIKeys.swift */; };
 		D7D098BF2866191E00138FBC /* WeatherServiceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D098BE2866191E00138FBC /* WeatherServiceExtensions.swift */; };
 		D7D098C12866312200138FBC /* DailyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D098C02866312200138FBC /* DailyForecastView.swift */; };
+		D7EB426A286CD7D500C6BC8D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EB4269286CD7D500C6BC8D /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		D7D098BC2865A16100138FBC /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		D7D098BE2866191E00138FBC /* WeatherServiceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherServiceExtensions.swift; sourceTree = "<group>"; };
 		D7D098C02866312200138FBC /* DailyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastView.swift; sourceTree = "<group>"; };
+		D7EB4269286CD7D500C6BC8D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				D798D9E2284FCC2700097978 /* CustomStackView.swift */,
 				D799C0D9284E5CF90084C541 /* HourColumn.swift */,
 				D7BE6A03284CD1960040AAC2 /* IconColor.swift */,
+				D7EB4269286CD7D500C6BC8D /* LoadingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 				D799C0DA284E5CF90084C541 /* HourColumn.swift in Sources */,
 				D7ABEFE0283FF57300F7E44C /* WeatherAroundApp.swift in Sources */,
 				D7BE6A02284CC9510040AAC2 /* HeaderView.swift in Sources */,
+				D7EB426A286CD7D500C6BC8D /* LoadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
