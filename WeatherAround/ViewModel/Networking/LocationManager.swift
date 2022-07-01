@@ -18,7 +18,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
 
     private let manager = CLLocationManager()
 
-    override init() {
+    override private init() {
         super.init()
         manager.delegate = self
         manager.requestWhenInUseAuthorization()

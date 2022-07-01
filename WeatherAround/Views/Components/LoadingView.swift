@@ -9,35 +9,35 @@ import SwiftUI
 
 struct LoadingCircle: View  {
     
-    var strokeColor: Color = .red
+    var strokeColor: Color = .blue.opacity(0.6)
     var strokeWidth: CGFloat  = 3
     
-    var rotation: Angle
+   
     var start: CGFloat
     var end: CGFloat
-
+    var rotation: Angle
     
     var body: some View {
         ZStack {
             Circle()
                 .trim(from: start , to: end)
                 .stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .rotationEffect(rotation)
                 
             
         }
-        .rotationEffect(rotation)
     }
     
 }
 
 struct LoadingView: View {
     
-    let rotationTime: Double = 0.75
+    let rotationTime: Double = 1
     let fullRotation: Angle = .degrees(360)
     static let startPoint: Angle = .degrees(270)
     let animationTime: Double = 1.9
     
-    @State private var animationAmount = 1.5
+    @State private var animationAmount = 2.2
     
 //    @State private var rotation: Angle = .degrees(0.2)
     @State private var start: CGFloat = 0.0
@@ -47,21 +47,23 @@ struct LoadingView: View {
     
     var body: some View {
         ZStack {
-            Image(systemName: "cloud.fill")
-                .interpolation(.none)
-                .foregroundColor(.gray)
-                .font(.title)
+            ZStack {
+                Image(systemName: "cloud.fill")
+                    .interpolation(.none)
+                    .foregroundColor(.gray.opacity(0.1))
+                    .font(.title2)
+                
+                    .shadow(radius: 5)
+                    .scaleEffect(animationAmount)
+                Image(systemName: "cloud")
+                    .interpolation(.none)
+                    .foregroundColor(.gray.opacity(0.3))
+                    .font(.title2)
+                
+                    
+                    .scaleEffect(animationAmount)
+            }
                 .shadow(radius: 5)
-                .scaleEffect(animationAmount)
-                .overlay(
-                    Circle()
-                        .stroke(.gray, lineWidth: 3)
-                        .shadow(radius: 10)
-                        .frame(width: 100, height: 100)
-                        .offset(y: 2)
-                        
-                        
-                )
                 .onAppear{
                     withAnimation(.easeInOut(duration: 1).repeatForever(autoreverses: true )) {
                         
@@ -70,8 +72,15 @@ struct LoadingView: View {
                     }
                 }
             
-            LoadingCircle(rotation: rotationDegrees, start: start, end: end)
-                .frame(width: 100, height: 100)
+            Circle()
+                .stroke(.gray.opacity(0.3), lineWidth: 4)
+                .shadow(color: .gray.opacity(0.5), radius: 5)
+                .frame(width: 80, height: 80)
+                .offset(y: 2)
+                
+            
+            LoadingCircle(start: start, end: end, rotation: rotationDegrees)
+                .frame(width: 80, height: 80)
                 .offset(y: 2)
                 .onAppear() {
                     Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { mainTimer in
@@ -93,7 +102,18 @@ struct LoadingView: View {
     }
     
     func animateSpinner() {
-        animateSpinner(with: (rotationTime * 2) - 0.025) {
+        animateSpinner(with: rotationTime) {
+            self.end = 1
+        }
+        
+        animateSpinner(with: (rotationTime * 2) ) {
+        self.start = self.end - 0.5
+            self.end = self.start + 0.3
+            
+
+        }
+        
+        animateSpinner(with: (rotationTime * 2 ) - 0.01) {
             self.rotationDegrees += fullRotation
         }
     }
