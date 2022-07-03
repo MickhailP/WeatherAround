@@ -50,7 +50,7 @@ import Combine
                 self?.weatherDaily = WeatherDaily(apiResponse: daily)
                 
                 
-                withAnimation(.easeInOut) {
+                withAnimation(.easeIn) {
                     self?.loadingState = .loaded
                 }
             }

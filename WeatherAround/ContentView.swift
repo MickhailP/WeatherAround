@@ -21,7 +21,7 @@ struct ContentView: View {
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-                
+            
             
             LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
                 .ignoresSafeArea()
@@ -31,8 +31,17 @@ struct ContentView: View {
             Color.gray.opacity(0.3)
                 .ignoresSafeArea()
             
-            if viewModel.loadingState == .loaded {
+            if viewModel.loadingState == .loading {
+                VStack(spacing: 10) {
+                    LoadingView()
+                    
+                    
+                    Text("Loading weather data...")
+                        .foregroundColor(.white.opacity(0.8))
+                        .padding()
+                }
                 
+            } else if viewModel.loadingState == .loaded {
                 if let weather = viewModel.weather  {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 15) {
@@ -87,13 +96,8 @@ struct ContentView: View {
                         )
                     }
                 }
-            } else if viewModel.loadingState == .loading {
-                ProgressView()
-                    .scaleEffect(2)
             }
-        }
-        
-    
+        }    
     }
     
     func getTitleOpacity() -> CGFloat {

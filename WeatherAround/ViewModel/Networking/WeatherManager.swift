@@ -56,7 +56,6 @@ final class WeatherManager {
             self.completionHandler?(decodedDataCurrent, decodedDataDaily)
             
             print("Weather forecast received successfully")
-            print(decodedDataDaily)
         } catch {
             print(error, error.localizedDescription)
         }

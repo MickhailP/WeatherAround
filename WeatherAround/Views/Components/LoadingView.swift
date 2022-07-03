@@ -9,8 +9,8 @@ import SwiftUI
 
 struct LoadingCircle: View  {
     
-    var strokeColor: Color = .blue.opacity(0.6)
-    var strokeWidth: CGFloat  = 3
+    var strokeColor: Color = .white.opacity(0.6)
+    var strokeWidth: CGFloat  = 4
     
    
     var start: CGFloat
@@ -45,19 +45,21 @@ struct LoadingView: View {
     
     @State private var rotationDegrees = startPoint
     
+    
+    
     var body: some View {
         ZStack {
             ZStack {
                 Image(systemName: "cloud.fill")
-                    .interpolation(.none)
-                    .foregroundColor(.gray.opacity(0.1))
+                    
+                    .foregroundColor(.white.opacity(0.4))
                     .font(.title2)
                 
                     .shadow(radius: 5)
                     .scaleEffect(animationAmount)
                 Image(systemName: "cloud")
-                    .interpolation(.none)
-                    .foregroundColor(.gray.opacity(0.3))
+
+                    .foregroundColor(.white.opacity(0.6))
                     .font(.title2)
                 
                     
@@ -73,8 +75,8 @@ struct LoadingView: View {
                 }
             
             Circle()
-                .stroke(.gray.opacity(0.3), lineWidth: 4)
-                .shadow(color: .gray.opacity(0.5), radius: 5)
+                .stroke(.white.opacity(0.4), lineWidth: 4)
+                .shadow(color: .gray, radius: 5)
                 .frame(width: 80, height: 80)
                 .offset(y: 2)
                 
@@ -107,9 +109,7 @@ struct LoadingView: View {
         }
         
         animateSpinner(with: (rotationTime * 2) ) {
-        self.start = self.end - 0.5
-            self.end = self.start + 0.3
-            
+            self.end = self.start + 0.5
 
         }
         
@@ -121,6 +121,10 @@ struct LoadingView: View {
 
 struct LoadingView_Previews: PreviewProvider {
     static var previews: some View {
-        LoadingView()
+        ZStack {
+            Color.gray
+            LoadingView()
+        }
+        
     }
 }
