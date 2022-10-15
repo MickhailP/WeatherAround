@@ -17,74 +17,31 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            Image("appBackground")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            
-            LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
-                .ignoresSafeArea()
-                .opacity(0.4)
-                .blur(radius: 100)
-            
-            Color.gray.opacity(0.3)
-                .ignoresSafeArea()
+            backgroundView
             
             if viewModel.loadingState == .loading {
-                VStack(spacing: 10) {
-                    LoadingView()
-                    
-                    
-                    Text("Loading weather data...")
-                        .foregroundColor(.white.opacity(0.8))
-                        .padding()
-                }
+                
+                loadingPlaceholder
                 
             } else if viewModel.loadingState == .loaded {
-                if let weather = viewModel.weather  {
+                
+                if
+                    let weather = viewModel.weather,
+                    let weatherHourly = viewModel.weatherHourly,
+                    let weatherDaily = viewModel.weatherDaily
+                {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 15) {
-                            ZStack {
-                                HStack(alignment: .top) {
-                                    Text(viewModel.locationName)
-                                        .font(.title)
-                                        .foregroundColor(.white)
-                                        .padding(.top, 20)
-                                }
-                                .frame(maxHeight: .infinity, alignment: .top)
-                                .opacity( 1 - getTitleOpacity())
-                                
-                                
-                                HeaderView(weather: weather, locationName: viewModel.locationName)
-                                    .opacity(getTitleOpacity())
-                                    .padding(.vertical, 30)
-                            }
-                            
-                            //for dragging from bottom
-                            .offset(y: -offset)
-                            
-                            //for dragging from top
-                            .offset(y: offset > 0 ? (offset / UIScreen.main.bounds.width) * 100 : 0)
-                            
-                            .offset(y: getTitleOffset())
-                            
-                            
-                            if let weatherHourly = viewModel.weatherHourly {
-                                HourlyWeatherView(weather: weatherHourly)
-                                
-                            }
-                            
-                            if let weatherDaily = viewModel.weatherDaily {
-                                DailyForecastView(weatherDaily: weatherDaily)
-                            }
-                            
+                            headerSection(weather)
+                            HourlyWeatherView(weather: weatherHourly)
+                            DailyForecastView(weatherDaily: weatherDaily)
                             WeatherDetailView(weather: weather)
                         }
                         .padding(.top, 25)
                         .padding(.top, topEdge)
                         .padding([.horizontal, .bottom])
                         .overlay(
+                            // read the frames to adjust scrolling animations
                             GeometryReader{ proxy -> Color in
                                 let minY = proxy.frame(in: .global).minY
                                 
@@ -115,6 +72,61 @@ struct ContentView: View {
             return -newOffset
         }
         return 0
+    }
+}
+
+extension ContentView {
+    
+    private var backgroundView: some View {
+        Group {
+            Image("appBackground")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            
+            LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
+                .ignoresSafeArea()
+                .opacity(0.4)
+                .blur(radius: 100)
+            
+            Color.gray.opacity(0.3)
+                .ignoresSafeArea()
+        }
+    }
+    
+    private func headerSection(_ weather: Weather) -> some View {
+       return ZStack {
+            HStack(alignment: .top) {
+                Text(viewModel.locationName)
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding(.top, 20)
+            }
+            .frame(maxHeight: .infinity, alignment: .top)
+            .opacity( 1 - getTitleOpacity())
+            
+            
+            HeaderView(weather: weather, locationName: viewModel.locationName)
+                .opacity(getTitleOpacity())
+                .padding(.vertical, 30)
+        }
+        //DRAGGING MODIFIERS
+        //for dragging from bottom
+        .offset(y: -offset)
+        //for dragging from top
+        .offset(y: offset > 0 ? (offset / UIScreen.main.bounds.width) * 100 : 0)
+        .offset(y: getTitleOffset())
+    
+    }
+    
+    private var loadingPlaceholder: some View {
+        VStack(spacing: 10) {
+            LoadingView()
+            Text("Loading weather data...")
+                .foregroundColor(.white.opacity(0.8))
+                .padding()
+        }
     }
 }
 

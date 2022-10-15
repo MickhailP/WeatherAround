@@ -39,7 +39,7 @@ struct HeaderView: View {
                 .font(.title3)
             
             Label {
-                Text("\(String(format:"%.2f", weather.windSpeed ?? 0)) mph")
+                Text("\(String(format:"%.2f", weather.windSpeed ?? 0)) m/s")
             } icon: {
                 Image(systemName: "wind")
             }

@@ -23,11 +23,8 @@ struct LoadingCircle: View  {
                 .trim(from: start , to: end)
                 .stroke(strokeColor, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
                 .rotationEffect(rotation)
-                
-            
         }
     }
-    
 }
 
 struct LoadingView: View {
@@ -39,12 +36,10 @@ struct LoadingView: View {
     
     @State private var animationAmount = 2.2
     
-//    @State private var rotation: Angle = .degrees(0.2)
     @State private var start: CGFloat = 0.0
     @State private var end: CGFloat = 0.03
     
     @State private var rotationDegrees = startPoint
-    
     
     
     var body: some View {

@@ -313,7 +313,6 @@ extension Weather {
 
 extension WeatherDaily {
     
-    
     static let exampleArray = [
         Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 22, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
         Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 31, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),

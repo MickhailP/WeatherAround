@@ -36,8 +36,9 @@ import Combine
         weatherManager.setWeatherToModel { [weak self] current, daily in
             DispatchQueue.main.async {
                 
+                //Set up location name
                 if let location = self?.locationManager.location {
-                    self?.weatherManager.getLocationName(for: location) { name in
+                    self?.locationManager.getLocationName(for: location) { name in
                         self?.locationName = name ?? "My location"
                     }
                 } else {
@@ -45,11 +46,12 @@ import Combine
                     print("Location is not available ")
                 }
                 
+                //Initialise Weather instances based on decoded Weather data
                 self?.weather = Weather(apiResponse: current)
                 self?.weatherHourly = WeatherHourly(apiResponse: current)
                 self?.weatherDaily = WeatherDaily(apiResponse: daily)
                 
-                
+                //Dismiss LoadingView
                 withAnimation(.easeIn) {
                     self?.loadingState = .loaded
                 }
@@ -57,15 +59,14 @@ import Combine
         }
     }
     
+    /// Use this method to get the location from LocationManager and request downloading a Weather data.
+    ///
+    ///  It requests data downloading through WeatherManager when LocationManager has published location data.
     func fetchWeather() {
         locationManager.$location
+            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] location in
-//                guard let location = location else {
-//                    self?.loadingState = .failed
-//                    print("Location not found")
-//                    return
-//                }
                 Task  {
                     await self?.weatherManager.downloadWeather(for: location)
                 }

@@ -1,5 +1,5 @@
 //
-//  WeatherServiceExtensions.swift
+//  APIEndpoits.swift
 //  WeatherAround
 //
 //  Created by Миша Перевозчиков on 24.06.2022.
@@ -8,40 +8,45 @@
 import CoreLocation
 import Foundation
 
-extension WeatherManager.APIEndPoint {
+
+/// Use this enum to set up URL components to make a request to TOMORROW.IO  API
+enum APIEndPoint {
+    case currentForecast(location: CLLocation)
+    case dailyForecast(location: CLLocation)
+}
+
+extension APIEndPoint {
     
+    //MARK: APIKeys
     //This properties configure URL parameters
     private static let currentWeatherAPIKey = APIKeys.currentWeatherAPIKey
     
-    //Date parameters
+    //MARK:  Date parameters
     private static let dateFormatter = ISO8601DateFormatter()
     private static let startTimeFormatted = dateFormatter.string(from: Date.now)
-
     
+    
+    //MARK: Time settings
     //ATTENTION!! FORCE UNWRAPPED OPTIONAL
     private static let endTimeFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 1), to: Date.now)!)
     private static let endTimeForDailyFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 10), to: Date.now)!)
     
+    //MARK: URL compose
     var url: URL {
-        var urlComponents = URLComponents(string: baseURL)
-        urlComponents?.path = path
-        urlComponents?.queryItems = queryItems
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.tomorrow.io"
+        urlComponents.path = self.path
+        urlComponents.queryItems = self.queryItems
         
-        guard let urlComponents = urlComponents?.url else {
-            fatalError("Invalid URL")
+        guard let urlComponents = urlComponents.url else {
+            fatalError("Failed to construct URL")
         }
         return urlComponents
     }
     
-    var baseURL: String {
-        switch self {
-            case .currentForecast:
-                return "https://api.tomorrow.io"
-            case .dailyForecast:
-                return "https://api.tomorrow.io"
-        }
-    }
-    
+
+    //MARK: Path
     var path: String {
         switch self {
             case .currentForecast:
@@ -51,6 +56,8 @@ extension WeatherManager.APIEndPoint {
         }
     }
     
+    //MARK: QueryItems
+    //Setup your queryItems for data that should be received from server
     var queryItems: [URLQueryItem]? {
         switch self {
             case .currentForecast(let location):
@@ -87,36 +94,3 @@ extension WeatherManager.APIEndPoint {
 }
 
 
-
-//The functionality to update user's location name
-extension WeatherManager {
-    
-    //Use this function to decode current location to locality name
-    func getLocationName(for location: CLLocation, completionHandler: @escaping (String?) -> Void ) {
-        //create a CLGeocoder instance
-        let geocoder = CLGeocoder()
-        
-        //Look up a location and pass it in to closure
-        geocoder.reverseGeocodeLocation(location, preferredLocale: .current) { placemark, error in
-            
-            //Check if location available
-            guard let place = placemark?.first, error == nil else {
-                //An error occurred during decoding
-                completionHandler(nil)
-                print("Failed to get placemark from location")
-                return
-            }
-            // To see all available options of placemark
-            print(place)
-            
-            var name = "My location"
-        
-            if let locality = place.locality {
-                name = locality
-            }
-            
-            //Decoding was successful, call completion handler with locality name
-            completionHandler(name)
-        }
-    }
-}

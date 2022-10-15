@@ -22,35 +22,35 @@ struct CustomStackView <Title: View, Content: View> : View {
     
     var body: some View {
         VStack(spacing: 0) {
-                titleView
-                    .lineLimit(1)
-                    .frame(height: 30)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 5)
-                    .padding(.leading, 10)
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                    .textCase(.uppercase)
-                    .background(.white.opacity(0.2), in: CustomCorners(corners: bottomOffset < 35 ? .allCorners : [.topLeft, .topRight], radius: 15))
-                    .zIndex(1)
+            titleView
+                .lineLimit(1)
+                .frame(height: 30)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 5)
+                .padding(.leading, 10)
+                .foregroundColor(.secondary)
+                .font(.caption)
+                .textCase(.uppercase)
+                .background(.white.opacity(0.2), in: CustomCorners(corners: bottomOffset < 35 ? .allCorners : [.topLeft, .topRight], radius: 15))
+                .zIndex(1)
+            
+            VStack {
+                Divider()
+                    .padding(.horizontal, 5)
                 
-                VStack {
-                    Divider()
-                        .padding(.horizontal, 5)
-                        
-                    
-                    contentView
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 10)
-                        
-                }
-                .background(.white.opacity(0.2), in: CustomCorners(corners: [.bottomLeft, .bottomRight], radius: 15))
-                .offset(y: topOffset >= 120 ? 0 : -(-topOffset + 120))
-                .zIndex(0)
-                .clipped()
-                .opacity(changeOpacity())
+                
+                contentView
+                    .padding(.horizontal, 15)
+                    .padding(.bottom, 10)
                 
             }
+            .background(.white.opacity(0.2), in: CustomCorners(corners: [.bottomLeft, .bottomRight], radius: 15))
+            .offset(y: topOffset >= 120 ? 0 : -(-topOffset + 120))
+            .zIndex(0)
+            .clipped()
+            .opacity(changeOpacity())
+            
+        }
         
         .frame(maxWidth: .infinity)
         .cornerRadius(15)
@@ -76,7 +76,7 @@ struct CustomStackView <Title: View, Content: View> : View {
     
     func changeOpacity() -> CGFloat {
         if bottomOffset < 28 {
-             let progress = bottomOffset / 28
+            let progress = bottomOffset / 28
             
             return progress
         }

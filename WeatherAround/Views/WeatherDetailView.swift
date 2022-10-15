@@ -83,8 +83,7 @@ struct WeatherDetailView: View {
                     Label("Wind speed", systemImage: "wind")
                 } contentView: {
                     VStack(alignment: .leading, spacing: customStackContentViewSpacing) {
-                        
-                        Text("\(Int(weather.windSpeed ?? 0)) mps")
+                        Text("\(String(format:"%.2f", weather.windSpeed ?? 0)) m/s")
                             .font(.title)
                         Spacer()
                     }

@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-
-
 struct HourlyWeatherView: View {
+    
     let weather: WeatherHourly
     
     var body: some View {
