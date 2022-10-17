@@ -70,15 +70,11 @@ extension LocationManager {
             }
             // To see all available options of placemark
             print(place)
-            
-            var name = "My location"
         
-            if let locality = place.locality {
-                name = locality
+            if let name = place.locality {
+                //Decoding was successful, call completion handler with locality name
+                completionHandler(name)
             }
-            
-            //Decoding was successful, call completion handler with locality name
-            completionHandler(name)
         }
     }
 }

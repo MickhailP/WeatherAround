@@ -19,9 +19,9 @@ public class Networking {
             let (data, response) = try await URLSession.shared.data(from: endpoint)
             try handleResponse(response)
             
-            if let json = try? JSONSerialization.jsonObject(with: data) {
-                print(json)
-            }
+//            if let json = try? JSONSerialization.jsonObject(with: data) {
+//                print(json)
+//            }
             
             return data
             
