@@ -84,12 +84,6 @@ struct CustomStackView <Title: View, Content: View> : View {
     }
 }
 
-struct CustomStackView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(topEdge: 100)
-    }
-}
-
 struct CornerModifier: ViewModifier {
     @Binding var bottomOffset: CGFloat
     
@@ -102,3 +96,14 @@ struct CornerModifier: ViewModifier {
         }
     }
 }
+
+
+struct CustomStackView_Previews: PreviewProvider {
+    
+    static let wm = WeatherManager()
+    
+    static var previews: some View {
+        ContentView(weatherManager: wm, topEdge: 100)
+    }
+}
+

@@ -12,32 +12,32 @@ import CoreLocation
 
 @MainActor class ViewModel: ObservableObject {
     
+    //Managers
     @ObservedObject private var locationManager = LocationManager.shared
-    private let weatherManager = WeatherManager()
+    private let weatherManager: WeatherManagerProtocol
     
+    //Weather instances
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
     @Published var weatherDaily: WeatherDaily?
     
-    @Published var locationName = ""
-    
-    
-    enum LoadingState{
-        case loading, loaded, failed
-    }
-    
+    //UI properties
+    @Published var locationName: String = ""
     @Published var loadingState: LoadingState = .loading
     
     private (set) var cancellables = Set<AnyCancellable>()
     
     //MARK: Ver.3
-    init() {
+    init(weatherManager: WeatherManagerProtocol) {
+        self.weatherManager = weatherManager
+        
         print("INITIALISE STARTS. LOADING STATE: \(loadingState)")
         fetchLocationAndWeather()
         
     }
     
     //MARK: VER. 2
+    /*
     //    init() {
     //        fetchWeather2()
     //
@@ -50,8 +50,10 @@ import CoreLocation
     //        }
     //        print(loadingState)
     //    }
+     */
     
     //MARK: VER. 1
+    /*
     //    init() {
     //        fetchWeather()
     //
@@ -84,6 +86,7 @@ import CoreLocation
     //        }
     //
     //    }
+   
     
     /// Use this method to get the location from LocationManager and request downloading a Weather data.
     ///
@@ -99,6 +102,7 @@ import CoreLocation
 //            }
 //            .store(in: &cancellables)
 //    }
+     */
     
     func setLocationName(_ location: CLLocation?) {
         if let location = location {
@@ -158,6 +162,8 @@ import CoreLocation
         }
     }
     
+    //MARK: VER.1 methods
+    /*
 //    func fetchWeather2() {
 //
 //        locationManager.$location
@@ -202,6 +208,7 @@ import CoreLocation
 //            }
 //            .store(in: &cancellables)
 //    }
+     */
         
     }
     

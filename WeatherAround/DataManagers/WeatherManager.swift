@@ -10,8 +10,8 @@ import CoreLocation
 import Combine
 import UIKit
 
-final class WeatherManager {
-  
+final class WeatherManager: WeatherManagerProtocol {
+    
     
     //MARK: VER.#3
     

@@ -9,11 +9,18 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var viewModel = ViewModel()
+    @StateObject var viewModel: ViewModel
     
     @State private var offset: CGFloat = 0
     
-    let topEdge: CGFloat
+    private let topEdge: CGFloat
+    
+    init(weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
+        _viewModel = StateObject(wrappedValue: ViewModel(weatherManager: weatherManager))
+        self.offset = 0
+        self.topEdge = topEdge
+    }
+    
     
     var body: some View {
         ZStack{
@@ -131,7 +138,9 @@ extension ContentView {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    static let wm = WeatherManager()
+    
     static var previews: some View {
-        ContentView( topEdge: 100 )
+        ContentView( weatherManager: wm, topEdge: 100 )
     }
 }
