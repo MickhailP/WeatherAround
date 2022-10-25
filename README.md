@@ -20,4 +20,8 @@ Weahter forecast application
  - SwitfUI
 
 ## Screenshots
-![weatherGif](https://user-images.githubusercontent.com/81718237/197859419-c60f344d-0ff3-48e1-ad2d-20d8e7c95197.gif)
+
+
+
+
+
