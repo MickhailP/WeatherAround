@@ -40,6 +40,8 @@ final class WeatherManager: WeatherManagerProtocol {
             throw error
         }
     }
+    
+    
     /// Use this method for fetching weather data from server for multiple endpoints, for example for different locations at the same time
     /// - Parameter locations: Coordinates for those data should be fetched
     /// - Returns: Array of decoded Weather responses for different locations
@@ -79,7 +81,7 @@ final class WeatherManager: WeatherManagerProtocol {
     
     
     //MARK: VER.#2
-    //Download from some URL and return decoded CurrentWeatherResponse to ViewModel.swift trough the closure
+    //Download from some URL and return decoded CurrentWeatherResponse to MainWeatherViewViewModel.swift trough the closure
     //More universal variant
     func download(from url: URL, completion: @escaping (_ weatherData: CurrentWeatherResponse) async -> Void) async throws {
         do {
@@ -100,7 +102,7 @@ final class WeatherManager: WeatherManagerProtocol {
     }
     
     //MARK: VER.#1. Fetching trough the closures
-    //Async loading two responses for specific location and sending response in tuple to the ViewModel.swift trough the closure
+    //Async loading two responses for specific location and sending response in tuple to the MainWeatherViewViewModel.swift trough the closure
     /*
     private var completionHandler: ((_ current: CurrentWeatherResponse,_ daily: CurrentWeatherResponse) -> Void)?
 

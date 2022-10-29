@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainWeatherView.swift
 //  WeatherAround
 //
 //  Created by Миша Перевозчиков on 26.05.2022.
@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MainWeatherView: View {
     
-    @StateObject var viewModel: ViewModel
+    @StateObject var viewModel: MainWeatherViewViewModel
     
     @State private var offset: CGFloat = 0
     
     private let topEdge: CGFloat
     
     init(weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
-        _viewModel = StateObject(wrappedValue: ViewModel(weatherManager: weatherManager))
+        _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(weatherManager: weatherManager))
         self.offset = 0
         self.topEdge = topEdge
     }
@@ -82,7 +82,7 @@ struct ContentView: View {
     }
 }
 
-extension ContentView {
+extension MainWeatherView {
     
     private var backgroundView: some View {
         Group {
@@ -141,6 +141,6 @@ struct ContentView_Previews: PreviewProvider {
     static let wm = WeatherManager()
     
     static var previews: some View {
-        ContentView( weatherManager: wm, topEdge: 100 )
+        MainWeatherView( weatherManager: wm, topEdge: 100 )
     }
 }

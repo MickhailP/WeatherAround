@@ -10,11 +10,14 @@ import SwiftUI
 import Combine
 import CoreLocation
 
-@MainActor class ViewModel: ObservableObject {
+class MainWeatherViewViewModel: ObservableObject {
     
     //Managers
     @ObservedObject private var locationManager = LocationManager.shared
     private let weatherManager: WeatherManagerProtocol
+    
+    
+    
     
     //Weather instances
     @Published var weather: Weather?
@@ -34,6 +37,65 @@ import CoreLocation
         print("INITIALISE STARTS. LOADING STATE: \(loadingState)")
         fetchLocationAndWeather()
         
+    }
+    
+   
+    func setLocationName(_ location: CLLocation?) {
+        if let location = location {
+            self.locationManager.getLocationName(for: location) { name in
+                self.locationName = name ?? "My location"
+            }
+        } else {
+            print("Location name is not available ")
+        }
+    }
+    
+    func fetchLocationAndWeather() {
+        locationManager.$location
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { completion in
+                switch completion {
+                    case .finished:
+                        print("Location has been set up.")
+                        break
+                    case .failure(let error):
+                        withAnimation(.easeIn) {
+                            self.loadingState = .failed
+                        }
+                        print("There was an error: \(error). Fetching location hasn't done.")
+                }
+            } receiveValue: { [ weak self ] location in
+                self?.setLocationName(location)
+                self?.getCurrentAndDailyWeather(for: location)
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getCurrentAndDailyWeather(for location: CLLocation)  {
+        
+        let urlCurrent = APIEndPoint.currentForecast(location: location).url
+        let urlDaily = APIEndPoint.dailyForecast(location: location).url
+        
+        Task {
+            do {
+                async let fetchedCurrent = self.weatherManager.fetchWeatherData(from: urlCurrent)
+                async let fetchedDaily = self.weatherManager.fetchWeatherData(from: urlDaily)
+                
+                try await self.weather = Weather(apiResponse: fetchedCurrent)
+                try await self.weatherHourly = WeatherHourly(apiResponse: fetchedCurrent)
+                try  await self.weatherDaily = WeatherDaily(apiResponse: fetchedDaily)
+                
+                self.loadingState = .loaded
+                print("LOADING STATE: \(loadingState)")
+               
+            } catch {
+                self.loadingState = .failed
+                print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
+                print("LOADING STATE: \(loadingState)")
+                
+            }
+        }
     }
     
     //MARK: VER. 2
@@ -104,63 +166,6 @@ import CoreLocation
 //    }
      */
     
-    func setLocationName(_ location: CLLocation?) {
-        if let location = location {
-            self.locationManager.getLocationName(for: location) { name in
-                self.locationName = name ?? "My location"
-            }
-        } else {
-            print("Location name is not available ")
-        }
-    }
-    
-    func fetchLocationAndWeather() {
-        locationManager.$location
-            .receive(on: DispatchQueue.main)
-            .compactMap { $0 }
-            .sink { completion in
-                switch completion {
-                    case .finished:
-                        print("Location has been set up.")
-                        break
-                    case .failure(let error):
-                        withAnimation(.easeIn) {
-                            self.loadingState = .failed
-                        }
-                        print("There was an error: \(error). Fetching location hasn't done.")
-                }
-            } receiveValue: { [ weak self ] location in
-                self?.setLocationName(location)
-                self?.getCurrentAndDailyWeather(for: location)
-            }
-            .store(in: &cancellables)
-    }
-    
-    func getCurrentAndDailyWeather(for location: CLLocation)  {
-        
-        let urlCurrent = APIEndPoint.currentForecast(location: location).url
-        let urlDaily = APIEndPoint.dailyForecast(location: location).url
-        
-        Task {
-            do {
-                async let fetchedCurrent = self.weatherManager.fetchWeatherData(from: urlCurrent)
-                async let fetchedDaily = self.weatherManager.fetchWeatherData(from: urlDaily)
-                
-                try await self.weather = Weather(apiResponse: fetchedCurrent)
-                try await self.weatherHourly = WeatherHourly(apiResponse: fetchedCurrent)
-                try  await self.weatherDaily = WeatherDaily(apiResponse: fetchedDaily)
-                
-                self.loadingState = .loaded
-                print("LOADING STATE: \(loadingState)")
-               
-            } catch {
-                self.loadingState = .failed
-                print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
-                print("LOADING STATE: \(loadingState)")
-                
-            }
-        }
-    }
     
     //MARK: VER.1 methods
     /*

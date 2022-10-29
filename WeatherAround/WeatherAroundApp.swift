@@ -12,13 +12,16 @@ struct WeatherAroundApp: App {
     
     let weatherManager = WeatherManager()
     
+    
     var body: some Scene {
         WindowGroup {
-            GeometryReader { proxy in
-                let topEdge = proxy.safeAreaInsets.top
-                ContentView(weatherManager: WeatherManager(), topEdge: topEdge)
-                    .ignoresSafeArea(.all, edges: .top)
-            }
+//            GeometryReader { proxy in
+//                let topEdge = proxy.safeAreaInsets.top
+//                MainWeatherView(weatherManager: WeatherManager(), topEdge: topEdge)
+//                    .ignoresSafeArea(.all, edges: .top)
+//            }
+            
+            FavoriteLocationView()
         }
     }
 }
