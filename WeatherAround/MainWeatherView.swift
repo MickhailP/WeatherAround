@@ -15,10 +15,20 @@ struct MainWeatherView: View {
     
     private let topEdge: CGFloat
     
-    init(weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
-        _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(weatherManager: weatherManager))
+    
+    
+    init(location: Location?, weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
+        if let location = location {
+            _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(location: location, weatherManager: weatherManager))
+            
+        } else {
+            _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(weatherManager: weatherManager))
+        }
+        
+       
         self.offset = 0
         self.topEdge = topEdge
+        
     }
     
     
@@ -141,6 +151,6 @@ struct ContentView_Previews: PreviewProvider {
     static let wm = WeatherManager()
     
     static var previews: some View {
-        MainWeatherView( weatherManager: wm, topEdge: 100 )
+        MainWeatherView(location: nil, weatherManager: wm, topEdge: 100 )
     }
 }

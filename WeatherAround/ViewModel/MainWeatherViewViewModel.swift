@@ -18,7 +18,6 @@ class MainWeatherViewViewModel: ObservableObject {
     
     
     
-    
     //Weather instances
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
@@ -37,6 +36,27 @@ class MainWeatherViewViewModel: ObservableObject {
         print("INITIALISE STARTS. LOADING STATE: \(loadingState)")
         fetchLocationAndWeather()
         
+    }
+    
+    init(location: Location? = nil, weatherManager: WeatherManagerProtocol) {
+        self.weatherManager = weatherManager
+        
+        if let location = location {
+            if location.weather == nil &&
+                location.weatherDaily == nil &&
+                location.weatherHourly == nil {
+                getCurrentAndDailyWeather(for: location.geoLocation)
+                
+            } else {
+                _weather = Published(wrappedValue: location.weather)
+                _weatherHourly = Published(wrappedValue: location.weatherHourly)
+                _weatherDaily = Published(wrappedValue:location.weatherDaily)
+            }
+            
+            self.locationName = location.name
+        } else {
+            fetchLocationAndWeather()
+        }
     }
     
    

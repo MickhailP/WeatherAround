@@ -11,7 +11,7 @@ import CoreLocation
 struct Location: Identifiable {
     let id = UUID()
     let name: String
-    let coordinates: CLLocationCoordinate2D
+    let geoLocation: CLLocation
     
     let weather: Weather?
     let weatherHourly: WeatherHourly?
