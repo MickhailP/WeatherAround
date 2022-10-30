@@ -11,21 +11,37 @@ import MapKit
 
 final class LocationSearchViewModel: ObservableObject {
     
-    @Published private(set) var isSearching = false
+    @Published private(set) var isSearching: Bool = false
+    
+    @Published var showSearchList: Bool = false
     
     @Published var searchFieldText: String = ""
     
     @Published private(set) var locationPlaceMarks: [CLPlacemark] = []
     
-    let searchService = LocationSearchManager()
+    @Published private(set) var favoritesLocation: [Location] = []
+    
+    private let searchService = LocationSearchManager()
     
     
-    var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     
     init() {
         addTextFieldSubscriber()
         addSearchSubscriber()
         setLocationsData()
+    }
+    
+    func addToFavorites(placeMark: CLPlacemark) {
+        
+        if let name = placeMark.name,
+           let country = placeMark.country,
+           let geoLocation = placeMark.location {
+            
+            let location = Location(name: name, country: country, geoLocation: geoLocation)
+            
+            favoritesLocation.append(location)
+        }
     }
     
     

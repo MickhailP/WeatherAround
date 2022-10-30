@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import CoreLocation
 
-class MainWeatherViewViewModel: ObservableObject {
+final class MainWeatherViewViewModel: ObservableObject {
     
     //Managers
     @ObservedObject private var locationManager = LocationManager.shared

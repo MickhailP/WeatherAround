@@ -11,9 +11,10 @@ import CoreLocation
 struct Location: Identifiable {
     let id = UUID()
     let name: String
+    let country: String
     let geoLocation: CLLocation
     
-    let weather: Weather?
-    let weatherHourly: WeatherHourly?
-    let weatherDaily: WeatherDaily?
+    let weather: Weather? = nil
+    let weatherHourly: WeatherHourly? = nil
+    let weatherDaily: WeatherDaily? = nil
 }

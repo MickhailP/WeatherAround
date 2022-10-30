@@ -15,8 +15,6 @@ struct MainWeatherView: View {
     
     private let topEdge: CGFloat
     
-    
-    
     init(location: Location?, weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
         if let location = location {
             _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(location: location, weatherManager: weatherManager))
