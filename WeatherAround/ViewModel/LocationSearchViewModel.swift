@@ -23,7 +23,7 @@ final class LocationSearchViewModel: ObservableObject {
     
     private let searchService = LocationSearchManager()
     
-   private let saveKey = "SavedLocations"
+    private let saveKey = "SavedLocations"
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -45,6 +45,7 @@ final class LocationSearchViewModel: ObservableObject {
         }
     }
     
+    
     func addToFavorites(placeMark: CLPlacemark) {
         
         if let name = placeMark.name,
@@ -61,8 +62,14 @@ final class LocationSearchViewModel: ObservableObject {
             } else {
                 print("There is the same location in database ")
             }
-         
+            
         }
+    }
+    
+    func delete(_ index: IndexSet) {
+        favoritesLocation.remove(atOffsets: index)
+        save()
+        print("Location removed")
     }
     
     
@@ -95,7 +102,7 @@ final class LocationSearchViewModel: ObservableObject {
                 } else {
                     self?.isSearching = true
                 }
-                     
+                
             })
             .store(in: &cancellables)
     }

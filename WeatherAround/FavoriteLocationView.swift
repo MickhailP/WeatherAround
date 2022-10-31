@@ -34,6 +34,9 @@ struct FavoriteLocationView: View {
                     .background(.ultraThinMaterial)
                     
                 }
+                .onDelete(perform: { index in
+                    viewModel.delete(index)
+                })
                 
                 
                 
@@ -45,6 +48,7 @@ struct FavoriteLocationView: View {
                 .listRowSeparator(.hidden)
                 
             }
+            
             
             .sheet(isPresented: $isPresented) {
                 SearchView(viewModel: viewModel)
