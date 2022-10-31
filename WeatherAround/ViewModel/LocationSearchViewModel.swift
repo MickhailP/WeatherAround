@@ -23,13 +23,26 @@ final class LocationSearchViewModel: ObservableObject {
     
     private let searchService = LocationSearchManager()
     
-    
+   private let saveKey = "SavedLocations"
     private var cancellables = Set<AnyCancellable>()
     
     init() {
+        
+        if let data = UserDefaults.standard.data(forKey: saveKey) {
+            if let decoded = try? JSONDecoder().decode([Location].self, from: data) {
+                favoritesLocation = decoded
+            }
+        }
+        
         addTextFieldSubscriber()
         addSearchSubscriber()
         setLocationsData()
+    }
+    
+    private func save() {
+        if let encoded = try? JSONEncoder().encode(favoritesLocation) {
+            UserDefaults.standard.set(encoded, forKey: saveKey)
+        }
     }
     
     func addToFavorites(placeMark: CLPlacemark) {
@@ -40,7 +53,15 @@ final class LocationSearchViewModel: ObservableObject {
             
             let location = Location(name: name, country: country, geoLocation: geoLocation)
             
-            favoritesLocation.append(location)
+            let unique = favoritesLocation.contains(where: { $0 == location})
+            
+            if !unique {
+                favoritesLocation.append(location)
+                save()
+            } else {
+                print("There is the same location in database ")
+            }
+         
         }
     }
     

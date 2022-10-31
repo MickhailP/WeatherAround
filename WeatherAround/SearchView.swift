@@ -39,6 +39,7 @@ struct SearchView: View {
                         .padding()
                         .foregroundColor(.black)
                     }
+                    .buttonStyle(.borderless)
                     
                 }
             }
