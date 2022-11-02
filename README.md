@@ -18,6 +18,7 @@ Weahter forecast application
  - Singleton
  - Swift Concurrency 
  - SwitfUI
+ - SwifLint
 
 ## Screenshots
 
