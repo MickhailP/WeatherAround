@@ -7,6 +7,6 @@
 
 import Foundation
 
-enum LoadingState{
+enum LoadingState {
     case loading, loaded, failed
 }

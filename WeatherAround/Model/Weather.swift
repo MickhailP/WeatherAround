@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct WeatherDaily {
+struct WeatherDaily: Codable {
     let weatherDaily: [Weather]
     
     init(apiResponse: CurrentWeatherResponse) {
@@ -23,7 +23,7 @@ struct WeatherDaily {
     
 }
 
-struct WeatherHourly {
+struct WeatherHourly: Codable {
     let weatherHourly: [Weather]
     
     init(apiResponse: CurrentWeatherResponse) {
@@ -63,7 +63,7 @@ struct WeatherHourly {
 }
 
 
-struct Weather: Identifiable {
+struct Weather: Identifiable, Codable {
     let id = UUID()
     
     let startTime: String
@@ -262,7 +262,7 @@ enum PrecipitationCode: Int {
     case icePellets = 4
 }
 
-enum WeatherCode: String {
+enum WeatherCode: String, Codable {
     case unknown = "0"
     case clear = "1000"
     case mostlyClear = "1100"
