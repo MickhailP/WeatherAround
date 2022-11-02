@@ -1,5 +1,5 @@
 //
-//  APIEndpoits.swift
+//  APIEndpoint.swift
 //  WeatherAround
 //
 //  Created by Миша Перевозчиков on 24.06.2022.
@@ -17,21 +17,20 @@ enum APIEndPoint {
 
 extension APIEndPoint {
     
-    //MARK: APIKeys
-    //This properties configure URL parameters
+    // MARK: APIKeys
+    // This properties configure URL parameters
     private static let currentWeatherAPIKey = APIKeys.currentWeatherAPIKey
     
-    //MARK:  Date parameters
+    // MARK: Date parameters
     private static let dateFormatter = ISO8601DateFormatter()
     private static let startTimeFormatted = dateFormatter.string(from: Date.now)
     
-    
-    //MARK: Time settings
-    //ATTENTION!! FORCE UNWRAPPED OPTIONAL
+    // MARK: Time settings
+    // ATTENTION!! FORCE UNWRAPPED OPTIONAL
     private static let endTimeFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 1), to: Date.now)!)
     private static let endTimeForDailyFormatted = dateFormatter.string(from: Calendar.current.date(byAdding: DateComponents(day: 10), to: Date.now)!)
     
-    //MARK: URL compose
+    // MARK: URL compose
     var url: URL {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -46,7 +45,7 @@ extension APIEndPoint {
     }
     
 
-    //MARK: Path
+    // MARK: Path
     var path: String {
         switch self {
             case .currentForecast:
@@ -56,8 +55,8 @@ extension APIEndPoint {
         }
     }
     
-    //MARK: QueryItems
-    //Setup your queryItems for data that should be received from server
+    // MARK: QueryItems
+    // Setup your queryItems for data that should be received from server
     var queryItems: [URLQueryItem]? {
         switch self {
             case .currentForecast(let location):
@@ -92,5 +91,3 @@ extension APIEndPoint {
         }
     }
 }
-
-

@@ -126,10 +126,10 @@ extension MainWeatherView {
                 .opacity(getTitleOpacity())
                 .padding(.vertical, 30)
         }
-        //DRAGGING MODIFIERS
-        //for dragging from bottom
+        // DRAGGING MODIFIERS
+        // for dragging from bottom
         .offset(y: -offset)
-        //for dragging from top
+        // for dragging from top
         .offset(y: offset > 0 ? (offset / UIScreen.main.bounds.width) * 100 : 0)
         .offset(y: getTitleOffset())
     
@@ -146,9 +146,9 @@ extension MainWeatherView {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static let wm = WeatherManager()
+    static let viewMode = WeatherManager()
     
     static var previews: some View {
-        MainWeatherView(location: nil, weatherManager: wm, topEdge: 100 )
+        MainWeatherView(location: nil, weatherManager: viewMode, topEdge: 100 )
     }
 }

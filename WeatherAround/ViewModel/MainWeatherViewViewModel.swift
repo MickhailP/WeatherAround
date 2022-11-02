@@ -12,24 +12,24 @@ import CoreLocation
 
 final class MainWeatherViewViewModel: ObservableObject {
     
-    //Managers
+    // Managers
     @ObservedObject private var locationManager = LocationManager.shared
     private let weatherManager: WeatherManagerProtocol
     
     
     
-    //Weather instances
+    // Weather instances
     @Published var weather: Weather?
     @Published var weatherHourly: WeatherHourly?
     @Published var weatherDaily: WeatherDaily?
     
-    //UI properties
+    // UI properties
     @Published var locationName: String = ""
     @Published var loadingState: LoadingState = .loading
     
     private (set) var cancellables = Set<AnyCancellable>()
     
-    //MARK: Ver.3
+// MARK: Ver.3
     init(weatherManager: WeatherManagerProtocol) {
         self.weatherManager = weatherManager
         
@@ -118,7 +118,7 @@ final class MainWeatherViewViewModel: ObservableObject {
         }
     }
     
-    //MARK: VER. 2
+    // MARK: VER. 2
     /*
     //    init() {
     //        fetchWeather2()
@@ -134,7 +134,7 @@ final class MainWeatherViewViewModel: ObservableObject {
     //    }
      */
     
-    //MARK: VER. 1
+    // MARK: VER. 1
     /*
     //    init() {
     //        fetchWeather()
@@ -187,7 +187,7 @@ final class MainWeatherViewViewModel: ObservableObject {
      */
     
     
-    //MARK: VER.1 methods
+    // MARK: VER.1 methods
     /*
 //    func fetchWeather2() {
 //

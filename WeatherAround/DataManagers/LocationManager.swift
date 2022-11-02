@@ -47,7 +47,7 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
 }
 
 
-//The functionality to update user's location name
+// The functionality to update user's location name
 extension LocationManager {
     
     /// Use this function to decode current location to locality name.
@@ -55,15 +55,15 @@ extension LocationManager {
     ///   - location: Coordinates that should be named
     ///   - completionHandler: Closure that manages received location name
     func getLocationName(for location: CLLocation, completionHandler: @escaping (String?) -> Void ) {
-        //create a CLGeocoder instance
+        // create a CLGeocoder instance
         let geocoder = CLGeocoder()
         
-        //Look up a location and pass it in to closure
+        // Look up a location and pass it in to closure
         geocoder.reverseGeocodeLocation(location, preferredLocale: .current) { placemark, error in
             
-            //Check if location available
+            // Check if location available
             guard let place = placemark?.first, error == nil else {
-                //An error occurred during decoding
+                // An error occurred during decoding
                 completionHandler(nil)
                 print("Failed to get placemark from location")
                 return
@@ -72,7 +72,7 @@ extension LocationManager {
             print(place)
         
             if let name = place.locality {
-                //Decoding was successful, call completion handler with locality name
+                // Decoding was successful, call completion handler with locality name
                 completionHandler(name)
             }
         }

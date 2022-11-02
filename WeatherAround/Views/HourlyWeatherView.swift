@@ -41,29 +41,28 @@ extension HourlyWeatherView {
             .font(.caption)
             .padding([.top, .leading], 10)
     }
-}
-
-
-fileprivate struct HourStack: View {
-    let column: HourColumn
     
-    var body: some View {
-        VStack(alignment: .center, spacing: 2.5){
-            Text(column.time)
-                .font(.body)
-            Spacer()
-            column.icon
-                .font(.title2)
-                .iconColor(weatherCode: column.weatherCode)
-            Spacer()
-            Text("\(column.detail)º")
+    
+    private struct HourStack: View {
+        let column: HourColumn
+        
+        var body: some View {
+            VStack(alignment: .center, spacing: 2.5){
+                Text(column.time)
+                    .font(.body)
+                Spacer()
+                column.icon
+                    .font(.title2)
+                    .iconColor(weatherCode: column.weatherCode)
+                Spacer()
+                Text("\(column.detail)º")
+            }
+            .foregroundColor(.white)
         }
-        .foregroundColor(.white)
     }
 }
-
 //struct HourlyWeatherView_Previews: PreviewProvider {
 //    static var previews: some View {
-////        HourlyWeatherView(hourlyWeather: WeatherHourly())
+//        HourlyWeatherView(hourlyWeather: WeatherHourly())
 //    }
 //}

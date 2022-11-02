@@ -18,6 +18,7 @@
 		D798D9E3284FCC2700097978 /* CustomStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D798D9E2284FCC2700097978 /* CustomStackView.swift */; };
 		D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */; };
 		D799C0DA284E5CF90084C541 /* HourColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D9284E5CF90084C541 /* HourColumn.swift */; };
+		D799E15E2912D820003152E3 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = D799E15D2912D820003152E3 /* .swiftlint.yml */; };
 		D79D157D28FF433200EAD69C /* WeatherManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79D157C28FF433200EAD69C /* WeatherManagerProtocol.swift */; };
 		D79D157F28FF463000EAD69C /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79D157E28FF463000EAD69C /* LoadingState.swift */; };
 		D79D158228FF474800EAD69C /* MockWeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79D158128FF474800EAD69C /* MockWeatherManager.swift */; };
@@ -52,6 +53,7 @@
 		D798D9E2284FCC2700097978 /* CustomStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStackView.swift; sourceTree = "<group>"; };
 		D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
 		D799C0D9284E5CF90084C541 /* HourColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourColumn.swift; sourceTree = "<group>"; };
+		D799E15D2912D820003152E3 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		D79D157C28FF433200EAD69C /* WeatherManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManagerProtocol.swift; sourceTree = "<group>"; };
 		D79D157E28FF463000EAD69C /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 		D79D158128FF474800EAD69C /* MockWeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWeatherManager.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				D7ABEFE3283FF57800F7E44C /* Assets.xcassets */,
 				D7ABEFE5283FF57800F7E44C /* Preview Content */,
 				D7ABEFED283FF60300F7E44C /* .gitignore.md */,
+				D799E15D2912D820003152E3 /* .swiftlint.yml */,
 			);
 			path = WeatherAround;
 			sourceTree = "<group>";
@@ -218,12 +221,15 @@
 				D7ABEFD8283FF57300F7E44C /* Sources */,
 				D7ABEFD9283FF57300F7E44C /* Frameworks */,
 				D7ABEFDA283FF57300F7E44C /* Resources */,
+				D799E15C2912D476003152E3 /* SwiftLint check */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = WeatherAround;
+			packageProductDependencies = (
+			);
 			productName = WeatherAround;
 			productReference = D7ABEFDC283FF57300F7E44C /* WeatherAround.app */;
 			productType = "com.apple.product-type.application";
@@ -252,6 +258,8 @@
 				Base,
 			);
 			mainGroup = D7ABEFD3283FF57300F7E44C;
+			packageReferences = (
+			);
 			productRefGroup = D7ABEFDD283FF57300F7E44C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -266,12 +274,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D799E15E2912D820003152E3 /* .swiftlint.yml in Resources */,
 				D7ABEFE7283FF57800F7E44C /* Preview Assets.xcassets in Resources */,
 				D7ABEFE4283FF57800F7E44C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D799E15C2912D476003152E3 /* SwiftLint check */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint check";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D7ABEFD8283FF57300F7E44C /* Sources */ = {

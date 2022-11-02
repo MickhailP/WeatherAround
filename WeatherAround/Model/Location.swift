@@ -22,7 +22,7 @@ struct Location: Identifiable, Codable {
 }
 
 //
-//MARK: Equatable
+// MARK: Equatable
 //
 extension Location: Equatable {
     static func == (lhs: Location, rhs: Location) -> Bool {
@@ -33,10 +33,10 @@ extension Location: Equatable {
 }
 
 //
-//MARK: Decodable
+// MARK: Decodable
 //
 extension Location {
-    enum codingKeys: CodingKey {
+    enum CodingKeys: CodingKey {
         case id, name, country, geoLocation
     }
     
@@ -52,7 +52,7 @@ extension Location {
 }
 
 //
-//MARK: Encodable
+// MARK: Encodable
 //
 extension CLLocation: Encodable {
     enum CodingKeys: String, CodingKey {
@@ -79,7 +79,7 @@ extension CLLocation: Encodable {
 }
 
 //
-//MARK: Codable conformance for CLLocation
+// MARK: Codable conformance for CLLocation
 //
 struct CLLocationData: Codable {
     let latitude: CLLocationDegrees
@@ -93,11 +93,13 @@ struct CLLocationData: Codable {
 }
 
 //
-//MARK: Custom init CLLocation
-//Allow to init from Decoder anywhere.
-//create a CLLocation variable trough the LocationData object
+// MARK: Custom init CLLocation
+// Allow to init from Decoder anywhere.
+// create a CLLocation variable trough the LocationData object
 extension CLLocation {
     convenience init(model: CLLocationData) {
-      self.init(coordinate: CLLocationCoordinate2DMake(model.latitude, model.longitude), altitude: model.altitude, horizontalAccuracy: model.horizontalAccuracy, verticalAccuracy: model.verticalAccuracy, course: model.course, speed: model.speed, timestamp: model.timestamp)
+      self.init(coordinate: CLLocationCoordinate2DMake(model.latitude, model.longitude), altitude: model.altitude,
+                horizontalAccuracy: model.horizontalAccuracy, verticalAccuracy: model.verticalAccuracy,
+                course: model.course, speed: model.speed, timestamp: model.timestamp)
      }
 }

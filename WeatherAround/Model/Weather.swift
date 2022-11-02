@@ -64,7 +64,7 @@ struct WeatherHourly: Codable {
 
 
 struct Weather: Identifiable, Codable {
-    let id = UUID()
+    var id = UUID()
     
     let startTime: String
     let temperature: Double
@@ -291,7 +291,12 @@ enum WeatherCode: String, Codable {
 
 extension Weather {
     
-    init(temperature: Double, weatherCode: WeatherCode, startTime: String , temperatureApparent: Double? = nil, humidity: Double? = nil, precipitationProbability: Int? = nil, precipitationType: Int? = nil, pressureSurfaceLevel: Double? = nil,  uvIndex: Int? = nil, visibility: Double? = nil, windSpeed: Double? = nil) {
+    init(temperature: Double, weatherCode: WeatherCode, startTime: String,
+         temperatureApparent: Double? = nil, humidity: Double? = nil,
+         precipitationProbability: Int? = nil, precipitationType: Int? = nil,
+         pressureSurfaceLevel: Double? = nil,  uvIndex: Int? = nil,
+         visibility: Double? = nil, windSpeed: Double? = nil) {
+        
         self.temperature = temperature
         self.weatherCode = weatherCode
         self.startTime = startTime
@@ -307,7 +312,12 @@ extension Weather {
         self.windSpeed = windSpeed
     }
     
-    static let example = Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
+    static let example = Weather(temperature: 14, weatherCode: .clear,
+                                 startTime: "2022-06-05T10:00:00Z",
+                                 temperatureApparent: 12, humidity: 41,
+                                 precipitationProbability: 25, precipitationType: 1,
+                                 pressureSurfaceLevel: 1241, uvIndex: 3,
+                                 visibility: 16, windSpeed: 2.5)
     
 }
 

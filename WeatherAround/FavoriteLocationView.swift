@@ -18,9 +18,7 @@ struct FavoriteLocationView: View {
     
     var body: some View {
         NavigationView {
-            
-            
-            List{
+            List {
                 
                 ForEach(viewModel.favoritesLocation) { location in
                     VStack(alignment: .leading) {
@@ -37,10 +35,7 @@ struct FavoriteLocationView: View {
                 .onDelete(perform: { index in
                     viewModel.delete(index)
                 })
-                
-                
-                
-                .onAppear{
+                .onAppear {
                     UITableView.appearance().backgroundColor = .red
                     UITableViewCell.appearance().backgroundColor = .yellow
                 }

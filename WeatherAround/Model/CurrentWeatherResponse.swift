@@ -1,6 +1,6 @@
-//MARK: - File description
-//Weather Response from Tomorrow IO API
-//This results we receive after API call in WeatherService.swift
+// MARK: - File description
+// Weather Response from Tomorrow IO API
+// This results we receive after API call in WeatherService.swift
 //
 
 import Foundation
@@ -32,7 +32,10 @@ struct Interval: Decodable {
 struct Values: Decodable {
     
     enum CodingKeys: CodingKey {
-        case humidity, precipitationProbability, precipitationType, pressureSurfaceLevel, temperature, temperatureApparent, uvIndex, visibility, weatherCode, windSpeed
+        case humidity, precipitationProbability
+        case precipitationType, pressureSurfaceLevel
+        case temperature, temperatureApparent
+        case uvIndex, visibility, weatherCode, windSpeed
     }
     
     let humidity: Double
@@ -58,4 +61,3 @@ struct Values: Decodable {
 
     }
 }
-

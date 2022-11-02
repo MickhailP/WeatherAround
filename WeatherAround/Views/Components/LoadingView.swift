@@ -79,8 +79,8 @@ struct LoadingView: View {
             LoadingCircle(start: start, end: end, rotation: rotationDegrees)
                 .frame(width: 80, height: 80)
                 .offset(y: 2)
-                .onAppear() {
-                    Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { mainTimer in
+                .onAppear {
+                    Timer.scheduledTimer(withTimeInterval: animationTime, repeats: true) { _ in
                         self.animateSpinner()
                     }
                 }
@@ -88,8 +88,7 @@ struct LoadingView: View {
         }
     }
     
-    func animateSpinner(with timeInterval: Double, completionHandler: @escaping
-                        (()-> Void)) {
+    func animateSpinner(with timeInterval: Double, completionHandler: @escaping (() -> Void)) {
         Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: false)  { _ in
             withAnimation(.easeInOut(duration: rotationTime)) {
                 completionHandler()

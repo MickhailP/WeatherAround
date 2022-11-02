@@ -16,5 +16,3 @@ struct CustomCorners: Shape {
         return Path(path.cgPath)
     }
 }
-
-

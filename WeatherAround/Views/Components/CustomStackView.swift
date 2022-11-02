@@ -100,10 +100,9 @@ struct CornerModifier: ViewModifier {
 
 struct CustomStackView_Previews: PreviewProvider {
     
-    static let wm = WeatherManager()
+    static let viewMod = WeatherManager()
     
     static var previews: some View {
-        MainWeatherView(location: nil, weatherManager: wm, topEdge: 100)
+        MainWeatherView(location: nil, weatherManager: viewMod, topEdge: 100)
     }
 }
-

@@ -13,7 +13,7 @@ import UIKit
 final class WeatherManager: WeatherManagerProtocol {
     
     
-    //MARK: VER.#3
+// MARK: VER.#3
     
     /// Use this method for fetching weather data from server
     ///
@@ -80,7 +80,7 @@ final class WeatherManager: WeatherManagerProtocol {
     }
     
     
-    //MARK: VER.#2
+// MARK: VER.#2
     //Download from some URL and return decoded CurrentWeatherResponse to MainWeatherViewViewModel.swift trough the closure
     //More universal variant
     func download(from url: URL, completion: @escaping (_ weatherData: CurrentWeatherResponse) async -> Void) async throws {
@@ -101,7 +101,7 @@ final class WeatherManager: WeatherManagerProtocol {
         }
     }
     
-    //MARK: VER.#1. Fetching trough the closures
+// MARK: VER.#1. Fetching trough the closures
     //Async loading two responses for specific location and sending response in tuple to the MainWeatherViewViewModel.swift trough the closure
     /*
     private var completionHandler: ((_ current: CurrentWeatherResponse,_ daily: CurrentWeatherResponse) -> Void)?
@@ -150,7 +150,7 @@ final class WeatherManager: WeatherManagerProtocol {
     
     
     
-    //MARK: DECODE METHOD
+// MARK: DECODE METHOD
     //MAY BE USEFUL SOMEWHERE ELSE
     /*
     func decodeData(_ data: Data) throws -> CurrentWeatherResponse {
