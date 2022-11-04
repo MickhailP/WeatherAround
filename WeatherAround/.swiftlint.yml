@@ -18,10 +18,14 @@ opt_in_rules:
 - implicitly_unwrapped_optional
 - yoda_condition
 
+included:
+- WeatherAround
+
 excluded:
 - Carthage
 - Pods
 - SwiftLint/Common/3rdPartyLib
+- WeatherAround/UIColorExtension.swift
 
 force_cast: warning
 

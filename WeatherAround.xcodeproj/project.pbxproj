@@ -19,6 +19,8 @@
 		D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */; };
 		D799C0DA284E5CF90084C541 /* HourColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799C0D9284E5CF90084C541 /* HourColumn.swift */; };
 		D799E15E2912D820003152E3 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = D799E15D2912D820003152E3 /* .swiftlint.yml */; };
+		D799E1602914DDDA003152E3 /* IconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799E15F2914DDDA003152E3 /* IconView.swift */; };
+		D799E1622914E97A003152E3 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D799E1612914E97A003152E3 /* UIColorExtension.swift */; };
 		D79D157D28FF433200EAD69C /* WeatherManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79D157C28FF433200EAD69C /* WeatherManagerProtocol.swift */; };
 		D79D157F28FF463000EAD69C /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79D157E28FF463000EAD69C /* LoadingState.swift */; };
 		D79D158228FF474800EAD69C /* MockWeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79D158128FF474800EAD69C /* MockWeatherManager.swift */; };
@@ -54,6 +56,8 @@
 		D799C0D6284E5AE80084C541 /* HourlyWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherView.swift; sourceTree = "<group>"; };
 		D799C0D9284E5CF90084C541 /* HourColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourColumn.swift; sourceTree = "<group>"; };
 		D799E15D2912D820003152E3 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		D799E15F2914DDDA003152E3 /* IconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconView.swift; sourceTree = "<group>"; };
+		D799E1612914E97A003152E3 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		D79D157C28FF433200EAD69C /* WeatherManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManagerProtocol.swift; sourceTree = "<group>"; };
 		D79D157E28FF463000EAD69C /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 		D79D158128FF474800EAD69C /* MockWeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWeatherManager.swift; sourceTree = "<group>"; };
@@ -99,6 +103,8 @@
 				D7BE6A03284CD1960040AAC2 /* IconColor.swift */,
 				D7EB4269286CD7D500C6BC8D /* LoadingView.swift */,
 				D79D157E28FF463000EAD69C /* LoadingState.swift */,
+				D799E15F2914DDDA003152E3 /* IconView.swift */,
+				D799E1612914E97A003152E3 /* UIColorExtension.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -326,6 +332,7 @@
 				D7D098BD2865A16100138FBC /* APIKeys.swift in Sources */,
 				D7BE6A04284CD1960040AAC2 /* IconColor.swift in Sources */,
 				D798D9E3284FCC2700097978 /* CustomStackView.swift in Sources */,
+				D799E1622914E97A003152E3 /* UIColorExtension.swift in Sources */,
 				D79D157F28FF463000EAD69C /* LoadingState.swift in Sources */,
 				D7B024DC284A60FF004549B5 /* CurrentWeatherResponse.swift in Sources */,
 				D7D098BF2866191E00138FBC /* APIEndpoint.swift in Sources */,
@@ -334,6 +341,7 @@
 				D7FFFC5A28FAD01A002BFBD4 /* NetworkingError.swift in Sources */,
 				D7925D04284BA62900FA1F28 /* Weather.swift in Sources */,
 				D799C0DA284E5CF90084C541 /* HourColumn.swift in Sources */,
+				D799E1602914DDDA003152E3 /* IconView.swift in Sources */,
 				D7ABEFE0283FF57300F7E44C /* WeatherAroundApp.swift in Sources */,
 				D7BE6A02284CC9510040AAC2 /* HeaderView.swift in Sources */,
 				D7EB426A286CD7D500C6BC8D /* LoadingView.swift in Sources */,
