@@ -6,7 +6,7 @@
 import Foundation
 
 // MARK: - WeatherResponse
-struct CurrentWeatherResponse: Decodable {
+struct WeatherResponse: Decodable {
     let data: DataClass
 }
 

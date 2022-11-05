@@ -15,9 +15,9 @@ struct Location: Identifiable, Codable {
     var country: String
     var geoLocation: CLLocation
    
-    let weather: Weather? = nil
-    let weatherHourly: WeatherHourly? = nil
-    let weatherDaily: WeatherDaily? = nil
+//    let weather: Weather? = nil
+//    let weatherHourly: WeatherHourly? = nil
+//    let weatherDaily: WeatherDaily? = nil
     
 }
 

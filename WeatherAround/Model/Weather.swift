@@ -9,50 +9,41 @@ import Foundation
 import SwiftUI
 
 
-
-struct WeatherDaily: Codable {
-    let weatherDaily: [Weather]
+struct WeatherObject {
     
-    init(apiResponse: CurrentWeatherResponse) {
-        let dailyIntervals = apiResponse.data.timelines[0].intervals
-        self.weatherDaily = dailyIntervals.compactMap { day -> Weather in
+    let currentWeather: Weather
+    
+    let hourlyWeather: [Weather]
+    let dailyWeather:  [Weather]
+    
+    init(current apiResponse: WeatherResponse, daily: WeatherResponse) {
+        
+        // Initialise current weather
+        //
+        self.currentWeather = Weather(current: apiResponse)
+        
+        // Initialise hourlyWeather
+        //
+        let hourIntervals = apiResponse.data.timelines[0].intervals
+        
+        self.hourlyWeather = hourIntervals.compactMap { hour -> Weather in
+            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
+            return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
+        }
+        
+        // Initialise dailyWeather
+        //
+        let dailyIntervals = daily.data.timelines[0].intervals
+        self.dailyWeather = dailyIntervals.compactMap { day -> Weather in
             let weatherCode = WeatherCode(rawValue: "\(day.values.weatherCode)") ?? WeatherCode.unknown
             return Weather(temperature: day.values.temperature, weatherCode: weatherCode, startTime: day.startTime)
         }
     }
-    
-    
-}
-
-struct WeatherHourly: Codable {
-    let weatherHourly: [Weather]
-    
-    init(apiResponse: CurrentWeatherResponse) {
-        let hourIntervals = apiResponse.data.timelines[0].intervals
-        
-        self.weatherHourly = hourIntervals.compactMap { hour -> Weather in
-            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
-            return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
-        }
-    }
-    
-    
-    //For testing purposes
-    init(array: [Weather]) {
-        self.weatherHourly = array
-    }
-    
-    static let example = WeatherHourly(array: [
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T12:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
-        
-    ])
 }
 
 
-struct Weather: Identifiable, Codable {
+
+struct Weather: Identifiable {
     var id = UUID()
     
     let startTime: String
@@ -69,29 +60,29 @@ struct Weather: Identifiable, Codable {
     let uvIndex: Int?
     let visibility: Double?
     let windSpeed: Double?
+
     
-    
-    init(apiResponse: CurrentWeatherResponse) {
+    /// Default Initializer from API response.
+    /// Use it to initialise from api response
+    /// - Parameter apiResponse: apiResponse
+    init(current apiResponse: WeatherResponse) {
         
         let currentResponse = apiResponse.data.timelines[0].intervals[0]
         
         self.startTime = currentResponse.startTime
         
-        let currentWeather = currentResponse.values
+        let values = currentResponse.values
         
-        self.temperature = currentWeather.temperature
-        self.temperatureApparent = currentWeather.temperatureApparent
-        
-        self.weatherCode = WeatherCode(rawValue: "\(currentWeather.weatherCode)") ?? WeatherCode.unknown
-        
-        
-        self.humidity = currentWeather.humidity
-        self.precipitationType = currentWeather.precipitationType
-        self.precipitationProbability = currentWeather.precipitationProbability
-        self.pressureSurfaceLevel = currentWeather.pressureSurfaceLevel
-        self.uvIndex = currentWeather.uvIndex
-        self.visibility = currentWeather.visibility
-        self.windSpeed = currentWeather.windSpeed
+        self.temperature = values.temperature
+        self.temperatureApparent = values.temperatureApparent
+        self.weatherCode = WeatherCode(rawValue: "\(values.weatherCode)") ?? WeatherCode.unknown
+        self.humidity = values.humidity
+        self.precipitationType = values.precipitationType
+        self.precipitationProbability = values.precipitationProbability
+        self.pressureSurfaceLevel = values.pressureSurfaceLevel
+        self.uvIndex = values.uvIndex
+        self.visibility = values.visibility
+        self.windSpeed = values.windSpeed
         
         print("Weather was successfully initialised")
         
@@ -244,43 +235,12 @@ struct Weather: Identifiable, Codable {
     
 }
 
-enum PrecipitationCode: Int {
-    case unknown = 0
-    case rain = 1
-    case snow = 2
-    case freezingRain = 3
-    case icePellets = 4
-}
 
-enum WeatherCode: String, Codable {
-    case unknown = "0"
-    case clear = "1000"
-    case mostlyClear = "1100"
-    case partlyCloudy = "1101"
-    case mostlyCloudy = "1102"
-    case cloudy =  "1001"
-    case fog = "2000"
-    case lightFog = "2100"
-    case drizzle = "4000"
-    case rain = "4001"
-    case lightRain = "4200"
-    case heavyRain = "4201"
-    case snow = "5000"
-    case flurries = "5001"
-    case lightSnow =  "5100"
-    case heavySnow = "5101"
-    case freezingDrizzle = "6000"
-    case freezingRain = "6001"
-    case lightFreezingRain =  "6200"
-    case heavyFreezingRain =  "6201"
-    case icePellets = "7000"
-    case heavyIcePellets = "7101"
-    case lightIcePellets = "7102"
-    case thunderStorm = "8000"
-}
-
+// MARK: Weather initializer
 extension Weather {
     
+    
+    /// Use this initialiser to set data manually
     init(temperature: Double, weatherCode: WeatherCode, startTime: String,
          temperatureApparent: Double? = nil, humidity: Double? = nil,
          precipitationProbability: Int? = nil, precipitationType: Int? = nil,
@@ -311,6 +271,21 @@ extension Weather {
     
 }
 
+
+
+struct WeatherDaily {
+    let weatherDaily: [Weather]
+    
+    init(apiResponse: WeatherResponse) {
+        let dailyIntervals = apiResponse.data.timelines[0].intervals
+        self.weatherDaily = dailyIntervals.compactMap { day -> Weather in
+            let weatherCode = WeatherCode(rawValue: "\(day.values.weatherCode)") ?? WeatherCode.unknown
+            return Weather(temperature: day.values.temperature, weatherCode: weatherCode, startTime: day.startTime)
+        }
+    }
+}
+
+// MARK: WeatherDaily static example array
 extension WeatherDaily {
     
     static let exampleArray = [
@@ -320,3 +295,70 @@ extension WeatherDaily {
         Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 12, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
     ]
 }
+
+
+struct WeatherHourly {
+
+    
+    let weatherHourly: [Weather]
+    
+    init(apiResponse: WeatherResponse) {
+        let hourIntervals = apiResponse.data.timelines[0].intervals
+        
+        self.weatherHourly = hourIntervals.compactMap { hour -> Weather in
+            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
+            return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
+        }
+    }
+    
+    
+    //For example property
+    private init(array: [Weather]) {
+        self.weatherHourly = array
+    }
+    
+    static let example = WeatherHourly(array: [
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T12:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
+        
+    ])
+}
+
+
+enum PrecipitationCode: Int {
+    case unknown = 0
+    case rain = 1
+    case snow = 2
+    case freezingRain = 3
+    case icePellets = 4
+}
+
+enum WeatherCode: String {
+    case unknown = "0"
+    case clear = "1000"
+    case mostlyClear = "1100"
+    case partlyCloudy = "1101"
+    case mostlyCloudy = "1102"
+    case cloudy =  "1001"
+    case fog = "2000"
+    case lightFog = "2100"
+    case drizzle = "4000"
+    case rain = "4001"
+    case lightRain = "4200"
+    case heavyRain = "4201"
+    case snow = "5000"
+    case flurries = "5001"
+    case lightSnow =  "5100"
+    case heavySnow = "5101"
+    case freezingDrizzle = "6000"
+    case freezingRain = "6001"
+    case lightFreezingRain =  "6200"
+    case heavyFreezingRain =  "6201"
+    case icePellets = "7000"
+    case heavyIcePellets = "7101"
+    case lightIcePellets = "7102"
+    case thunderStorm = "8000"
+}
+

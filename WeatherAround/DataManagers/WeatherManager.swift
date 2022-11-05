@@ -47,14 +47,14 @@ final class WeatherManager: WeatherManagerProtocol {
     /// Than receives the response from Networking manager and decodes in to CurrentWeatherResponse
     /// - Parameter url: URL with data  request according to Weather API
     /// - Returns: Decoded server response
-     func fetchWeatherData(from url: URL) async throws -> CurrentWeatherResponse {
+     func fetchWeatherData(from url: URL) async throws -> WeatherResponse {
         do {
             print("WEATHER DATA REQUESTED")
             let data = try await Networking.shared.requestData(endpoint: url)
             
             let decoder = JSONDecoder()
             
-            let decodedData = try decoder.decode(CurrentWeatherResponse.self, from: data)
+            let decodedData = try decoder.decode(WeatherResponse.self, from: data)
 
             
             print("Weather forecast received successfully")
@@ -71,10 +71,10 @@ final class WeatherManager: WeatherManagerProtocol {
     /// Use this method for fetching weather data from server for multiple endpoints, for example for different locations at the same time
     /// - Parameter locations: Coordinates for those data should be fetched
     /// - Returns: Array of decoded Weather responses for different locations
-     func fetchWeatherDataWithTaskGroup(for locations: [CLLocation?]) async throws -> [CurrentWeatherResponse] {
+     func fetchWeatherDataWithTaskGroup(for locations: [CLLocation?]) async throws -> [WeatherResponse] {
         
         var endpoints = [URL]()
-        var responses = [CurrentWeatherResponse]()
+        var responses = [WeatherResponse]()
         
         for location in locations {
             if let location = location {
@@ -84,7 +84,7 @@ final class WeatherManager: WeatherManagerProtocol {
         }
         
         return try await withThrowingTaskGroup(of: Data.self) { group in
-            var weatherData: [CurrentWeatherResponse] = []
+            var weatherData: [WeatherResponse] = []
             weatherData.reserveCapacity(endpoints.count)
             
             endpoints.forEach { url in
@@ -97,7 +97,7 @@ final class WeatherManager: WeatherManagerProtocol {
                 
                 let decoder = JSONDecoder()
                 
-                let decodedData = try decoder.decode(CurrentWeatherResponse.self, from: dataResponse)
+                let decodedData = try decoder.decode(WeatherResponse.self, from: dataResponse)
                 responses.append(decodedData)
                 
             }
@@ -109,14 +109,14 @@ final class WeatherManager: WeatherManagerProtocol {
 // MARK: VER.#2
     //Download from some URL and return decoded CurrentWeatherResponse to MainWeatherViewViewModel.swift trough the closure
     //More universal variant
-    func download(from url: URL, completion: @escaping (_ weatherData: CurrentWeatherResponse) async -> Void) async throws {
+    func download(from url: URL, completion: @escaping (_ weatherData: WeatherResponse) async -> Void) async throws {
         do {
             print("WEATHER DATA REQUESTED")
             let data = try await Networking.shared.requestData(endpoint: url)
             
             let decoder = JSONDecoder()
             
-            let decodedData = try decoder.decode(CurrentWeatherResponse.self, from: data)
+            let decodedData = try decoder.decode(WeatherResponse.self, from: data)
            
             await completion(decodedData)
             
