@@ -12,9 +12,10 @@ import UIKit
 
 final class WeatherManager: WeatherManagerProtocol {
     
-    //
-    // Prototype
-    //
+    
+    /// Use this method to set up Network request for specific location and request data for Current, Hourly and Daily forecast using async call
+    /// - Parameter location: Location for which data should be requested
+    /// - Returns: WeatherObject instance
     func getWeather(for location: CLLocation) async -> WeatherObject? {
         let urlCurrent = APIEndPoint.currentForecast(location: location).url
         let urlDaily = APIEndPoint.dailyForecast(location: location).url
