@@ -103,6 +103,6 @@ struct CustomStackView_Previews: PreviewProvider {
     static let viewMod = WeatherManager()
     
     static var previews: some View {
-        MainWeatherView(location: nil, weatherManager: viewMod, topEdge: 100)
+        MainWeatherView(from: WeatherObject.example, location: nil, weatherManager: viewMod, topEdge: 100)
     }
 }

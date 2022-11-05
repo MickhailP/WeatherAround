@@ -12,7 +12,6 @@ import SwiftUI
 struct WeatherObject {
     
     let currentWeather: Weather
-    
     let hourlyWeather: [Weather]
     let dailyWeather:  [Weather]
     
@@ -41,6 +40,33 @@ struct WeatherObject {
     }
 }
 
+extension WeatherObject {
+    
+    private init(current: Weather, hourly: [Weather], daily: [Weather]) {
+        self.currentWeather = current
+        self.hourlyWeather = hourly
+        self.dailyWeather = daily
+    }
+    
+    
+    static let example = WeatherObject(current: Weather.example, hourly: exampleHourly, daily: exampleDaily)
+    
+    static let exampleDaily = [
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 22, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 31, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 12, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
+    ]
+    
+    static let exampleHourly = [
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T12:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
+        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
+        
+    ]
+   
+}
 
 
 struct Weather: Identifiable {
@@ -313,7 +339,7 @@ struct WeatherHourly {
     
     
     //For example property
-    private init(array: [Weather]) {
+    fileprivate init(array: [Weather]) {
         self.weatherHourly = array
     }
     

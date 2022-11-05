@@ -23,6 +23,12 @@ final class MainWeatherViewViewModel: ObservableObject {
     @Published var weatherHourly: WeatherHourly?
     @Published var weatherDaily: WeatherDaily?
     
+    
+    // VER. 2
+    @Published var currentWeather: Weather?
+    @Published var hourlyWeather: [Weather]?
+    @Published var dailyWeather: [Weather]?
+    
     // UI properties
     @Published var locationName: String = ""
     @Published var loadingState: LoadingState = .loading
@@ -38,25 +44,19 @@ final class MainWeatherViewViewModel: ObservableObject {
         
     }
     
-    init(location: Location?, weatherManager: WeatherManagerProtocol) {
+    init(from weatherObject: WeatherObject, location: Location, weatherManager: WeatherManagerProtocol) {
+        
         self.weatherManager = weatherManager
         
-        if let location = location {
-            if location.weather == nil &&
-                location.weatherDaily == nil &&
-                location.weatherHourly == nil {
-                getCurrentAndDailyWeather(for: location.geoLocation)
-                
-            } else {
-                _weather = Published(wrappedValue: location.weather)
-                _weatherHourly = Published(wrappedValue: location.weatherHourly)
-                _weatherDaily = Published(wrappedValue:location.weatherDaily)
-            }
-            
-            self.locationName = location.name
-        } else {
-            fetchLocationAndWeather()
-        }
+        _currentWeather = Published(wrappedValue: weatherObject.currentWeather)
+        _hourlyWeather = Published(wrappedValue: weatherObject.hourlyWeather)
+        _dailyWeather = Published(wrappedValue: weatherObject.dailyWeather)
+        
+        
+        self.locationName = location.name
+        
+        self.loadingState = .loaded
+        
     }
     
    
@@ -88,10 +88,27 @@ final class MainWeatherViewViewModel: ObservableObject {
             } receiveValue: { [ weak self ] location in
                 self?.setLocationName(location)
                 
-                
-                self?.getCurrentAndDailyWeather(for: location)
+                self?.getWeatherAndSetModel(for: location)
+//                self?.getCurrentAndDailyWeather(for: location)
             }
             .store(in: &cancellables)
+    }
+    
+    func getWeatherAndSetModel(for location: CLLocation) {
+        
+        Task{
+            if let weatherObject = await weatherManager.getWeather(for: location) {
+                currentWeather = weatherObject.currentWeather
+                hourlyWeather = weatherObject.hourlyWeather
+                dailyWeather = weatherObject.dailyWeather
+                
+                loadingState = .loaded
+                print(weatherObject)
+            } else {
+                print("FAIL")
+                loadingState = .failed
+            }
+        }
     }
     
     func getCurrentAndDailyWeather(for location: CLLocation)  {
@@ -104,7 +121,7 @@ final class MainWeatherViewViewModel: ObservableObject {
                 async let fetchedCurrent = self.weatherManager.fetchWeatherData(from: urlCurrent)
                 async let fetchedDaily = self.weatherManager.fetchWeatherData(from: urlDaily)
                 
-                try await self.weather = Weather(apiResponse: fetchedCurrent)
+                try await self.weather = Weather(current: fetchedCurrent)
                 try await self.weatherHourly = WeatherHourly(apiResponse: fetchedCurrent)
                 try  await self.weatherDaily = WeatherDaily(apiResponse: fetchedDaily)
                 
