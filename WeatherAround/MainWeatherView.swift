@@ -42,9 +42,9 @@ struct MainWeatherView: View {
             } else if viewModel.loadingState == .loaded {
                 
                 if
-                    let weather = viewModel.weather,
-                    let weatherHourly = viewModel.weatherHourly,
-                    let weatherDaily = viewModel.weatherDaily
+                    let weather = viewModel.currentWeather,
+                    let weatherHourly = viewModel.hourlyWeather,
+                    let weatherDaily = viewModel.dailyWeather
                 {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 15) {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DailyForecastView: View {
     
-    let weatherDaily: WeatherDaily
+    let weatherDaily: [Weather]
     
     var body: some View {
         CustomStackView {
@@ -17,7 +17,7 @@ struct DailyForecastView: View {
                 .padding([.top, .leading], 10)
 
         } contentView: {
-            ForEach(weatherDaily.weatherDaily) { day in
+            ForEach(weatherDaily) { day in
                 VStack {
                     HStack {
                         Text("\(day.displayedDay)")

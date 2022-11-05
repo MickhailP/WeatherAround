@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HourlyWeatherView: View {
     
-    let weather: WeatherHourly
+    let weather: [Weather]
     
     var body: some View {
         CustomStackView(titleView: {
@@ -27,7 +27,7 @@ extension HourlyWeatherView {
     private var scrollHourlySection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(alignment: .center, spacing: 20) {
-                ForEach(weather.weatherHourly) { weather in
+                ForEach(weather) { weather in
                     HourStack(column: HourColumn(columnType: .regular, weather: weather))
                 }
             }
