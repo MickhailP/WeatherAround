@@ -90,8 +90,10 @@ struct MainWeatherView: View {
     }
 }
 
+
 extension MainWeatherView {
-    
+
+// MARK: backgroundView component
     private var backgroundView: some View {
         Group {
             Image("appBackground")
@@ -110,6 +112,7 @@ extension MainWeatherView {
         }
     }
     
+// MARK: headerSection component
     private func headerSection(_ weather: Weather) -> some View {
        return ZStack {
             HStack(alignment: .top) {
@@ -135,6 +138,7 @@ extension MainWeatherView {
     
     }
     
+// MARK: loadingPlaceholder component
     private var loadingPlaceholder: some View {
         VStack(spacing: 10) {
             LoadingView()

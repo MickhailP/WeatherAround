@@ -38,7 +38,7 @@ final class MainWeatherViewViewModel: ObservableObject {
         
     }
     
-    init(location: Location? = nil, weatherManager: WeatherManagerProtocol) {
+    init(location: Location?, weatherManager: WeatherManagerProtocol) {
         self.weatherManager = weatherManager
         
         if let location = location {
@@ -87,6 +87,8 @@ final class MainWeatherViewViewModel: ObservableObject {
                 }
             } receiveValue: { [ weak self ] location in
                 self?.setLocationName(location)
+                
+                
                 self?.getCurrentAndDailyWeather(for: location)
             }
             .store(in: &cancellables)

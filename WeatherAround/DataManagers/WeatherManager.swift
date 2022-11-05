@@ -12,6 +12,32 @@ import UIKit
 
 final class WeatherManager: WeatherManagerProtocol {
     
+    //
+    // Prototype
+    //
+    func getWeather(for location: CLLocation) async -> (weather: Weather, hourly: WeatherHourly, daily: WeatherDaily)? {
+        let urlCurrent = APIEndPoint.currentForecast(location: location).url
+        let urlDaily = APIEndPoint.dailyForecast(location: location).url
+        
+        
+            do {
+                async let fetchedCurrent = fetchWeatherData(from: urlCurrent)
+                async let fetchedDaily = fetchWeatherData(from: urlDaily)
+                
+               let weather = try await Weather(apiResponse: fetchedCurrent)
+               let weatherHourly = try await WeatherHourly(apiResponse: fetchedCurrent)
+                let weatherDaily = try await WeatherDaily(apiResponse: fetchedDaily)
+                
+                
+                return(weather, weatherHourly, weatherDaily)
+               
+            } catch {
+                
+                print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
+                return nil
+                
+            }
+    }
     
 // MARK: VER.#3
     

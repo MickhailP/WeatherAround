@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 
+
 struct WeatherDaily: Codable {
     let weatherDaily: [Weather]
     
@@ -33,18 +34,6 @@ struct WeatherHourly: Codable {
             let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
             return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
         }
-        
-        //Old version of creating a hourly forecast using for loop.
-        /*
-//        var tempHourlyWeather = [Weather]()
-//        for hour in hourIntervals {
-//            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
-//            let weather = Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
-//            tempHourlyWeather.append(weather)
-//        }
-        
-//        self.weatherHourly = tempHourlyWeather
-         */
     }
     
     
@@ -80,6 +69,7 @@ struct Weather: Identifiable, Codable {
     let uvIndex: Int?
     let visibility: Double?
     let windSpeed: Double?
+    
     
     init(apiResponse: CurrentWeatherResponse) {
         
