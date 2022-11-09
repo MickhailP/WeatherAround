@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D704C80E29179BB90063653A /* LocatIonPreViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D704C80D29179BB90063653A /* LocatIonPreViewViewModel.swift */; };
 		D7687CBE286A36490037BEB5 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7687CBD286A36490037BEB5 /* LocationManager.swift */; };
 		D78061C3285713C7003125A0 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78061C2285713C7003125A0 /* WeatherDetailView.swift */; };
 		D78EFF662851AF6A0075E6A1 /* CustomCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */; };
@@ -46,7 +45,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D704C80D29179BB90063653A /* LocatIonPreViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocatIonPreViewViewModel.swift; sourceTree = "<group>"; };
 		D7687CBD286A36490037BEB5 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		D78061C2285713C7003125A0 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCorners.swift; sourceTree = "<group>"; };
@@ -138,7 +136,6 @@
 				D798D17D290AEAD40013F4F4 /* FavoriteLocationView.swift */,
 				D7A68D47290EE771001C2CD7 /* SearchView.swift */,
 				D795DDC62917889B00B9D3CC /* LocationPreview.swift */,
-				D704C80D29179BB90063653A /* LocatIonPreViewViewModel.swift */,
 			);
 			path = FavoriteLocations;
 			sourceTree = "<group>";
@@ -350,7 +347,6 @@
 				D7FFFC5228F8A53D002BFBD4 /* Networking.swift in Sources */,
 				D7A68D48290EE772001C2CD7 /* SearchView.swift in Sources */,
 				D7ABEFE2283FF57300F7E44C /* MainWeatherView.swift in Sources */,
-				D704C80E29179BB90063653A /* LocatIonPreViewViewModel.swift in Sources */,
 				D7687CBE286A36490037BEB5 /* LocationManager.swift in Sources */,
 				D78EFF662851AF6A0075E6A1 /* CustomCorners.swift in Sources */,
 				D7B024C0284916BF004549B5 /* WeatherManager.swift in Sources */,
