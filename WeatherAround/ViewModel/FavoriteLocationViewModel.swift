@@ -9,9 +9,12 @@ import Foundation
 import Combine
 import MapKit
 
-final class LocationSearchViewModel: ObservableObject {
+final class FavoriteLocationViewModel: ObservableObject {
     
     @Published private(set) var isSearching: Bool = false
+    @Published var isSearchPresented: Bool = false
+    
+    @Published var isMainViewPresented: Bool = false
     
     @Published var showSearchList: Bool = false
     
@@ -21,22 +24,26 @@ final class LocationSearchViewModel: ObservableObject {
     
     @Published private(set) var favoritesLocation: [Location] = []
     
+    @Published private(set) var favoriteWeather = [(locationData: Location, weatherData: WeatherObject)]()
+
+    let weatherManager: WeatherManagerProtocol
+    
     private let searchService = LocationSearchManager()
     
     private let saveKey = "SavedLocations"
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
+    init(weatherManager: WeatherManagerProtocol) {
         
-        if let data = UserDefaults.standard.data(forKey: saveKey) {
-            if let decoded = try? JSONDecoder().decode([Location].self, from: data) {
-                favoritesLocation = decoded
-            }
-        }
+        self.weatherManager = weatherManager
+        
+        loadFavoriteLocations()
+
         
         addTextFieldSubscriber()
         addSearchSubscriber()
         setLocationsData()
+        fetchAllFavoriteWeather()
     }
     
     private func save() {
@@ -45,6 +52,27 @@ final class LocationSearchViewModel: ObservableObject {
         }
     }
     
+    
+    private func loadFavoriteLocations() {
+        if let data = UserDefaults.standard.data(forKey: saveKey) {
+            if let decoded = try? JSONDecoder().decode([Location].self, from: data) {
+                favoritesLocation = decoded
+            }
+        }
+    }
+    
+    private func fetchAllFavoriteWeather() {
+        Task {
+            do {
+                let weathers = try await weatherManager.fetchWeatherDataWithTaskGroup(for: favoritesLocation)
+                await MainActor.run {
+                    favoriteWeather = weathers
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     func addToFavorites(placeMark: CLPlacemark) {
         
@@ -63,6 +91,8 @@ final class LocationSearchViewModel: ObservableObject {
                 print("There is the same location in database ")
             }
             
+            searchFieldText = ""
+            
         }
     }
     
@@ -73,7 +103,7 @@ final class LocationSearchViewModel: ObservableObject {
     }
     
     
-    func addTextFieldSubscriber() {
+    private func addTextFieldSubscriber() {
         $searchFieldText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .combineLatest($isSearching)
@@ -93,7 +123,7 @@ final class LocationSearchViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func addSearchSubscriber() {
+    private func addSearchSubscriber() {
         $searchFieldText
             .sink(receiveValue: { [weak self] text in
                 if text.count < 2 {
@@ -107,12 +137,12 @@ final class LocationSearchViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func searchCity(searchText: String) {
+    private func searchCity(searchText: String) {
         searchService.request(request: .address, searchText: searchText)
         print("\(#function) has been called")
     }
     
-    func setLocationsData() {
+    private func setLocationsData() {
         searchService.locationSearchPublisher
             .receive(on: DispatchQueue.main)
             .replaceError(with: [])

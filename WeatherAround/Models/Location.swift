@@ -14,11 +14,16 @@ struct Location: Identifiable, Codable {
     var name: String
     var country: String
     var geoLocation: CLLocation
-   
-//    let weather: Weather? = nil
-//    let weatherHourly: WeatherHourly? = nil
-//    let weatherDaily: WeatherDaily? = nil
-    
+}
+
+//
+// MARK: Hashable
+//
+extension Location: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+        hasher.combine(country)
+    }
 }
 
 //

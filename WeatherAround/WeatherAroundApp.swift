@@ -29,7 +29,7 @@ struct WeatherAroundApp: App {
                     }
                 }
                 
-                FavoriteLocationView()
+                FavoriteLocationView(weatherManger: weatherManager)
                     .tabItem {
                         VStack{
                             Image(systemName: "heart")

@@ -14,7 +14,7 @@ protocol WeatherManagerProtocol {
     
     func fetchWeatherData(from url: URL) async throws -> WeatherResponse
     
-    func fetchWeatherDataWithTaskGroup(for locations: [CLLocation?]) async throws -> [WeatherResponse]
+    func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [(locationData: Location, weatherData: WeatherObject)]
     
     func download(from url: URL, completion: @escaping (_ weatherData: WeatherResponse) async -> Void) async throws
 }

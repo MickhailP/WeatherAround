@@ -13,7 +13,7 @@ struct SearchView: View {
     @Environment(\.dismissSearch) var dismissSearch
     @Environment(\.isSearching) private var isSearching
     
-    @ObservedObject var viewModel: LocationSearchViewModel
+    @ObservedObject var viewModel: FavoriteLocationViewModel
     
     
     var body: some View {
@@ -55,6 +55,6 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(viewModel: LocationSearchViewModel())
+        SearchView(viewModel: FavoriteLocationViewModel(weatherManager: WeatherManager()))
     }
 }

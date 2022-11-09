@@ -69,6 +69,63 @@ final class WeatherManager: WeatherManagerProtocol {
     /// Use this method for fetching weather data from server for multiple endpoints, for example for different locations at the same time
     /// - Parameter locations: Coordinates for those data should be fetched
     /// - Returns: Array of decoded Weather responses for different locations
+    ///
+    func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [(locationData: Location, weatherData: WeatherObject)] {
+        
+        var endpoints = [(currentURL: URL, dailyURL: URL)]()
+        
+        var weatherData: [(locationData: Location, weatherData: WeatherObject)] = []
+        weatherData.reserveCapacity(endpoints.count)
+
+        
+        for location in locations {
+            if let location = location {
+                let currentEndpoint = APIEndPoint.currentForecast(location: location.geoLocation).url
+                let dailyEndpoint = APIEndPoint.dailyForecast(location: location.geoLocation).url
+                endpoints.append((currentEndpoint, dailyEndpoint))
+                
+                
+                
+                return try await withThrowingTaskGroup(of: (current: Data, daily: Data).self) { group -> [(Location, WeatherObject)] in
+                    
+                    
+                    endpoints.forEach { (currentURL, dailyURL) in
+                        group.addTask {
+                            let currentWeatherData = try await Networking.shared.requestData(endpoint: currentURL)
+                            let dailyWeatherData = try await Networking.shared.requestData(endpoint: dailyURL)
+                            
+                            return (currentWeatherData, dailyWeatherData)
+                        }
+                    }
+                    
+                    for try await dataResponse in group {
+                        
+                        let weather = try decodeDataResponses(dataResponse)
+                        
+                        weatherData.append((locationData: location, weatherData: weather))
+                        
+                    }
+                    return weatherData
+                }
+            }
+        }
+        return weatherData
+    }
+    
+    private func decodeDataResponses(_ dataResponse: (current: Data, daily: Data)) throws -> WeatherObject {
+        let decoder = JSONDecoder()
+        
+        let decodedCurrentData = try decoder.decode(WeatherResponse.self, from: dataResponse.current)
+        let decodedDailyData = try decoder.decode(WeatherResponse.self, from: dataResponse.daily)
+        
+        let weather = WeatherObject(current: decodedCurrentData, daily: decodedDailyData)
+        
+        return weather
+    }
+    
+    
+    //VER. 01
+    /*
     func fetchWeatherDataWithTaskGroup(for locations: [CLLocation?]) async throws -> [WeatherResponse] {
         
         var endpoints = [URL]()
@@ -102,7 +159,7 @@ final class WeatherManager: WeatherManagerProtocol {
             return responses
         }
     }
-    
+    */
     
     // MARK: VER.#2
     //Download from some URL and return decoded CurrentWeatherResponse to MainWeatherViewViewModel.swift trough the closure
