@@ -33,7 +33,7 @@ struct MainWeatherView: View {
     
     var body: some View {
         ZStack{
-            backgroundView
+            BackgroundView()
             
             if viewModel.loadingState == .loading {
                 
@@ -94,24 +94,6 @@ struct MainWeatherView: View {
 
 extension MainWeatherView {
 
-// MARK: backgroundView component
-    private var backgroundView: some View {
-        Group {
-            Image("appBackground")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            
-            LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
-                .ignoresSafeArea()
-                .opacity(0.4)
-                .blur(radius: 100)
-            
-            Color.gray.opacity(0.3)
-                .ignoresSafeArea()
-        }
-    }
     
 // MARK: headerSection component
     private func headerSection(_ weather: Weather) -> some View {
@@ -154,6 +136,7 @@ struct ContentView_Previews: PreviewProvider {
     static let viewMode = WeatherManager()
     
     static var previews: some View {
-        MainWeatherView(from: WeatherObject.example, location: nil, weatherManager: viewMode, topEdge: 100 )
+        
+        MainWeatherView(from: WeatherObject.example, location: nil, weatherManager: viewMode, topEdge: 100)
     }
 }
