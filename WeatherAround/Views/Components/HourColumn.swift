@@ -27,7 +27,7 @@ struct HourColumn: Identifiable {
         let ISODateFormatter = ISO8601DateFormatter()
         
         
-let startTime = weather.startTime 
+        let startTime = weather.startTime
         let convertedDate = ISODateFormatter.date(from: startTime) ?? Date()
         
         self.date = convertedDate
@@ -49,7 +49,7 @@ let startTime = weather.startTime
                 dateFormatter.dateFormat = "h"
                 time = dateFormatter.string(from: date)
                 icon = weather.image
-                detail = String(format: "%.f", weather.temperature)
+                detail = ("\( weather.temperature)")
         }
     }
 }

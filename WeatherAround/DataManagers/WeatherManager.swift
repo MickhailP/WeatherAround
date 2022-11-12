@@ -12,30 +12,52 @@ import UIKit
 
 final class WeatherManager: WeatherManagerProtocol {
     
+func getWeather(for location: Location) async -> WeatherObject? {
+        print("CALLING \(#file) for \(location.name)")
     
-    /// Use this method to set up Network request for specific location and request data for Current, Hourly and Daily forecast using async call
-    /// - Parameter location: Location for which data should be requested
-    /// - Returns: WeatherObject instance
-    func getWeather(for location: CLLocation) async -> WeatherObject? {
-        let urlCurrent = APIEndPoint.currentForecast(location: location).url
-        let urlDaily = APIEndPoint.dailyForecast(location: location).url
-        
+        let urlCurrent = APIEndPoint.currentForecast(location: location.geoLocation).url
+        let urlDaily = APIEndPoint.dailyForecast(location: location.geoLocation).url
         
         do {
             async let fetchedCurrent = fetchWeatherData(from: urlCurrent)
             async let fetchedDaily = fetchWeatherData(from: urlDaily)
             
-            let weather = try await WeatherObject(current: fetchedCurrent, daily: fetchedDaily)
-
+            let weather = try await decodeWeatherData(location, (current: fetchedCurrent, daily: fetchedDaily))
+            
+  
             return weather
             
         } catch {
             
             print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
             return nil
-            
         }
     }
+    
+    
+    
+    /// Use this method to set up Network request for specific location and request data for Current, Hourly and Daily forecast using async call
+    /// - Parameter location: Location for which data should be requested
+    /// - Returns: WeatherObject instance
+//    func getWeather(for location: CLLocation) async -> WeatherObject? {
+//        let urlCurrent = APIEndPoint.currentForecast(location: location).url
+//        let urlDaily = APIEndPoint.dailyForecast(location: location).url
+//
+//
+//        do {
+//            async let fetchedCurrent = fetchWeatherData(from: urlCurrent)
+//            async let fetchedDaily = fetchWeatherData(from: urlDaily)
+//
+//            let weather = try await decodeWeatherData( nil,  (current: fetchedCurrent, daily: fetchedDaily))
+//
+//            return weather
+//
+//        } catch {
+//
+//            print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
+//            return nil
+//        }
+//    }
     
     // MARK: VER.#3
     
@@ -45,18 +67,13 @@ final class WeatherManager: WeatherManagerProtocol {
     /// Than receives the response from Networking manager and decodes in to CurrentWeatherResponse
     /// - Parameter url: URL with data  request according to Weather API
     /// - Returns: Decoded server response
-    func fetchWeatherData(from url: URL) async throws -> WeatherResponse {
+    internal func fetchWeatherData(from url: URL) async throws -> Data {
         do {
             print("WEATHER DATA REQUESTED")
             let data = try await Networking.shared.requestData(endpoint: url)
             
-            let decoder = JSONDecoder()
-            
-            let decodedData = try decoder.decode(WeatherResponse.self, from: data)
-            
-            
-            print("Weather forecast received successfully")
-            return decodedData
+            print("Weather data received successfully")
+            return data
             
         } catch {
             
@@ -65,47 +82,96 @@ final class WeatherManager: WeatherManagerProtocol {
         }
     }
     
-    
     /// Use this method for fetching weather data from server for multiple endpoints, for example for different locations at the same time
     /// - Parameter locations: Coordinates for those data should be fetched
     /// - Returns: Array of decoded Weather responses for different locations
-    func fetchWeatherDataWithTaskGroup(for locations: [CLLocation?]) async throws -> [WeatherResponse] {
+    ///
+    func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [WeatherObject] {
+        print("Called", #function)
         
-        var endpoints = [URL]()
-        var responses = [WeatherResponse]()
+        
+        var endpoints = [(location: Location, currentURL: URL, dailyURL: URL)]()
+        
+        var weatherData: [WeatherObject] = []
+        //        weatherData.reserveCapacity(endpoints.count)
+        
+        print("WE WILL SEARCH FOR THOOSE LOCATIONS: ",locations.count)
         
         for location in locations {
+            print("FOR  \(location?.name.uppercased())")
             if let location = location {
-                let newURL = APIEndPoint.currentForecast(location: location).url
-                endpoints.append(newURL)
+                
+                let currentEndpoint = APIEndPoint.currentForecast(location: location.geoLocation).url
+                let dailyEndpoint = APIEndPoint.dailyForecast(location: location.geoLocation).url
+                endpoints.append((location, currentEndpoint, dailyEndpoint))
+                
+                print("HERE IS ENDPOINTS TUPLES COUNT", endpoints.count)
             }
         }
-        
-        return try await withThrowingTaskGroup(of: Data.self) { group in
-            var weatherData: [WeatherResponse] = []
-            weatherData.reserveCapacity(endpoints.count)
+        return try await withThrowingTaskGroup(of: (current: Data?, daily: Data?).self) { group -> ([WeatherObject]) in
             
-            endpoints.forEach { url in
+            
+            for endpoint in endpoints {
                 group.addTask {
-                    try await Networking.shared.requestData(endpoint: url)
+                    do {
+                        
+                        let currentWeatherData = try await Networking.shared.requestData(endpoint: endpoint.currentURL)
+                        let dailyWeatherData = try await Networking.shared.requestData(endpoint: endpoint.dailyURL)
+                        
+                        return (currentWeatherData, dailyWeatherData)
+                        
+                    } catch {
+                        print("Data task has been failed")
+                        print("ERROR calling \(#function)", error.localizedDescription)
+                        return (nil, nil)
+                    }
+                    
+                }
+                print("Added a TASKS for \(endpoint.location)" )
+                
+                
+                for try await dataResponse in group {
+                    
+                    let weather = try decodeWeatherData(endpoint.location, dataResponse)
+                    
+                    weatherData.append(weather)
+                    print("ADDED WEATHER OBJECT for \(endpoint.location)")
                 }
             }
+            return weatherData
+        }
+    }
+    
+        
+       
+    
+    
+     func decodeWeatherData(_ location: Location?, _ dataResponse: (current: Data?, daily: Data?)) throws -> WeatherObject {
+         
+         print("CALLING \(#function) \(location?.name)")
+         
+        if let current = dataResponse.current,
+           let daily = dataResponse.daily {
             
-            for try await dataResponse in group {
-                
-                let decoder = JSONDecoder()
-                
-                let decodedData = try decoder.decode(WeatherResponse.self, from: dataResponse)
-                responses.append(decodedData)
-                
-            }
-            return responses
+            let decodedCurrentData = try JSONDecoder().decode(WeatherResponse.self, from: current)
+            let decodedDailyData = try JSONDecoder().decode(WeatherResponse.self, from: daily)
+            
+            let weatherObject = WeatherObject(location: location, current: decodedCurrentData, daily: decodedDailyData)
+            
+//            print("\(#function) MADE WEATHER OBJECT: \(weatherObject)" )
+            return weatherObject
+        } else {
+            print("WEATHER DATA NOT DECODED")
+            let weatherObject = WeatherObject(location: location)
+            
+            return weatherObject
         }
     }
     
     
+    
     // MARK: VER.#2
-    //Download from some URL and return decoded CurrentWeatherResponse to MainWeatherViewViewModel.swift trough the closure
+    //Download from some URL and return decoded WeatherResponse to MainWeatherViewViewModel.swift trough the closure
     //More universal variant
     func download(from url: URL, completion: @escaping (_ weatherData: WeatherResponse) async -> Void) async throws {
         do {
@@ -171,24 +237,7 @@ final class WeatherManager: WeatherManagerProtocol {
      }
      }
      */
-    
-    
-    
-    // MARK: DECODE METHOD
-    //MAY BE USEFUL SOMEWHERE ELSE
-    /*
-     func decodeData(_ data: Data) throws -> CurrentWeatherResponse {
-     let decoder = JSONDecoder()
-     do {
-     let decodedData = try decoder.decode(CurrentWeatherResponse.self, from: data)
-     
-     return decodedData
-     } catch {
-     print(error.localizedDescription)
-     throw error
-     }
-     }
-     */
+
 }
 
 

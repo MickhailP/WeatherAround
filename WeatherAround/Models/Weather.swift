@@ -11,38 +11,72 @@ import SwiftUI
 
 struct WeatherObject {
     
-    let currentWeather: Weather
-    let hourlyWeather: [Weather]
-    let dailyWeather:  [Weather]
+    let objectId = UUID()
     
-    init(current apiResponse: WeatherResponse, daily: WeatherResponse) {
+    var currentWeather: Weather?
+    var hourlyWeather: [Weather]?
+    var dailyWeather:  [Weather]?
+    var location: Location?
+    
+    init(location: Location? = nil, current apiResponse: WeatherResponse? = nil, daily: WeatherResponse? = nil) {
+        
+        self.location = location
         
         // Initialise current weather
         //
-        self.currentWeather = Weather(current: apiResponse)
-        
-        // Initialise hourlyWeather
-        //
-        let hourIntervals = apiResponse.data.timelines[0].intervals
-        
-        self.hourlyWeather = hourIntervals.compactMap { hour -> Weather in
-            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
-            return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
+        if let current = apiResponse,
+           let daily = daily {
+            
+            self.currentWeather = Weather(current: current)
+            let hourIntervals = current.data.timelines[0].intervals
+            // Initialise hourlyWeather
+            //
+            self.hourlyWeather = hourIntervals.compactMap { hour -> Weather in
+                let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
+                return Weather(temperature: Int(hour.values.temperature), weatherCode: weatherCode, startTime: hour.startTime)
+            }
+            
+            
+            // Initialise dailyWeather
+            //
+            let dailyIntervals = daily.data.timelines[0].intervals
+            self.dailyWeather = dailyIntervals.compactMap { day -> Weather in
+                let weatherCode = WeatherCode(rawValue: "\(day.values.weatherCode)") ?? WeatherCode.unknown
+                return Weather(temperature: Int(day.values.temperature), weatherCode: weatherCode, startTime: day.startTime)
+            }
         }
-        
-        // Initialise dailyWeather
-        //
-        let dailyIntervals = daily.data.timelines[0].intervals
-        self.dailyWeather = dailyIntervals.compactMap { day -> Weather in
-            let weatherCode = WeatherCode(rawValue: "\(day.values.weatherCode)") ?? WeatherCode.unknown
-            return Weather(temperature: day.values.temperature, weatherCode: weatherCode, startTime: day.startTime)
+        return
+    }
+}
+
+//
+// MARK: Hashable
+//
+extension WeatherObject: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(objectId)
+    }
+}
+
+//
+// MARK: Equatable
+//
+extension WeatherObject: Equatable {
+    static func == (lhs: WeatherObject, rhs: WeatherObject) -> Bool {
+        if lhs.objectId == rhs.objectId  { return true } else {
+            return false
         }
     }
 }
 
+//
+// MARK: Object example
+//
 extension WeatherObject {
     
-    private init(current: Weather, hourly: [Weather], daily: [Weather]) {
+    private init(location: Location? = nil, current: Weather, hourly: [Weather], daily: [Weather]) {
+        self.location = location
+        
         self.currentWeather = current
         self.hourlyWeather = hourly
         self.dailyWeather = daily
@@ -73,7 +107,7 @@ struct Weather: Identifiable {
     var id = UUID()
     
     let startTime: String
-    let temperature: Double
+    let temperature: Int
     let temperatureApparent: Double?
     
     let weatherCode: WeatherCode
@@ -99,7 +133,7 @@ struct Weather: Identifiable {
         
         let values = currentResponse.values
         
-        self.temperature = values.temperature
+        self.temperature = Int(values.temperature)
         self.temperatureApparent = values.temperatureApparent
         self.weatherCode = WeatherCode(rawValue: "\(values.weatherCode)") ?? WeatherCode.unknown
         self.humidity = values.humidity
@@ -261,13 +295,14 @@ struct Weather: Identifiable {
     
 }
 
-
+//
 // MARK: Weather initializer
+// Use this one to initialise
 extension Weather {
     
     
     /// Use this initialiser to set data manually
-    init(temperature: Double, weatherCode: WeatherCode, startTime: String,
+    init(temperature: Int, weatherCode: WeatherCode, startTime: String,
          temperatureApparent: Double? = nil, humidity: Double? = nil,
          precipitationProbability: Int? = nil, precipitationType: Int? = nil,
          pressureSurfaceLevel: Double? = nil,  uvIndex: Int? = nil,
@@ -296,62 +331,6 @@ extension Weather {
                                  visibility: 16, windSpeed: 2.5)
     
 }
-
-
-
-struct WeatherDaily {
-    let weatherDaily: [Weather]
-    
-    init(apiResponse: WeatherResponse) {
-        let dailyIntervals = apiResponse.data.timelines[0].intervals
-        self.weatherDaily = dailyIntervals.compactMap { day -> Weather in
-            let weatherCode = WeatherCode(rawValue: "\(day.values.weatherCode)") ?? WeatherCode.unknown
-            return Weather(temperature: day.values.temperature, weatherCode: weatherCode, startTime: day.startTime)
-        }
-    }
-}
-
-// MARK: WeatherDaily static example array
-extension WeatherDaily {
-    
-    static let exampleArray = [
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T10:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 22, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 31, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 12, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
-    ]
-}
-
-
-struct WeatherHourly {
-
-    
-    let weatherHourly: [Weather]
-    
-    init(apiResponse: WeatherResponse) {
-        let hourIntervals = apiResponse.data.timelines[0].intervals
-        
-        self.weatherHourly = hourIntervals.compactMap { hour -> Weather in
-            let weatherCode = WeatherCode(rawValue: "\(hour.values.weatherCode)") ?? WeatherCode.unknown
-            return Weather(temperature: hour.values.temperature, weatherCode: weatherCode, startTime: hour.startTime)
-        }
-    }
-    
-    
-    //For example property
-    fileprivate init(array: [Weather]) {
-        self.weatherHourly = array
-    }
-    
-    static let example = WeatherHourly(array: [
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T11:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T12:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T13:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5),
-        Weather(temperature: 14, weatherCode: .clear, startTime: "2022-06-05T14:00:00Z", temperatureApparent: 12, humidity: 41, precipitationProbability: 25, precipitationType: 1, pressureSurfaceLevel: 1241, uvIndex: 3, visibility: 16, windSpeed: 2.5)
-        
-    ])
-}
-
 
 enum PrecipitationCode: Int {
     case unknown = 0

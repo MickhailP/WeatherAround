@@ -22,6 +22,9 @@ final class MainWeatherViewViewModel: ObservableObject {
     @Published var hourlyWeather: [Weather]?
     @Published var dailyWeather: [Weather]?
     
+    @Published var location: Location?
+
+    
     // UI properties
     @Published var locationName: String = ""
     @Published var loadingState: LoadingState = .loading
@@ -31,28 +34,34 @@ final class MainWeatherViewViewModel: ObservableObject {
     // MARK: Init from scratch
     /// Use this initialiser to set MainWeatherViewViewModel
     /// - Parameter weatherManager: Weather manager instance, that supports WeatherManager Protocol
-    init(weatherManager: WeatherManagerProtocol) {
+    init(from weatherObject: WeatherObject? = nil, weatherManager: WeatherManagerProtocol) {
+        
         self.weatherManager = weatherManager
         
-        print("INITIALISE STARTS. LOADING STATE: \(loadingState)")
-        fetchLocationAndWeather()
-        
-    }
-    
-    /// The method sets user's location name that has been received from  Location Manager
-    /// - Parameter location: CLLocation data that hold information about user's location
-    func setLocationName(_ location: CLLocation?) {
-        if let location = location {
-            self.locationManager.getLocationName(for: location) { name in
-                self.locationName = name ?? "My location"
+        if let weatherObject = weatherObject {
+            _currentWeather = Published(wrappedValue: weatherObject.currentWeather)
+            _hourlyWeather = Published(wrappedValue: weatherObject.hourlyWeather)
+            _dailyWeather = Published(wrappedValue: weatherObject.dailyWeather)
+            _location = Published(wrappedValue: weatherObject.location)
+            
+            if let locationName = weatherObject.location {
+                self.locationName = locationName.name
             }
-        } else {
-            print("Location name is not available ")
+        } else{
+            
+            print("INITIALISE STARTS. LOADING STATE: \(loadingState)")
+            fetchLocationAndWeather()
         }
+        
+        self.loadingState = .loaded
+
     }
+
     
     /// This method listen LocationManager publisher, then user's location has been received it sets location name and requests a Weather data for it.
     func fetchLocationAndWeather() {
+        print("CALLING: \(#function)")
+        
         locationManager.$location
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
@@ -68,23 +77,31 @@ final class MainWeatherViewViewModel: ObservableObject {
                         print("There was an error: \(error). Fetching location hasn't done.")
                 }
             } receiveValue: { [ weak self ] location in
-                self?.setLocationName(location)
-                
-                self?.getWeatherAndSetModel(for: location)
+                self?.setLocation(location) { location in
+                    print("Location received by \(#file)")
+                    self?.getWeatherAndSetModel(for: location)
+                    self?.loadingState = .loaded
+                }
+             print("INIT DONE")
             }
             .store(in: &cancellables)
     }
     
     /// This method sets up Published properties in VM
     /// - Parameter location: CLLocation instance that holds location data for which data should be requested and set to a MainWeatherViewModel
-    func getWeatherAndSetModel(for location: CLLocation) {
-        Task{
+    func getWeatherAndSetModel(for location: Location) {
+        print("CALLING \(#function) for \(location.name)")
+        
+        Task {
             if let weatherObject = await weatherManager.getWeather(for: location) {
+                
+//                print(weatherObject)
                 currentWeather = weatherObject.currentWeather
                 hourlyWeather = weatherObject.hourlyWeather
                 dailyWeather = weatherObject.dailyWeather
-                
-                loadingState = .loaded
+                 
+                print(hourlyWeather as AnyObject)
+    
                 
             } else {
                 print("FAIL")
@@ -92,6 +109,48 @@ final class MainWeatherViewViewModel: ObservableObject {
             }
         }
     }
+    
+    private func setLocation(_ location: CLLocation?, completion: @escaping (_ location: Location) -> Void) {
+        print("CALLING \(#function)")
+        
+        if let location = location  {
+            self.locationManager.returnPlaceMark(for: location) { placemark in
+                guard let placemark = placemark else {
+                    print("PlaceMark data is not available ")
+                    return
+                }
+                
+                if let name = placemark.locality,
+                   let country = placemark.country,
+                   let geoLocation = placemark.location {
+                    
+                   let newLocation = Location(name: name, country: country,  geoLocation: geoLocation)
+                    
+                    self.location = newLocation
+                
+                 completion(newLocation)
+                } else {
+                    print("Failed to set Location data")
+                }
+            }
+        }
+    }
+    
+//    // The method sets user's location name that has been received from  Location Manager
+//    /// - Parameter location: CLLocation data that hold information about user's location
+//    private func setLocationName(_ location: CLLocation?) {
+//        if let location = location {
+//            self.locationManager.getLocationName(for: location) { name in
+//                self.locationName = name ?? "My location"
+//            }
+//        } else {
+//            print("Location name is not available ")
+//        }
+//    }
+    
+    
+    
+    
 }
 
 // MARK: Init from WeatherObject
@@ -103,20 +162,7 @@ extension MainWeatherViewViewModel{
     ///   - location: Location instance that holds location data
     ///   - weatherManager: Weather manager
     ///
-    convenience init(from weatherObject: WeatherObject, location: Location, weatherManager: WeatherManagerProtocol) {
-        
-        self.init(weatherManager: weatherManager)
-        
-        _currentWeather = Published(wrappedValue: weatherObject.currentWeather)
-        _hourlyWeather = Published(wrappedValue: weatherObject.hourlyWeather)
-        _dailyWeather = Published(wrappedValue: weatherObject.dailyWeather)
-        
-        self.locationName = location.name
-        
-        //Dismiss LoadingView
-        self.loadingState = .loaded
-        
-    }
+
 }
 
 

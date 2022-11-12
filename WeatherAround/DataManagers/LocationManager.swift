@@ -70,11 +70,32 @@ extension LocationManager {
             }
             // To see all available options of placemark
             print(place)
-        
+            
             if let name = place.locality {
                 // Decoding was successful, call completion handler with locality name
                 completionHandler(name)
             }
+        }
+    }
+    
+    
+    func returnPlaceMark(for location: CLLocation, completionHandler: @escaping (CLPlacemark?) -> Void ) {
+        
+        // create a CLGeocoder instance
+        let geocoder = CLGeocoder()
+        
+        // Look up a location and pass it in to closure
+        geocoder.reverseGeocodeLocation(location, preferredLocale: .current) { placemark, error in
+            
+            // Check if location available
+            guard let place = placemark?.first, error == nil else {
+                // An error occurred during decoding
+                completionHandler(nil)
+                print("Failed to get placemark from location")
+                return
+            }
+            // To see all available options of placemark
+            completionHandler(place)
         }
     }
 }

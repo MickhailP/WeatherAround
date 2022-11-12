@@ -15,10 +15,9 @@ struct MainWeatherView: View {
     
     private let topEdge: CGFloat
     
-    init(from weatherObject: WeatherObject?, location: Location?, weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
-        if let location = location,
-            let weatherObject = weatherObject {
-            _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(from: weatherObject, location: location, weatherManager: weatherManager))
+    init(from weatherObject: WeatherObject?, weatherManager: WeatherManagerProtocol, topEdge: CGFloat) {
+        if let weatherObject = weatherObject {
+            _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(from: weatherObject, weatherManager: weatherManager))
             
         } else {
             _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(weatherManager: weatherManager))
@@ -33,7 +32,7 @@ struct MainWeatherView: View {
     
     var body: some View {
         ZStack{
-            backgroundView
+            BackgroundView()
             
             if viewModel.loadingState == .loading {
                 
@@ -44,11 +43,12 @@ struct MainWeatherView: View {
                 if
                     let weather = viewModel.currentWeather,
                     let weatherHourly = viewModel.hourlyWeather,
-                    let weatherDaily = viewModel.dailyWeather
+                    let weatherDaily = viewModel.dailyWeather,
+                    let location = viewModel.location
                 {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 15) {
-                            headerSection(weather)
+                            headerSection(weather, location)
                             HourlyWeatherView(weather: weatherHourly)
                             DailyForecastView(weatherDaily: weatherDaily)
                             WeatherDetailView(weather: weather)
@@ -68,9 +68,12 @@ struct MainWeatherView: View {
                             }
                         )
                     }
+                } else {
+                    Text("FAIL")
                 }
             }
-        }    
+        }
+//        .navigationBarHidden(true)
     }
     
     func getTitleOpacity() -> CGFloat {
@@ -94,30 +97,12 @@ struct MainWeatherView: View {
 
 extension MainWeatherView {
 
-// MARK: backgroundView component
-    private var backgroundView: some View {
-        Group {
-            Image("appBackground")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-            
-            
-            LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
-                .ignoresSafeArea()
-                .opacity(0.4)
-                .blur(radius: 100)
-            
-            Color.gray.opacity(0.3)
-                .ignoresSafeArea()
-        }
-    }
     
 // MARK: headerSection component
-    private func headerSection(_ weather: Weather) -> some View {
+    private func headerSection(_ weather: Weather, _ location: Location) -> some View {
        return ZStack {
             HStack(alignment: .top) {
-                Text(viewModel.locationName)
+                Text(location.name)
                     .font(.title)
                     .foregroundColor(.white)
                     .padding(.top, 20)
@@ -126,7 +111,7 @@ extension MainWeatherView {
             .opacity( 1 - getTitleOpacity())
             
             
-            HeaderView(weather: weather, locationName: viewModel.locationName)
+            HeaderView(weather: weather, locationName: location.name)
                 .opacity(getTitleOpacity())
                 .padding(.vertical, 30)
         }
@@ -154,6 +139,7 @@ struct ContentView_Previews: PreviewProvider {
     static let viewMode = WeatherManager()
     
     static var previews: some View {
-        MainWeatherView(from: WeatherObject.example, location: nil, weatherManager: viewMode, topEdge: 100 )
+        
+        MainWeatherView(from: WeatherObject.example, weatherManager: viewMode, topEdge: 100)
     }
 }

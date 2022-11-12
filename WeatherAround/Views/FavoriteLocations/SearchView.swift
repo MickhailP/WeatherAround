@@ -12,8 +12,9 @@ struct SearchView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dismissSearch) var dismissSearch
     @Environment(\.isSearching) private var isSearching
+    @Environment(\.colorScheme) var colorScheme
     
-    @ObservedObject var viewModel: LocationSearchViewModel
+    @ObservedObject var viewModel: FavoriteLocationViewModel
     
     
     var body: some View {
@@ -37,7 +38,7 @@ struct SearchView: View {
                             Spacer()
                         }
                         .padding()
-                        .foregroundColor(.black)
+                        .foregroundColor(colorScheme == .light ? .black : .white)
                     }
                     .buttonStyle(.borderless)
                     
@@ -55,6 +56,6 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(viewModel: LocationSearchViewModel())
+        SearchView(viewModel: FavoriteLocationViewModel(weatherManager: WeatherManager()))
     }
 }
