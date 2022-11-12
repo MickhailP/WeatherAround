@@ -8,53 +8,64 @@
 import SwiftUI
 
 struct LocationPreview: View {
-
+    
     
     let weather: WeatherObject
-    let location: Location
     
     let weatherManager: WeatherManagerProtocol
-
+    
     
     var body: some View {
-        NavigationLink {
-            MainWeatherView(from: weather, location: location, weatherManager: weatherManager, topEdge: 59.0)
-        } label: {
+        ZStack {
+            NavigationLink(destination:  MainWeatherView(from: weather, weatherManager: weatherManager, topEdge: 59.0)) {
+                EmptyView()
+            }
+            
+            .opacity(0.0)
+            .buttonStyle(.plain)
+            
             HStack {
-                
-                VStack(alignment: .leading, spacing: 10){
-                    Text(location.name)
-                        .font(.headline)
-                    Text(location.country)
-                        .font(.subheadline)
+                if let location = weather.location {
+                    VStack(alignment: .leading, spacing: 10){
+                        Text(location.name)
+                            .font(.headline)
+                        Text(location.country)
+                            .font(.subheadline)
+                    }
+                    .padding()
+                    .foregroundColor(.white)
                 }
-                .padding()
-                .foregroundColor(.white)
+                
+            // TODO: When weather is unavailable create a blank view
                 
                 Spacer()
                 
                 HStack {
-                    weather.currentWeather.image
-                        .iconColor(weatherCode: weather.currentWeather.weatherCode)
-                        .font(.title)
+                    if let weather = weather.currentWeather {
                     
-                    
-                    
-                    VStack(alignment: .leading, spacing: 10){
-                        Text("\(weather.currentWeather.temperature)˚")
-                            .font(.headline)
-                        Text(weather.currentWeather.description)
-                            .font(.subheadline)
+                        weather.image
+                            .iconColor(weatherCode: weather.weatherCode)
+                            .font(.title)
+                        
+                        
+                        
+                        VStack(alignment: .leading, spacing: 10){
+                            Text("\(weather.temperature)˚")
+                                .font(.headline)
+                            Text(weather.description)
+                                .font(.subheadline)
+                        }
+                        .foregroundColor(.white)
+                    } else {
+                        ProgressView()
                     }
-                    .foregroundColor(.white)
                     
                 }
                 .padding()
                 
-                
             }
+            
         }
-        
         .background(
             BackgroundView()
         )
@@ -64,9 +75,9 @@ struct LocationPreview: View {
         
     }
 }
-//
-//struct LocationPreview_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LocationPreview(weather: WeatherObject.example, location: Location(name: "Lon", country: "Russia"))
-//    }
-//}
+
+struct LocationPreview_Previews: PreviewProvider {
+    static var previews: some View {
+        LocationPreview(weather: WeatherObject.example, weatherManager: WeatherManager())
+    }
+}
