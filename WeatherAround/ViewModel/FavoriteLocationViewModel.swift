@@ -22,9 +22,9 @@ final class FavoriteLocationViewModel: ObservableObject {
     
     @Published private(set) var locationPlaceMarks: [CLPlacemark] = []
     
-    @Published private(set) var favoritesLocation: [Location] = []
+    @Published private(set) var favoriteLocations: [Location] = []
     
-    @Published private(set) var favoriteWeather = [(locationData: Location, weatherData: WeatherObject)]()
+    @Published private(set) var favoriteWeather = [WeatherObject]()
 
     let weatherManager: WeatherManagerProtocol
     
@@ -39,24 +39,26 @@ final class FavoriteLocationViewModel: ObservableObject {
         
         loadFavoriteLocations()
 
-        
         addTextFieldSubscriber()
         addSearchSubscriber()
         setLocationsData()
         fetchAllFavoriteWeather()
+        
+//        removeAll()
+//        save()
+        
     }
     
-    private func save() {
-        if let encoded = try? JSONEncoder().encode(favoritesLocation) {
-            UserDefaults.standard.set(encoded, forKey: saveKey)
-        }
-    }
-    
-    
+  
     private func loadFavoriteLocations() {
         if let data = UserDefaults.standard.data(forKey: saveKey) {
-            if let decoded = try? JSONDecoder().decode([Location].self, from: data) {
-                favoritesLocation = decoded
+            do {
+                let decoded = try JSONDecoder().decode([Location].self, from: data)
+                favoriteLocations = decoded
+                print("LOCATIONS LOADED")
+                print(favoriteLocations.count)
+            } catch {
+                print("ERROR calling \(#function)", error.localizedDescription)
             }
         }
     }
@@ -64,12 +66,12 @@ final class FavoriteLocationViewModel: ObservableObject {
     private func fetchAllFavoriteWeather() {
         Task {
             do {
-                let weathers = try await weatherManager.fetchWeatherDataWithTaskGroup(for: favoritesLocation)
+                let weathers = try await weatherManager.fetchWeatherDataWithTaskGroup(for: favoriteLocations)
                 await MainActor.run {
                     favoriteWeather = weathers
                 }
             } catch {
-                print(error.localizedDescription)
+                print("ERROR calling \(#function)", error.localizedDescription)
             }
         }
     }
@@ -82,11 +84,22 @@ final class FavoriteLocationViewModel: ObservableObject {
             
             let location = Location(name: name, country: country, geoLocation: geoLocation)
             
-            let unique = favoritesLocation.contains(where: { $0 == location})
+            let contains = favoriteLocations.contains(where: { $0 == location})
             
-            if !unique {
-                favoritesLocation.append(location)
+            if !contains {
+                favoriteLocations.append(location)
                 save()
+                
+                Task {
+                    let weather = await weatherManager.getWeather(for: location)
+            
+                    await MainActor.run(body: {
+                        if let weather = weather {
+                            favoriteWeather.append(weather)
+                        }
+                    })
+                }
+                
             } else {
                 print("There is the same location in database ")
             }
@@ -96,12 +109,33 @@ final class FavoriteLocationViewModel: ObservableObject {
         }
     }
     
+    
+    private func save() {
+        do {
+            let encoded = try JSONEncoder().encode(favoriteLocations)
+            UserDefaults.standard.set(encoded, forKey: saveKey)
+            print("LOCATION SAVED")
+            print(favoriteLocations.count)
+            
+        } catch  {
+            print("ERROR due calling \(#function)", error.localizedDescription)
+        }
+    }
+    
     func delete(_ index: IndexSet) {
-        favoritesLocation.remove(atOffsets: index)
+        favoriteLocations.remove(atOffsets: index)
+        favoriteWeather.remove(atOffsets: index)
+        
         save()
         print("Location removed")
     }
     
+    private func removeAll() {
+        favoriteLocations.removeAll()
+        save()
+        print("ALL LOCATIONS REMOVED")
+        
+    }
     
     private func addTextFieldSubscriber() {
         $searchFieldText

@@ -10,11 +10,15 @@ import CoreLocation
 
 protocol WeatherManagerProtocol {
     
-    func getWeather(for location: CLLocation) async -> WeatherObject?
+//    func getWeather(for location: CLLocation) async -> WeatherObject?
+    func getWeather(for location: Location) async -> WeatherObject?
+
     
-    func fetchWeatherData(from url: URL) async throws -> WeatherResponse
+    func fetchWeatherData(from url: URL) async throws -> Data
     
-    func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [(locationData: Location, weatherData: WeatherObject)]
+    func decodeWeatherData(_ location: Location?, _ dataResponse: (current: Data?, daily: Data?)) throws -> WeatherObject
+    
+    func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [WeatherObject]
     
     func download(from url: URL, completion: @escaping (_ weatherData: WeatherResponse) async -> Void) async throws
 }
