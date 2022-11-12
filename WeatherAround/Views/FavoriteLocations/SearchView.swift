@@ -12,6 +12,7 @@ struct SearchView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dismissSearch) var dismissSearch
     @Environment(\.isSearching) private var isSearching
+    @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var viewModel: FavoriteLocationViewModel
     
@@ -37,7 +38,7 @@ struct SearchView: View {
                             Spacer()
                         }
                         .padding()
-                        .foregroundColor(.black)
+                        .foregroundColor(colorScheme == .light ? .black : .white)
                     }
                     .buttonStyle(.borderless)
                     

@@ -134,8 +134,8 @@
 			isa = PBXGroup;
 			children = (
 				D798D17D290AEAD40013F4F4 /* FavoriteLocationView.swift */,
-				D7A68D47290EE771001C2CD7 /* SearchView.swift */,
 				D795DDC62917889B00B9D3CC /* LocationPreview.swift */,
+				D7A68D47290EE771001C2CD7 /* SearchView.swift */,
 			);
 			path = FavoriteLocations;
 			sourceTree = "<group>";

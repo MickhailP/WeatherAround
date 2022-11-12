@@ -20,7 +20,7 @@ struct WeatherAroundApp: App {
                 
                 GeometryReader { proxy in
                     let topEdge = proxy.safeAreaInsets.top
-                    MainWeatherView(from: nil, location: nil, weatherManager: WeatherManager(), topEdge: topEdge)
+                    MainWeatherView(from: nil, weatherManager: WeatherManager(), topEdge: topEdge)
                         .ignoresSafeArea(.all, edges: .top)
                 }
                 .tabItem {
