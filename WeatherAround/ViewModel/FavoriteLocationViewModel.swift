@@ -191,5 +191,4 @@ final class FavoriteLocationViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
 }

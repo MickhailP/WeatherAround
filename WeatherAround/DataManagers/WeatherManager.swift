@@ -10,7 +10,7 @@ import CoreLocation
 import Combine
 import UIKit
 
-final class WeatherManager: WeatherManagerProtocol {
+final class WeatherManager: ObservableObject, WeatherManagerProtocol {
  
     /// Use this method for fetching weather data from server
     ///

@@ -9,9 +9,9 @@ import Foundation
 import SwiftUI
 
 
-struct WeatherObject {
+struct WeatherObject: Identifiable {
     
-    let objectId = UUID()
+    let id = UUID()
     
     var currentWeather: Weather?
     var hourlyWeather: [Weather]?
@@ -54,7 +54,7 @@ struct WeatherObject {
 //
 extension WeatherObject: Hashable {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(objectId)
+        hasher.combine(id)
     }
 }
 
@@ -63,7 +63,7 @@ extension WeatherObject: Hashable {
 //
 extension WeatherObject: Equatable {
     static func == (lhs: WeatherObject, rhs: WeatherObject) -> Bool {
-        if lhs.objectId == rhs.objectId  { return true } else {
+        if lhs.id == rhs.id  { return true } else {
             return false
         }
     }

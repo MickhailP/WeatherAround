@@ -29,7 +29,7 @@ struct FavoriteLocationView: View {
                         VStack{
                             Image(systemName: "magnifyingglass.circle")
                                 .font(.system(size: 50))
-                            Text("You haven't favourite places yet")
+                            Text("You haven't favorite places yet")
                             
                         }
                         
