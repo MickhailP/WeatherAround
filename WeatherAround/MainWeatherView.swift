@@ -23,7 +23,6 @@ struct MainWeatherView: View {
             _viewModel = StateObject(wrappedValue: MainWeatherViewViewModel(weatherManager: weatherManager))
         }
         
-       
         self.offset = 0
         self.topEdge = topEdge
         
@@ -68,7 +67,7 @@ struct MainWeatherView: View {
                             }
                         )
                     }
-                } else {
+                } else if viewModel.loadingState == .failed {
                     Text("FAIL")
                 }
             }

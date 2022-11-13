@@ -45,6 +45,10 @@ struct SearchView: View {
                 }
             }
             .listStyle(.plain)
+            .alert(isPresented: $viewModel.showSameLocationAlert) {
+                Alert(title: Text("Same location"),
+                      message: Text("You are already have the same place in your favourite places"))
+            }
         }
         .searchable(text: $viewModel.searchFieldText,
                     placement: .navigationBarDrawer(displayMode: .always),

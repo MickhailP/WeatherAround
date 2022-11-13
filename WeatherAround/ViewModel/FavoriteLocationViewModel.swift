@@ -25,6 +25,9 @@ final class FavoriteLocationViewModel: ObservableObject {
     @Published private(set) var favoriteLocations: [Location] = []
     
     @Published private(set) var favoriteWeather = [WeatherObject]()
+    
+    @Published var showSameLocationAlert: Bool = false
+    @Published var showRemoveAllAlert: Bool = false
 
     let weatherManager: WeatherManagerProtocol
     
@@ -43,9 +46,6 @@ final class FavoriteLocationViewModel: ObservableObject {
         addSearchSubscriber()
         setLocationsData()
         fetchAllFavoriteWeather()
-        
-//        removeAll()
-//        save()
         
     }
     
@@ -101,6 +101,7 @@ final class FavoriteLocationViewModel: ObservableObject {
                 }
                 
             } else {
+                showSameLocationAlert = true
                 print("There is the same location in database ")
             }
             
@@ -130,7 +131,7 @@ final class FavoriteLocationViewModel: ObservableObject {
         print("Location removed")
     }
     
-    private func removeAll() {
+     func removeAll() {
         favoriteLocations.removeAll()
         save()
         print("ALL LOCATIONS REMOVED")

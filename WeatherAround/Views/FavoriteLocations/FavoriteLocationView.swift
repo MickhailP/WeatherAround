@@ -29,8 +29,8 @@ struct FavoriteLocationView: View {
                         VStack{
                             Image(systemName: "magnifyingglass.circle")
                                 .font(.system(size: 50))
-                            Text("You haven't favorite places yet")
-
+                            Text("You haven't favourite places yet")
+                            
                         }
                         
                         Spacer()
@@ -65,7 +65,22 @@ struct FavoriteLocationView: View {
                             .foregroundColor(.black)
                     }
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        viewModel.showRemoveAllAlert = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    }
+                }
             }
+            .alert("Remove all", isPresented: $viewModel.showRemoveAllAlert, actions: {
+                Button("Nope", role: .cancel, action: {})
+                Button("Delete", role: .destructive , action: { viewModel.removeAll()
+                })
+            }, message: {
+                Text("Are you sure delete all your favourite locations? ")
+            })
         }
     }
 }
