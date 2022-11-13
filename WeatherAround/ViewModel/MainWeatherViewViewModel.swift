@@ -31,9 +31,14 @@ final class MainWeatherViewViewModel: ObservableObject {
     
     private (set) var cancellables = Set<AnyCancellable>()
     
-    // MARK: Init from scratch
+    
     /// Use this initialiser to set MainWeatherViewViewModel
+    ///
+    ///The view model initialise by this init()  in two ways.
+    ///By default WeatherObject is set to nil and in this case it will cal fetchLocationAndWeather() to initialise ViewModel from scratch
+    ///If you pass a WeatherObject to it than ViewModel will create from data that this object holds
     /// - Parameter weatherManager: Weather manager instance, that supports WeatherManager Protocol
+    /// - Parameter weatherObject: Weather Object from which MainView will be create
     init(from weatherObject: WeatherObject? = nil, weatherManager: WeatherManagerProtocol) {
         
         self.weatherManager = weatherManager
@@ -48,18 +53,15 @@ final class MainWeatherViewViewModel: ObservableObject {
                 self.locationName = locationName.name
             }
         } else{
-            
-            print("INITIALISE STARTS. LOADING STATE: \(loadingState)")
+        
             fetchLocationAndWeather()
         }
-        
-        self.loadingState = .loaded
 
     }
 
     
     /// This method listen LocationManager publisher, then user's location has been received it sets location name and requests a Weather data for it.
-    func fetchLocationAndWeather() {
+    private func fetchLocationAndWeather() {
         print("CALLING: \(#function)")
         
         locationManager.$location
@@ -81,25 +83,26 @@ final class MainWeatherViewViewModel: ObservableObject {
                     print("Location received by \(#file)")
                     self?.getWeatherAndSetModel(for: location)
                     self?.loadingState = .loaded
+                    print("DATA HAS BEEN SET")
                 }
-             print("INIT DONE")
             }
             .store(in: &cancellables)
     }
     
     /// This method sets up Published properties in VM
-    /// - Parameter location: CLLocation instance that holds location data for which data should be requested and set to a MainWeatherViewModel
-    func getWeatherAndSetModel(for location: Location) {
+    /// - Parameter location: Location instance that holds location data for which data should be requested and set to a MainWeatherViewModel properties
+    private func getWeatherAndSetModel(for location: Location) {
         print("CALLING \(#function) for \(location.name)")
         
         Task {
             if let weatherObject = await weatherManager.getWeather(for: location) {
                 
-//                print(weatherObject)
-                currentWeather = weatherObject.currentWeather
-                hourlyWeather = weatherObject.hourlyWeather
-                dailyWeather = weatherObject.dailyWeather
-                 
+                await MainActor.run(body: {
+                    currentWeather = weatherObject.currentWeather
+                    hourlyWeather = weatherObject.hourlyWeather
+                    dailyWeather = weatherObject.dailyWeather
+                })
+              
                 print(hourlyWeather as AnyObject)
     
                 
@@ -110,6 +113,10 @@ final class MainWeatherViewViewModel: ObservableObject {
         }
     }
     
+    /// Transform CLLocation to Location object
+    /// - Parameters:
+    ///   - location: CLLocation data
+    ///   - completion: transfer Location instance forward
     private func setLocation(_ location: CLLocation?, completion: @escaping (_ location: Location) -> Void) {
         print("CALLING \(#function)")
         
@@ -135,63 +142,8 @@ final class MainWeatherViewViewModel: ObservableObject {
             }
         }
     }
-    
-//    // The method sets user's location name that has been received from  Location Manager
-//    /// - Parameter location: CLLocation data that hold information about user's location
-//    private func setLocationName(_ location: CLLocation?) {
-//        if let location = location {
-//            self.locationManager.getLocationName(for: location) { name in
-//                self.locationName = name ?? "My location"
-//            }
-//        } else {
-//            print("Location name is not available ")
-//        }
-//    }
-    
-    
-    
-    
 }
 
-// MARK: Init from WeatherObject
-extension MainWeatherViewViewModel{
-    
-    /// Use this initialiser for creating MainWeatherViewViewModel from existing data
-    /// - Parameters:
-    ///   - weatherObject: WeatherObject instance that hold weather data
-    ///   - location: Location instance that holds location data
-    ///   - weatherManager: Weather manager
-    ///
-
-}
-
-
-
-//    func getCurrentAndDailyWeather(for location: CLLocation)  {
-//
-//        let urlCurrent = APIEndPoint.currentForecast(location: location).url
-//        let urlDaily = APIEndPoint.dailyForecast(location: location).url
-//
-//        Task {
-//            do {
-//                async let fetchedCurrent = self.weatherManager.fetchWeatherData(from: urlCurrent)
-//                async let fetchedDaily = self.weatherManager.fetchWeatherData(from: urlDaily)
-//
-//                try await self.weather = Weather(current: fetchedCurrent)
-//                try await self.weatherHourly = WeatherHourly(apiResponse: fetchedCurrent)
-//                try  await self.weatherDaily = WeatherDaily(apiResponse: fetchedDaily)
-//
-//                self.loadingState = .loaded
-//                print("LOADING STATE: \(loadingState)")
-//
-//            } catch {
-//                self.loadingState = .failed
-//                print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
-//                print("LOADING STATE: \(loadingState)")
-//
-//            }
-//        }
-//    }
 
 // MARK: VER. 2
 /*
@@ -244,21 +196,6 @@ extension MainWeatherViewViewModel{
  //
  //    }
  
- 
- /// Use this method to get the location from LocationManager and request downloading a Weather data.
- ///
- ///  It requests data downloading through WeatherManager when LocationManager has published location data.
- //    func fetchWeather() {
- //        locationManager.$location
- //            .receive(on: DispatchQueue.main)
- //            .compactMap { $0 }
- //            .sink { [weak self] location in
- //                Task  {
- //                    await self?.weatherManager.downloadWeather(for: location)
- //                }
- //            }
- //            .store(in: &cancellables)
- //    }
  */
 
 

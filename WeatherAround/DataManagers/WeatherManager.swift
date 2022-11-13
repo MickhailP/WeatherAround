@@ -11,20 +11,30 @@ import Combine
 import UIKit
 
 final class WeatherManager: WeatherManagerProtocol {
+ 
+    /// Use this method for fetching weather data from server
+    ///
+    /// This method request weather data that has been specified in url based on APIEndpoint enum.
+    /// Than receives the response from Networking manager and decodes in to WeatherResponse
+    /// - Parameter url: URL with data  request according to Weather API
+    /// - Returns: Decoded data
     
-func getWeather(for location: Location) async -> WeatherObject? {
+    /// Use this method to get data from single Location instance
+    /// - Parameter location: Location for which you want get Weather Data
+    /// - Returns: optional WeatherObject
+    func getWeather(for location: Location) async -> WeatherObject? {
         print("CALLING \(#file) for \(location.name)")
-    
+        
         let urlCurrent = APIEndPoint.currentForecast(location: location.geoLocation).url
         let urlDaily = APIEndPoint.dailyForecast(location: location.geoLocation).url
         
         do {
-            async let fetchedCurrent = fetchWeatherData(from: urlCurrent)
-            async let fetchedDaily = fetchWeatherData(from: urlDaily)
+            async let fetchedCurrent = Networking.shared.requestData(endpoint: urlCurrent)
+            async let fetchedDaily = Networking.shared.requestData(endpoint: urlDaily)
             
             let weather = try await decodeWeatherData(location, (current: fetchedCurrent, daily: fetchedDaily))
             
-  
+            
             return weather
             
         } catch {
@@ -34,57 +44,13 @@ func getWeather(for location: Location) async -> WeatherObject? {
         }
     }
     
+   
     
-    
-    /// Use this method to set up Network request for specific location and request data for Current, Hourly and Daily forecast using async call
-    /// - Parameter location: Location for which data should be requested
-    /// - Returns: WeatherObject instance
-//    func getWeather(for location: CLLocation) async -> WeatherObject? {
-//        let urlCurrent = APIEndPoint.currentForecast(location: location).url
-//        let urlDaily = APIEndPoint.dailyForecast(location: location).url
-//
-//
-//        do {
-//            async let fetchedCurrent = fetchWeatherData(from: urlCurrent)
-//            async let fetchedDaily = fetchWeatherData(from: urlDaily)
-//
-//            let weather = try await decodeWeatherData( nil,  (current: fetchedCurrent, daily: fetchedDaily))
-//
-//            return weather
-//
-//        } catch {
-//
-//            print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
-//            return nil
-//        }
-//    }
-    
-    // MARK: VER.#3
-    
-    /// Use this method for fetching weather data from server
+    /// Use this method for fetching weather data from server for multiple endpoints, for example for different locations at the same time with TaskGroup
     ///
-    /// This method request weather data that has been specified in url based on APIEndpoint enum.
-    /// Than receives the response from Networking manager and decodes in to CurrentWeatherResponse
-    /// - Parameter url: URL with data  request according to Weather API
-    /// - Returns: Decoded server response
-    internal func fetchWeatherData(from url: URL) async throws -> Data {
-        do {
-            print("WEATHER DATA REQUESTED")
-            let data = try await Networking.shared.requestData(endpoint: url)
-            
-            print("Weather data received successfully")
-            return data
-            
-        } catch {
-            
-            print(error, error.localizedDescription)
-            throw error
-        }
-    }
-    
-    /// Use this method for fetching weather data from server for multiple endpoints, for example for different locations at the same time
-    /// - Parameter locations: Coordinates for those data should be fetched
-    /// - Returns: Array of decoded Weather responses for different locations
+    /// It creates endpoints for each location and request data based on it, than decode responses with help of decodeWeatherData()
+    /// - Parameter locations: Locations objects for which data should be fetch
+    /// - Returns: Array of WeatherObject for different locations
     ///
     func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [WeatherObject] {
         print("Called", #function)
@@ -146,7 +112,14 @@ func getWeather(for location: Location) async -> WeatherObject? {
        
     
     
-     func decodeWeatherData(_ location: Location?, _ dataResponse: (current: Data?, daily: Data?)) throws -> WeatherObject {
+    /// Create a WeatherObject from data Response
+    ///
+    /// Receives a location instance and data responses for current and daily weather, decodes these responses and create a WeatherObject with weather data in case of successful decoding or in the case of failure WeatherObjects just with Location data
+    /// - Parameters:
+    ///   - location: Location data
+    ///   - dataResponse: Current and Daily responses from server
+    /// - Returns: Weather Object with location data and weather data depending on decoding result
+    internal func decodeWeatherData(_ location: Location?, _ dataResponse: (current: Data?, daily: Data?)) throws -> WeatherObject {
          
          print("CALLING \(#function) \(location?.name)")
          
