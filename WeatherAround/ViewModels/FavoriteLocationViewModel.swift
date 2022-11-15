@@ -11,29 +11,27 @@ import MapKit
 
 final class FavoriteLocationViewModel: ObservableObject {
     
-    @Published private(set) var isSearching: Bool = false
+    // Search sheet
+    @Published private(set) var shouldSearch: Bool = false
     @Published var isSearchPresented: Bool = false
-    
-    @Published var isMainViewPresented: Bool = false
-    
     @Published var showSearchList: Bool = false
-    
     @Published var searchFieldText: String = ""
-    
     @Published private(set) var locationPlaceMarks: [CLPlacemark] = []
     
-    @Published private(set) var favoriteLocations: [Location] = []
-    
+    // Favourite Locations
+    @Published private(set) var favouriteLocations: [Location] = []
     @Published private(set) var favoriteWeather = [WeatherObject]()
     
+    // MainWeather sheet
     @Published var selectedWeather: WeatherObject?
-    
     @Published var showWeatherSheet: Bool = false
+    
+    // Alerts
     @Published var showSameLocationAlert: Bool = false
     @Published var showRemoveAllAlert: Bool = false
-
-    let weatherManager: WeatherManagerProtocol
     
+    // Managers
+    private let weatherManager: WeatherManagerProtocol
     private let searchService = LocationSearchManager()
     
     private let saveKey = "SavedLocations"
@@ -44,7 +42,7 @@ final class FavoriteLocationViewModel: ObservableObject {
         self.weatherManager = weatherManager
         
         loadFavoriteLocations()
-
+        
         addTextFieldSubscriber()
         addSearchSubscriber()
         setLocationsData()
@@ -52,33 +50,26 @@ final class FavoriteLocationViewModel: ObservableObject {
         
     }
     
-  
+    
+    /// Load favourite Locations form UserDefaults and decode to favouriteLocations array
     private func loadFavoriteLocations() {
         if let data = UserDefaults.standard.data(forKey: saveKey) {
             do {
                 let decoded = try JSONDecoder().decode([Location].self, from: data)
-                favoriteLocations = decoded
+                favouriteLocations = decoded
                 print("LOCATIONS LOADED")
-                print(favoriteLocations.count)
+                print(favouriteLocations.count)
             } catch {
                 print("ERROR calling \(#function)", error.localizedDescription)
             }
         }
     }
     
-    private func fetchAllFavoriteWeather() {
-        Task {
-            do {
-                let weathers = try await weatherManager.fetchWeatherDataWithTaskGroup(for: favoriteLocations)
-                await MainActor.run {
-                    favoriteWeather = weathers
-                }
-            } catch {
-                print("ERROR calling \(#function)", error.localizedDescription)
-            }
-        }
-    }
+   
     
+    /// Creates a Location instance based on chosen place mark from SearchView and request a weather data for it.
+    /// Updates the favoriteLocations list
+    /// - Parameter placeMark: CLPlacemak for which weather data should be fetched
     func addToFavorites(placeMark: CLPlacemark) {
         
         if let name = placeMark.name,
@@ -87,21 +78,13 @@ final class FavoriteLocationViewModel: ObservableObject {
             
             let location = Location(name: name, country: country, geoLocation: geoLocation)
             
-            let contains = favoriteLocations.contains(where: { $0 == location})
+            let contains = favouriteLocations.contains(where: { $0 == location})
             
             if !contains {
-                favoriteLocations.append(location)
+                favouriteLocations.append(location)
                 save()
-                
-                Task {
-                    let weather = await weatherManager.getWeather(for: location)
-            
-                    await MainActor.run(body: {
-                        if let weather = weather {
-                            favoriteWeather.append(weather)
-                        }
-                    })
-                }
+    
+                requestWeather(for: location)
                 
             } else {
                 showSameLocationAlert = true
@@ -113,38 +96,71 @@ final class FavoriteLocationViewModel: ObservableObject {
         }
     }
     
+    /// Fetches weather data for Location
+    /// - Parameter location: Location instance for which data should be fetched
+    private func requestWeather(for location: Location) {
+        Task {
+            let weather = await weatherManager.getWeather(for: location)
+            
+            await MainActor.run(body: {
+                if let weather = weather {
+                    favoriteWeather.append(weather)
+                }
+            })
+        }
+    }
     
+    /// Fetch weather data for favouriteLocations
+    private func fetchAllFavoriteWeather() {
+        Task {
+            do {
+                let weathers = try await weatherManager.fetchWeatherDataWithTaskGroup(for: favouriteLocations)
+                await MainActor.run {
+                    favoriteWeather = weathers
+                }
+            } catch {
+                print("ERROR calling \(#function)", error.localizedDescription)
+            }
+        }
+    }
+    
+    
+    /// Save favoriteLocations in the UserDeafults
     private func save() {
         do {
-            let encoded = try JSONEncoder().encode(favoriteLocations)
+            let encoded = try JSONEncoder().encode(favouriteLocations)
             UserDefaults.standard.set(encoded, forKey: saveKey)
             print("LOCATION SAVED")
-            print(favoriteLocations.count)
+            print(favouriteLocations.count)
             
         } catch  {
             print("ERROR due calling \(#function)", error.localizedDescription)
         }
     }
     
+    ///  Delete chosen  location from list of favoriteLocations
+    /// - Parameter index: Index set from List
     func delete(_ index: IndexSet) {
-        favoriteLocations.remove(atOffsets: index)
+        favouriteLocations.remove(atOffsets: index)
         favoriteWeather.remove(atOffsets: index)
         
         save()
         print("Location removed")
     }
     
-     func removeAll() {
-        favoriteLocations.removeAll()
+    /// Remove all favourite locations
+    func removeAll() {
+        favouriteLocations.removeAll()
         save()
         print("ALL LOCATIONS REMOVED")
         
     }
     
+    /// Subscribes on $searchFieldText changes and call searchCity method to find a place if shouldSearch = true
     private func addTextFieldSubscriber() {
         $searchFieldText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .combineLatest($isSearching)
+            .combineLatest($shouldSearch)
             .sink { [weak self] (text, shouldSearch) in
                 print("Search Text: \(text)")
                 self?.locationPlaceMarks = []
@@ -161,25 +177,29 @@ final class FavoriteLocationViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Subscribes on $searchFieldText  and  set shouldSearching to true if searching text is longer than 2 characters and false if it is less than 2
     private func addSearchSubscriber() {
         $searchFieldText
             .sink(receiveValue: { [weak self] text in
                 if text.count < 2 {
-                    self?.isSearching = false
+                    self?.shouldSearch = false
                     print(text.count)
                 } else {
-                    self?.isSearching = true
+                    self?.shouldSearch = true
                 }
                 
             })
             .store(in: &cancellables)
     }
     
+    /// Creates a request to Search service to find place
+    /// - Parameter searchText: Place  that should be searched
     private func searchCity(searchText: String) {
         searchService.request(request: .address, searchText: searchText)
         print("\(#function) has been called")
     }
     
+    /// Adds a Placemark  that was founded by searchCity to locationPlaceMarks
     private func setLocationsData() {
         searchService.locationSearchPublisher
             .receive(on: DispatchQueue.main)
@@ -190,7 +210,6 @@ final class FavoriteLocationViewModel: ObservableObject {
                     print(item)
                     return item.placemark
                 }
-                
             }
             .store(in: &cancellables)
     }

@@ -72,10 +72,6 @@ struct MainWeatherView: View {
                 }
             }
         }
-        .onAppear {
-        
-        }
-//        .navigationBarHidden(true)
     }
     
     func getTitleOpacity() -> CGFloat {

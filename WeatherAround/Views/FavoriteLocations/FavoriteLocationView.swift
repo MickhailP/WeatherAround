@@ -23,7 +23,7 @@ struct FavoriteLocationView: View {
         NavigationView {
             Group {
                 
-                if viewModel.favoriteLocations.isEmpty {
+                if viewModel.favouriteLocations.isEmpty {
                     emptyLocations
                     
                 } else {

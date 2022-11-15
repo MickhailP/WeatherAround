@@ -54,15 +54,15 @@ final class MainWeatherViewViewModel: ObservableObject {
             }
             
             self.loadingState = .loaded
-        } else{
-        
+            
+        } else {
             fetchLocationAndWeather()
         }
 
     }
 
     
-    /// This method listen LocationManager publisher, then user's location has been received it sets location name and requests a Weather data for it.
+    /// This method listen LocationManager publisher, then user's location has been received it sets location model  and requests a Weather data for it.
     private func fetchLocationAndWeather() {
         print("CALLING: \(#function)")
         
@@ -105,8 +105,7 @@ final class MainWeatherViewViewModel: ObservableObject {
                     dailyWeather = weatherObject.dailyWeather
                 })
               
-                print(hourlyWeather as AnyObject)
-    
+//                print(hourlyWeather as AnyObject)
                 
             } else {
                 print("FAIL")
@@ -133,11 +132,10 @@ final class MainWeatherViewViewModel: ObservableObject {
                    let country = placemark.country,
                    let geoLocation = placemark.location {
                     
-                   let newLocation = Location(name: name, country: country,  geoLocation: geoLocation)
-                    
+                    let newLocation = Location(name: name, country: country,  geoLocation: geoLocation)
                     self.location = newLocation
-                
-                 completion(newLocation)
+                    completion(newLocation)
+                    
                 } else {
                     print("Failed to set Location data")
                 }
@@ -146,7 +144,7 @@ final class MainWeatherViewViewModel: ObservableObject {
     }
 }
 
-
+// OLD VERSIONS
 // MARK: VER. 2
 /*
  //    init() {

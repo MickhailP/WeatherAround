@@ -192,7 +192,7 @@
 				D7ABEFDF283FF57300F7E44C /* WeatherAroundApp.swift */,
 				D7ABEFE1283FF57300F7E44C /* MainWeatherView.swift */,
 				D79D158028FF46E200EAD69C /* Protocols */,
-				D7ABEFF4284243B000F7E44C /* ViewModel */,
+				D7ABEFF4284243B000F7E44C /* ViewModels */,
 				D799C0D8284E5AF10084C541 /* Views */,
 				D7FFFC5B28FAD15B002BFBD4 /* DataManagers */,
 				D7AB5FAA286C09F30081519A /* Networking */,
@@ -224,13 +224,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		D7ABEFF4284243B000F7E44C /* ViewModel */ = {
+		D7ABEFF4284243B000F7E44C /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				D7ABEFF0283FF87B00F7E44C /* MainWeatherViewViewModel.swift */,
 				D798D17B2909CDA50013F4F4 /* FavoriteLocationViewModel.swift */,
 			);
-			path = ViewModel;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		D7FFFC5B28FAD15B002BFBD4 /* DataManagers */ = {
