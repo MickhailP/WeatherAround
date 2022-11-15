@@ -72,6 +72,9 @@ struct MainWeatherView: View {
                 }
             }
         }
+        .onAppear {
+        
+        }
 //        .navigationBarHidden(true)
     }
     
@@ -139,6 +142,6 @@ struct ContentView_Previews: PreviewProvider {
     
     static var previews: some View {
         
-        MainWeatherView(from: WeatherObject.example, weatherManager: viewMode, topEdge: 100)
+        MainWeatherView(from: WeatherObject.example, weatherManager: WeatherManager(), topEdge: 100)
     }
 }

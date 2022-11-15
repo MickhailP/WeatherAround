@@ -15,6 +15,7 @@ struct BackgroundView:View {
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
+                .frame(maxWidth: .infinity)
             
             
             LinearGradient(gradient: Gradient(colors: [.indigo, .white]), startPoint: .topLeading, endPoint: .bottom)
@@ -26,7 +27,6 @@ struct BackgroundView:View {
                 .ignoresSafeArea()
             
         }
-
     }
 }
 

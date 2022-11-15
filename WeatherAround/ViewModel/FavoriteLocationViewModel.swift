@@ -26,6 +26,9 @@ final class FavoriteLocationViewModel: ObservableObject {
     
     @Published private(set) var favoriteWeather = [WeatherObject]()
     
+    @Published var selectedWeather: WeatherObject?
+    
+    @Published var showWeatherSheet: Bool = false
     @Published var showSameLocationAlert: Bool = false
     @Published var showRemoveAllAlert: Bool = false
 

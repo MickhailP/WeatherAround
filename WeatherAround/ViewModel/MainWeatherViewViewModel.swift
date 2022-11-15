@@ -52,6 +52,8 @@ final class MainWeatherViewViewModel: ObservableObject {
             if let locationName = weatherObject.location {
                 self.locationName = locationName.name
             }
+            
+            self.loadingState = .loaded
         } else{
         
             fetchLocationAndWeather()

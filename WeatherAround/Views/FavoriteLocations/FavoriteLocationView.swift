@@ -16,7 +16,7 @@ struct FavoriteLocationView: View {
     init(weatherManger: WeatherManagerProtocol) {
         _viewModel = StateObject(wrappedValue: FavoriteLocationViewModel(weatherManager: weatherManger))
         self.weatherManager = weatherManger
-        
+
     }
     
     var body: some View {
@@ -24,37 +24,19 @@ struct FavoriteLocationView: View {
             Group {
                 
                 if viewModel.favoriteLocations.isEmpty {
-                    VStack {
-                        Spacer()
-                        VStack{
-                            Image(systemName: "magnifyingglass.circle")
-                                .font(.system(size: 50))
-                            Text("You haven't favorite places yet")
-                            
-                        }
-                        
-                        Spacer()
-                    }
+                    emptyLocations
+                    
                 } else {
-                    List {
-                        ForEach(viewModel.favoriteWeather, id: \.self) { object in
-                            
-                            LocationPreview(weather: object, weatherManager: weatherManager)
-                            
-                        }
-                        .onDelete(perform: { index in
-                            viewModel.delete(index)
-                        })
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                    }
+                    listView
                 }
-                
             }
             .sheet(isPresented: $viewModel.isSearchPresented) {
                 SearchView(viewModel: viewModel)
             }
-            .navigationBarTitle("Favorite places")
+            .sheet(isPresented: $viewModel.showWeatherSheet, content: {
+                MainWeatherView(from: viewModel.selectedWeather, weatherManager: weatherManager, topEdge: 59.0)
+            })
+            .navigationBarTitle("Favorites")
             .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -74,6 +56,7 @@ struct FavoriteLocationView: View {
                     }
                 }
             }
+            
             .alert("Remove all", isPresented: $viewModel.showRemoveAllAlert, actions: {
                 Button("Nope", role: .cancel, action: {})
                 Button("Delete", role: .destructive , action: { viewModel.removeAll()
@@ -83,6 +66,39 @@ struct FavoriteLocationView: View {
             })
         }
     }
+    
+    
+    var emptyLocations: some View {
+        VStack {
+            Spacer()
+            VStack(spacing: 10){
+                Image(systemName: "magnifyingglass.circle")
+                    .font(.system(size: 50))
+                Text("You haven't favourite places yet!")
+                
+            }
+            Spacer()
+        }
+    }
+    
+    var listView: some View {
+        List {
+            ForEach(viewModel.favoriteWeather, id: \.self) { object in
+                
+                LocationPreview(weather: object, weatherManager: weatherManager)
+                    .onTapGesture {
+                        viewModel.selectedWeather = object
+                        viewModel.showWeatherSheet = true
+                    }
+            }
+            .onDelete(perform: { index in
+                viewModel.delete(index)
+            })
+            .listStyle(.plain)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+        }
+    } 
 }
 
 
