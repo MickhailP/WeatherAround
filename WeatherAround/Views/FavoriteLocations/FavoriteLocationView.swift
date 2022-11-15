@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoriteLocationView: View {
     
+    @Environment(\.colorScheme) var colorScheme
     @StateObject var viewModel: FavoriteLocationViewModel
     
     private let weatherManager: WeatherManagerProtocol
@@ -44,7 +45,7 @@ struct FavoriteLocationView: View {
                         viewModel.isSearchPresented = true
                     } label: {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.black)
+                            .foregroundColor(colorScheme == .light ? .black : .white)
                     }
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
