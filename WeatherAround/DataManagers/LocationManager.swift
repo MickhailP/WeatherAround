@@ -11,17 +11,13 @@ import Combine
 
 
 final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
-
+    
     static let shared = LocationManager()
     
     @Published var location: CLLocation?
-
+    
     private let manager = CLLocationManager()
     
-    deinit {
-        print("LOCATION MANAGER CLASS WAS DENINITIALIZED")
-    }
-
     override private init() {
         super.init()
         manager.delegate = self
@@ -30,16 +26,16 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
         manager.requestLocation()
         print("Location requested")
     }
-
+    
     // Fetch the user's locations and request Weather from server for the last one.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.first else { return }
         self.location = location
         print("Location received FROM MANAGER")
         print(location)
-
+        
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Unable to get user's location.", error)
         manager.requestLocation()

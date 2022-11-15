@@ -99,7 +99,7 @@ struct CLLocationData: Codable {
 
 //
 // MARK: Custom init CLLocation
-// Allow to init from Decoder anywhere.
+// Allow to init from Decoder.
 // create a CLLocation variable trough the LocationData object
 extension CLLocation {
     convenience init(model: CLLocationData) {

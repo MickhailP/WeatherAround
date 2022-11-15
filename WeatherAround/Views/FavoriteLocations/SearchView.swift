@@ -11,6 +11,7 @@ struct SearchView: View {
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dismissSearch) var dismissSearch
+    
     @Environment(\.isSearching) private var isSearching
     @Environment(\.colorScheme) var colorScheme
     

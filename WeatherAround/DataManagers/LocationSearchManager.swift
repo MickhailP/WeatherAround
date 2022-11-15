@@ -12,8 +12,6 @@ import Combine
 final class LocationSearchManager {
     
     var locationSearchPublisher = PassthroughSubject<[MKMapItem], Never>()
- 
-    @Published var locationPublisher = [CLPlacemark]()
     
     public func request(request: MKLocalSearch.ResultType, searchText: String) {
         
@@ -21,7 +19,6 @@ final class LocationSearchManager {
         
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = searchText.lowercased()
-        
         
         let search = MKLocalSearch(request: searchRequest)
         

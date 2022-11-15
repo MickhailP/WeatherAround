@@ -34,7 +34,6 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
             
             let weather = try await decodeWeatherData(location, (current: fetchedCurrent, daily: fetchedDaily))
             
-            
             return weather
             
         } catch {
@@ -59,7 +58,7 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
         var endpoints = [(location: Location, currentURL: URL, dailyURL: URL)]()
         
         var weatherData: [WeatherObject] = []
-        //        weatherData.reserveCapacity(endpoints.count)
+        weatherData.reserveCapacity(endpoints.count)
         
         print("WE WILL SEARCH FOR THOOSE LOCATIONS: ",locations.count)
         
@@ -107,9 +106,6 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
             return weatherData
         }
     }
-    
-        
-       
     
     
     /// Create a WeatherObject from data Response

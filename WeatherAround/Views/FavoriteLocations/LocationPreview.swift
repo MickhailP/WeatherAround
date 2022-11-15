@@ -24,19 +24,9 @@ struct LocationPreview: View {
     
     
     var body: some View {
-        
-        
         HStack {
-            if let location = weather.location {
-                VStack(alignment: .leading, spacing: 10){
-                    Text(location.name)
-                        .font(.headline)
-                    Text(location.country)
-                        .font(.subheadline)
-                }
-                .padding()
-                .foregroundColor(.white)
-            }
+            
+            locationSection
             
             Spacer()
             
@@ -48,7 +38,6 @@ struct LocationPreview: View {
                     WeatherSection(weather: weather)
                         .redacted(reason: .placeholder)
                 }
-                
             }
             .padding()
         }
@@ -59,6 +48,21 @@ struct LocationPreview: View {
         )
         .cornerRadius(20)
         
+    }
+    
+    var locationSection: some View {
+        Group{
+            if let location = weather.location {
+                VStack(alignment: .leading, spacing: 10){
+                    Text(location.name)
+                        .font(.headline)
+                    Text(location.country)
+                        .font(.subheadline)
+                }
+                .padding()
+                .foregroundColor(.white)
+            }
+        }
     }
 }
 

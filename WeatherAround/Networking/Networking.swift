@@ -25,7 +25,6 @@ public class Networking {
             
             return data
             
-            
         } catch {
             print(error.localizedDescription)
             throw error
