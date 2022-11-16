@@ -1,4 +1,5 @@
-# Weather Around
+<p align="left"> # Weather Around  <img width="50" alt="Снимок экрана 2022-11-04 в 11 38 23" src="https://user-images.githubusercontent.com/81718237/202276035-f05ab3e0-23ed-4f87-8e0f-a32295b0922a.png">
+</p>
 Weahter forecast application
 
 ## Short description
