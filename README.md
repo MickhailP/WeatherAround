@@ -26,4 +26,4 @@ Weahter forecast application
 
 
 
-![Simulato 21 43 39](https://user-images.githubusercontent.com/81718237/202258266-bd7a4a58-888b-49f8-ac8c-d223424c9448.gif)
+
