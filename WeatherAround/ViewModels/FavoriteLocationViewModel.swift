@@ -30,8 +30,14 @@ final class FavoriteLocationViewModel: ObservableObject {
     @Published var showSameLocationAlert: Bool = false
     @Published var showRemoveAllAlert: Bool = false
     
+    // FetchingError alert
+    @Published var showFetchingAlert: Bool = false
+    @Published var errorCode: Error?
+    
+    
+    
     // Managers
-    private let weatherManager: WeatherManagerProtocol
+    let weatherManager: WeatherManagerProtocol
     private let searchService = LocationSearchManager()
     
     private let saveKey = "SavedLocations"
@@ -92,6 +98,7 @@ final class FavoriteLocationViewModel: ObservableObject {
             }
             
             searchFieldText = ""
+            showSearchList = false
             
         }
     }
@@ -100,13 +107,27 @@ final class FavoriteLocationViewModel: ObservableObject {
     /// - Parameter location: Location instance for which data should be fetched
     private func requestWeather(for location: Location) {
         Task {
-            let weather = await weatherManager.getWeather(for: location)
-            
-            await MainActor.run(body: {
-                if let weather = weather {
-                    favoriteWeather.append(weather)
-                }
-            })
+            do {
+                let weather = try await weatherManager.getWeather(for: location)
+                
+                await MainActor.run(body: {
+                    if let weather = weather {
+                        favoriteWeather.append(weather)
+                    }
+                })
+            } catch {
+                print("ERROR calling \(#function) for \(location.name)", error.localizedDescription)
+                await MainActor.run(body: {
+                    
+                    // Save place only with Location data
+                    let weatherObject = WeatherObject(location: location)
+                    favoriteWeather.append(weatherObject)
+                   
+                    // Handle error
+                    self.errorCode = error
+                    self.showFetchingAlert = true
+                })
+            }
         }
     }
     
@@ -119,13 +140,17 @@ final class FavoriteLocationViewModel: ObservableObject {
                     favoriteWeather = weathers
                 }
             } catch {
-                print("ERROR calling \(#function)", error.localizedDescription)
+                print("ERROR calling \(#function) for \(favouriteLocations)", error.localizedDescription)
+                await MainActor.run {
+                    self.errorCode = error
+                    self.showFetchingAlert = true
+                }
             }
         }
     }
     
     
-    /// Save favoriteLocations in the UserDeafults
+    /// Save favoriteLocations in the UserDefaults
     private func save() {
         do {
             let encoded = try JSONEncoder().encode(favouriteLocations)
@@ -151,6 +176,7 @@ final class FavoriteLocationViewModel: ObservableObject {
     /// Remove all favourite locations
     func removeAll() {
         favouriteLocations.removeAll()
+        favoriteWeather.removeAll()
         save()
         print("ALL LOCATIONS REMOVED")
         

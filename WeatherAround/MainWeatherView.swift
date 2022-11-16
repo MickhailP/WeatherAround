@@ -71,7 +71,11 @@ struct MainWeatherView: View {
                     Text("FAIL")
                 }
             }
+            
         }
+        .alert("Server Error", isPresented: $viewModel.showFetchingAlert, actions: { }, message: {
+            Text("There was an error during data fetching. Some data may not be available.")
+        })
     }
     
     func getTitleOpacity() -> CGFloat {

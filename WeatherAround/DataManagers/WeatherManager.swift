@@ -11,6 +11,8 @@ import Combine
 import UIKit
 
 final class WeatherManager: ObservableObject, WeatherManagerProtocol {
+    
+   
  
     /// Use this method for fetching weather data from server
     ///
@@ -22,7 +24,7 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
     /// Use this method to get data from single Location instance
     /// - Parameter location: Location for which you want get Weather Data
     /// - Returns: optional WeatherObject
-    func getWeather(for location: Location) async -> WeatherObject? {
+    func getWeather(for location: Location) async throws -> WeatherObject? {
         print("CALLING \(#file) for \(location.name)")
         
         let urlCurrent = APIEndPoint.currentForecast(location: location.geoLocation).url
@@ -37,9 +39,8 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
             return weather
             
         } catch {
-            
-            print("There was an error due setting up Weather models. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
-            return nil
+            print("There was an error due setting up Weather. \n ERROR: \(error).\n DESCRIPTION: \(error.localizedDescription)")
+            throw error
         }
     }
     
@@ -54,13 +55,10 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
     func fetchWeatherDataWithTaskGroup(for locations: [Location?]) async throws -> [WeatherObject] {
         print("Called", #function)
         
-        
         var endpoints = [(location: Location, currentURL: URL, dailyURL: URL)]()
         
         var weatherData: [WeatherObject] = []
-        weatherData.reserveCapacity(endpoints.count)
-        
-        print("WE WILL SEARCH FOR THOOSE LOCATIONS: ",locations.count)
+        weatherData.reserveCapacity(endpoints.count * 2)
         
         for location in locations {
             print("FOR  \(location?.name.uppercased())")
@@ -70,27 +68,20 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
                 let dailyEndpoint = APIEndPoint.dailyForecast(location: location.geoLocation).url
                 endpoints.append((location, currentEndpoint, dailyEndpoint))
                 
-                print("HERE IS ENDPOINTS TUPLES COUNT", endpoints.count)
+                print("HERE ARE \(endpoints.count) ENDPOINTS")
             }
         }
+        
         return try await withThrowingTaskGroup(of: (current: Data?, daily: Data?).self) { group -> ([WeatherObject]) in
             
             
             for endpoint in endpoints {
                 group.addTask {
-                    do {
-                        
-                        let currentWeatherData = try await Networking.shared.requestData(endpoint: endpoint.currentURL)
-                        let dailyWeatherData = try await Networking.shared.requestData(endpoint: endpoint.dailyURL)
-                        
-                        return (currentWeatherData, dailyWeatherData)
-                        
-                    } catch {
-                        print("Data task has been failed")
-                        print("ERROR calling \(#function)", error.localizedDescription)
-                        return (nil, nil)
-                    }
+                    let currentWeatherData = try? await Networking.shared.requestData(endpoint: endpoint.currentURL)
+                    let dailyWeatherData = try? await Networking.shared.requestData(endpoint: endpoint.dailyURL)
                     
+                    return (currentWeatherData, dailyWeatherData)
+
                 }
                 print("Added a TASKS for \(endpoint.location)" )
                 
@@ -118,6 +109,7 @@ final class WeatherManager: ObservableObject, WeatherManagerProtocol {
     internal func decodeWeatherData(_ location: Location?, _ dataResponse: (current: Data?, daily: Data?)) throws -> WeatherObject {
          
          print("CALLING \(#function) \(location?.name)")
+        
          
         if let current = dataResponse.current,
            let daily = dataResponse.daily {

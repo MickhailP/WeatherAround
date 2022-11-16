@@ -10,7 +10,7 @@ import CoreLocation
 
 protocol WeatherManagerProtocol {
     
-    func getWeather(for location: Location) async -> WeatherObject?
+    func getWeather(for location: Location) async throws-> WeatherObject?
     
     func decodeWeatherData(_ location: Location?, _ dataResponse: (current: Data?, daily: Data?)) throws -> WeatherObject
     

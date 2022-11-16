@@ -26,7 +26,7 @@ public class Networking {
             return data
             
         } catch {
-            print(error.localizedDescription)
+            print("❌ There was an error during calling \(#function). ERROR:", error.localizedDescription)
             throw error
         }
     }

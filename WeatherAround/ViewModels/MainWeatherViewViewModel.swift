@@ -29,6 +29,10 @@ final class MainWeatherViewViewModel: ObservableObject {
     @Published var locationName: String = ""
     @Published var loadingState: LoadingState = .loading
     
+    // FetchingError alert
+    @Published var showFetchingAlert: Bool = false
+    @Published var errorCode: Error?
+    
     private (set) var cancellables = Set<AnyCancellable>()
     
     
@@ -97,19 +101,24 @@ final class MainWeatherViewViewModel: ObservableObject {
         print("CALLING \(#function) for \(location.name)")
         
         Task {
-            if let weatherObject = await weatherManager.getWeather(for: location) {
+            do {
+                if let weatherObject = try await weatherManager.getWeather(for: location) {
+                    
+                    await MainActor.run(body: {
+                        currentWeather = weatherObject.currentWeather
+                        hourlyWeather = weatherObject.hourlyWeather
+                        dailyWeather = weatherObject.dailyWeather
+                    })
+                    
+                } else {
+                        print("FAIL. Decoding Error")
+                        loadingState = .failed
+                    }
                 
-                await MainActor.run(body: {
-                    currentWeather = weatherObject.currentWeather
-                    hourlyWeather = weatherObject.hourlyWeather
-                    dailyWeather = weatherObject.dailyWeather
-                })
-              
-//                print(hourlyWeather as AnyObject)
-                
-            } else {
-                print("FAIL")
-                loadingState = .failed
+            } catch {
+                print("ERROR calling \(#function) for \(location.name)", error.localizedDescription)
+                self.errorCode = error
+                self.showFetchingAlert = true
             }
         }
     }

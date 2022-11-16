@@ -65,6 +65,10 @@ struct FavoriteLocationView: View {
             }, message: {
                 Text("Are you sure delete all your favourite locations? ")
             })
+            
+            .alert("Server Error", isPresented: $viewModel.showFetchingAlert, actions: { }, message: {
+                Text("There was an error during weather data fetching. \n Some data may not be available")
+            })
         }
     }
     
