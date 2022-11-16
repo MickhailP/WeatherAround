@@ -26,7 +26,8 @@ Weahter forecast application
 
 Current location                                                         |  Favourites locations                                                       
 :----------------------------------------------------------------:|:--------------------------------------------------------------------:
-[<img src="https://user-images.githubusercontent.com/81718237/202260200-0e9cc9c2-ed8d-4548-baf2-e947c3a9e6fb.gif" width = "250" />](image.png) | [<img src="https://user-images.githubusercontent.com/81718237/202274072-1639b74e-fdda-457d-9dac-806a33e6b05e.gif" width="250"/>](image.png)
+[<img src="https://user-images.githubusercontent.com/81718237/202274918-ee5f2f8d-94e5-4999-af7f-7429be2d5597.gif" width = "300" />](image.png) | [<img src="https://user-images.githubusercontent.com/81718237/202274072-1639b74e-fdda-457d-9dac-806a33e6b05e.gif" width="300"/>](image.png)
+
 
 
 
