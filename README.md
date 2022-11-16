@@ -7,13 +7,13 @@
 
 ## Short description
  
- 🌍 This is the app that allows you check a weather forecast around you and yours favorite places around the world. It works on [Tommorow.io API](https://www.tomorrow.io). User can observe a weather for it's current location and search it for any place. 
+ 🌍 This is the app that allows you check a weather forecast around you and your favorite places around the world. It works on [Tommorow.io](https://www.tomorrow.io) API. User can observe a weather for it's current location and search it for any place. 
  
  ## Features 
 ✅ Easily get the information about the tempreature and weather conditions at your location.<br> 
 🕚 24-hours forecasst.<br> 
 👆 Get the weather forecast for 10 days.<br> 
-⭐️ Add your favorite places to the bookmaks and discover more about weather on it.<br> 
+⭐️ Add your favorite places to the bookmaks and discover more about weather on around the world.<br> 
  
  ## Technologies
  - REST weather API
