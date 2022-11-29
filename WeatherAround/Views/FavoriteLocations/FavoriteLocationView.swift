@@ -79,7 +79,7 @@ struct FavoriteLocationView: View {
             VStack(spacing: 10){
                 Image(systemName: "magnifyingglass.circle")
                     .font(.system(size: 50))
-                Text("You haven't favourite places yet!")
+                Text("You don't have favourite places yet!")
                 
             }
             Spacer()

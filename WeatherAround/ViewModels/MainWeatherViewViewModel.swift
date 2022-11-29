@@ -138,10 +138,9 @@ final class MainWeatherViewViewModel: ObservableObject {
                 }
                 
                 if let name = placemark.locality,
-                   let country = placemark.country,
-                   let geoLocation = placemark.location {
+                   let country = placemark.country {
                     
-                    let newLocation = Location(name: name, country: country,  geoLocation: geoLocation)
+                    let newLocation = Location(name: name, country: country,  geoLocation: location)
                     self.location = newLocation
                     completion(newLocation)
                     

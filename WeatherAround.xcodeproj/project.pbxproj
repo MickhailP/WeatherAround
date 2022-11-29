@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D7536CCF2935BB87009C23B8 /* NetworkingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536CCE2935BB87009C23B8 /* NetworkingProtocol.swift */; };
+		D7536CD12935BF51009C23B8 /* LocationManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7536CD02935BF51009C23B8 /* LocationManagerProtocol.swift */; };
 		D7687CBE286A36490037BEB5 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7687CBD286A36490037BEB5 /* LocationManager.swift */; };
 		D78061C3285713C7003125A0 /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78061C2285713C7003125A0 /* WeatherDetailView.swift */; };
 		D78EFF662851AF6A0075E6A1 /* CustomCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */; };
@@ -45,6 +47,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D7536CCE2935BB87009C23B8 /* NetworkingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingProtocol.swift; sourceTree = "<group>"; };
+		D7536CD02935BF51009C23B8 /* LocationManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerProtocol.swift; sourceTree = "<group>"; };
 		D7687CBD286A36490037BEB5 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		D78061C2285713C7003125A0 /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
 		D78EFF652851AF6A0075E6A1 /* CustomCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCorners.swift; sourceTree = "<group>"; };
@@ -154,6 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				D79D157C28FF433200EAD69C /* WeatherManagerProtocol.swift */,
+				D7536CCE2935BB87009C23B8 /* NetworkingProtocol.swift */,
+				D7536CD02935BF51009C23B8 /* LocationManagerProtocol.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -358,8 +364,10 @@
 				D799C0D7284E5AE80084C541 /* HourlyWeatherView.swift in Sources */,
 				D7D098BD2865A16100138FBC /* APIKeys.swift in Sources */,
 				D7BE6A04284CD1960040AAC2 /* IconColor.swift in Sources */,
+				D7536CD12935BF51009C23B8 /* LocationManagerProtocol.swift in Sources */,
 				D798D9E3284FCC2700097978 /* CustomStackView.swift in Sources */,
 				D799E1622914E97A003152E3 /* UIColorExtension.swift in Sources */,
+				D7536CCF2935BB87009C23B8 /* NetworkingProtocol.swift in Sources */,
 				D79D157F28FF463000EAD69C /* LoadingState.swift in Sources */,
 				D7B024DC284A60FF004549B5 /* WeatherResponse.swift in Sources */,
 				D7D098BF2866191E00138FBC /* APIEndpoint.swift in Sources */,

@@ -7,13 +7,13 @@
 
 import Foundation
 
-public class Networking {
+public class Networking: NetworkingProtocoL {
     
     static let shared = Networking()
     
     private init() {}
     
-     func requestData(endpoint: URL) async throws -> Data {
+    func requestData(endpoint: URL) async throws -> Data {
         
         do {
             let (data, response) = try await URLSession.shared.data(from: endpoint)
@@ -31,7 +31,7 @@ public class Networking {
         }
     }
     
-     private func handleResponse(_ response: URLResponse?) throws {
+    private func handleResponse(_ response: URLResponse?) throws {
         guard
             let response = response as? HTTPURLResponse,
             response.statusCode >= 200 && response.statusCode < 300

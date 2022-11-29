@@ -43,38 +43,13 @@ final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObje
 }
 
 
-// The functionality to update user's location name
-extension LocationManager {
+extension LocationManager: LocationManagerProtocol {
     
-    /// Use this function to decode current location to locality name.
+    /// Use this function to get a placemark for specific location.
+    /// This method uses a  CLGeocoder() instance to find an information about CLLocation, such as names of the city and coutry
     /// - Parameters:
-    ///   - location: Coordinates that should be named
-    ///   - completionHandler: Closure that manages received location name
-    func getLocationName(for location: CLLocation, completionHandler: @escaping (String?) -> Void ) {
-        // create a CLGeocoder instance
-        let geocoder = CLGeocoder()
-        
-        // Look up a location and pass it in to closure
-        geocoder.reverseGeocodeLocation(location, preferredLocale: .current) { placemark, error in
-            
-            // Check if location available
-            guard let place = placemark?.first, error == nil else {
-                // An error occurred during decoding
-                completionHandler(nil)
-                print("Failed to get placemark from location")
-                return
-            }
-            // To see all available options of placemark
-            print(place)
-            
-            if let name = place.locality {
-                // Decoding was successful, call completion handler with locality name
-                completionHandler(name)
-            }
-        }
-    }
-    
-    
+    ///   - location: CLLocation that should be geocoded
+    ///   - completionHandler: Closure that manages received values
     func returnPlaceMark(for location: CLLocation, completionHandler: @escaping (CLPlacemark?) -> Void ) {
         
         // create a CLGeocoder instance
@@ -90,7 +65,7 @@ extension LocationManager {
                 print("Failed to get placemark from location")
                 return
             }
-            // To see all available options of placemark
+            // Call the closure with the first placemark
             completionHandler(place)
         }
     }
