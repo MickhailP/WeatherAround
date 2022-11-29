@@ -9,6 +9,8 @@
  
  🌍 This is the app that allows you check a weather forecast around you and your favorite places around the world. It works on [Tommorow.io](https://www.tomorrow.io) API. User can observe a weather for it's current location and search it for any place. 
  
+My idea was to create a project that will looks like the standart Weather app from Apple and get more practice and confident of working with REST API, practice Combine and Concurrency. 
+ 
  ## Features 
 ✅ Easily get the information about the tempreature and weather conditions at your location.<br> 
 🕚 24-hours forecasst.<br> 
@@ -26,6 +28,12 @@
  - SwitfUI
  - SwifLint
  - UserDefaults 
+ 
+ ## Features in TO-DO list:
+ - Blank views;
+ - Add more animations;
+ - Tracking geo location and update weather data if the user has changed one;
+ - Pull to refresh a weather forecast for favourite locations;
 
 ## Screenshots
 
