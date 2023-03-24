@@ -2,7 +2,7 @@
 🌥 Weahter forecast application
 
 ### App Icon
-<img width="60" alt="Снимок экрана 2022-11-04 в 11 38 23" src="https://user-images.githubusercontent.com/81718237/202279067-0a7864e7-b075-4099-8999-6c36b254edef.png">
+<img width="60" alt="Icon" src="https://user-images.githubusercontent.com/81718237/202279067-0a7864e7-b075-4099-8999-6c36b254edef.png">
 
 
 ## Short description
